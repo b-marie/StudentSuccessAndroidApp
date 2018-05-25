@@ -1,0 +1,27 @@
+<resources>
+    <string name="app_name">Student Success Tracker</string>
+    <string name="add_courses">Add Courses</string>
+    <string name="view_courses">View Courses</string>
+    <string name="end_date">End Date</string>
+    <string name="start_date">Start Date</string>
+    <string name="terms">Terms</string>
+    <string name="courses">Courses</string>
+    <string name="mentors">Mentors</string>
+    <string name="assessments">Assessments</string>
+    <string name="save">Save</string>
+    <string name="share_via_email">Share via Email</string>
+    <string name="back_to_course">Back to Course</string>
+    <string name="home">Home</string>
+    <string name="planned">Planned</string>
+    <string name="in_progress">In Progress</string>
+    <string name="completed">Completed</string>
+    <string name="course_name">Course Name</string>
+    <string name="course_notes">Course Notes</string>
+    <string name="course_status">Course Status</string>
+    <string name="set_start_date_reminder">Set Start Date Reminder</string>
+    <string name="e_mail">E-Mail</string>
+    <string name="set_end_date_reminder">Set End Date Reminder</string>
+    <string name="course_mentor">Course Mentor</string>
+    <string name="phone_number">Phone Number</string>
+    <string name="name">Name</string>
+</resources>
