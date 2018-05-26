@@ -24,4 +24,6 @@
     <string name="course_mentor">Course Mentor</string>
     <string name="phone_number">Phone Number</string>
     <string name="name">Name</string>
+    <string name="term_number">Term Number</string>
+    <string name="add_new_term">Add New Term</string>
 </resources>

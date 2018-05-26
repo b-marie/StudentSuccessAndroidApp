@@ -20,6 +20,9 @@ public interface TermDao {
     ListItemTerm findTermByName(String term);
 
     @Insert
+    void insert(ListItemTerm term);
+
+    @Insert
     void insertAllTerms(ListItemTerm... terms);
 
     @Delete

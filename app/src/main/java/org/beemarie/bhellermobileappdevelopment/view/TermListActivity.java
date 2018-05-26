@@ -61,6 +61,15 @@ public class TermListActivity extends AppCompatActivity implements TermViewInter
                 view.getContext().startActivity(intent);
             }
         });
+
+        addTerm = (Button) findViewById(R.id.term_list_add_term_button);
+        addTerm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(view.getContext(), AddNewTermActivity.class);
+                view.getContext().startActivity(intent);
+            }
+        });
     }
 
     @Override

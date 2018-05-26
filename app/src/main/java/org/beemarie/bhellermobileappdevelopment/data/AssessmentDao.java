@@ -21,6 +21,9 @@ public interface AssessmentDao {
     ListItemAssessment findAssessmentByName(String assessment);
 
     @Insert
+    void insert(ListItemAssessment assessment);
+
+    @Insert
     void insertAllAssessments(ListItemAssessment... assessments);
 
     @Delete

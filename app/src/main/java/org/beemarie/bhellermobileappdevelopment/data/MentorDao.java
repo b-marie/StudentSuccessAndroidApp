@@ -21,6 +21,9 @@ public interface MentorDao {
     ListItemMentor findMentorByName(String mentor);
 
     @Insert
+    void insert(ListItemMentor mentor);
+
+    @Insert
     void insertAllMentors(ListItemMentor... mentors);
 
     @Delete

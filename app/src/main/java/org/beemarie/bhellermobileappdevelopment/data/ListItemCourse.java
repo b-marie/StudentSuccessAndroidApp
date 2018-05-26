@@ -1,11 +1,11 @@
 package org.beemarie.bhellermobileappdevelopment.data;
 
+import android.arch.lifecycle.LiveData;
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -30,16 +30,16 @@ public class ListItemCourse {
     private String courseStatus;
 
     @ColumnInfo(name = "course_mentors")
-    private List<ListItemMentor> courseMentors;
+    private LiveData<List<ListItemMentor>> courseMentors;
 
     @ColumnInfo(name = "course_assessments")
-    private List<ListItemAssessment> courseAssessments;
+    private LiveData<List<ListItemAssessment>> courseAssessments;
 
     @ColumnInfo(name = "course_notes")
     private String courseNotes;
 
 
-    public ListItemCourse(int courseID, String courseName, Date courseStartDate, Date courseEndDate, String courseStatus, List<ListItemMentor> courseMentors, List<ListItemAssessment> courseAssessments, String courseNotes) {
+    public ListItemCourse(int courseID, String courseName, Date courseStartDate, Date courseEndDate, String courseStatus, LiveData<List<ListItemMentor>> courseMentors, LiveData<List<ListItemAssessment>> courseAssessments, String courseNotes) {
         this.courseID = courseID;
         this.courseName = courseName;
         this.courseStartDate = courseStartDate;
@@ -91,19 +91,19 @@ public class ListItemCourse {
         this.courseStatus = courseStatus;
     }
 
-    public List<ListItemMentor> getCourseMentors() {
+    public LiveData<List<ListItemMentor>> getCourseMentors() {
         return courseMentors;
     }
 
-    public void setCourseMentors(List<ListItemMentor> courseMentors) {
+    public void setCourseMentors(LiveData<List<ListItemMentor>> courseMentors) {
         this.courseMentors = courseMentors;
     }
 
-    public List<ListItemAssessment> getCourseAssessments() {
+    public LiveData<List<ListItemAssessment>> getCourseAssessments() {
         return courseAssessments;
     }
 
-    public void setCourseAssessments(List<ListItemAssessment> courseAssessments) {
+    public void setCourseAssessments(LiveData<List<ListItemAssessment>> courseAssessments) {
         this.courseAssessments = courseAssessments;
     }
 

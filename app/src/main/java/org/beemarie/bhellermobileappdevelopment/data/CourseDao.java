@@ -21,6 +21,9 @@ public interface CourseDao {
     ListItemCourse findCourseByName(String course);
 
     @Insert
+    void insert(ListItemCourse course);
+
+    @Insert
     void insertAllCourses(ListItemCourse... courses);
 
     @Delete

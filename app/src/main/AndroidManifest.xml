@@ -25,7 +25,8 @@
         <activity android:name=".view.MentorDetailActivity" />
         <activity android:name=".view.AssessmentListActivity" />
         <activity android:name=".view.AssessmentDetailActivity" />
-        <activity android:name=".view.CourseNotesActivity"></activity>
+        <activity android:name=".view.CourseNotesActivity" />
+        <activity android:name=".view.AddNewTermActivity"></activity>
     </application>
 
 </manifest>
