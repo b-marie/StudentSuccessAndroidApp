@@ -16,7 +16,6 @@ import android.widget.TextView;
 
 import org.beemarie.bhellermobileappdevelopment.R;
 import org.beemarie.bhellermobileappdevelopment.data.DataSourceInterface;
-import org.beemarie.bhellermobileappdevelopment.data.InterimDataSource;
 import org.beemarie.bhellermobileappdevelopment.data.ListItemAssessment;
 import org.beemarie.bhellermobileappdevelopment.data.ListItemCourse;
 import org.beemarie.bhellermobileappdevelopment.data.ListItemMentor;
@@ -34,8 +33,10 @@ public class TermListActivity extends AppCompatActivity implements TermViewInter
     private List<ListItemTerm> listOfTerms;
 
     private LayoutInflater layoutInflater;
-    private RecyclerView recyclerView;
-    private CustomAdapter adapter;
+    private RecyclerView termRecyclerView;
+    private TermAdapter termAdapter;
+    private RecyclerView courseRecyclerView;
+
 
     private TermController controller;
 
@@ -48,10 +49,11 @@ public class TermListActivity extends AppCompatActivity implements TermViewInter
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_term_list);
 
-        recyclerView = (RecyclerView) findViewById(R.id.rec_list_term_activity);
+        termRecyclerView = (RecyclerView) findViewById(R.id.rec_list_term_activity);
         layoutInflater = getLayoutInflater();
+        courseRecyclerView = findViewById(R.id.term_course_list);
 
-        controller = new TermController(this, new InterimDataSource());
+//        controller = new TermController(this, AppDatabase);
 
         home = (Button) findViewById(R.id.term_list_home_button);
         home.setOnClickListener(new View.OnClickListener() {
@@ -70,6 +72,7 @@ public class TermListActivity extends AppCompatActivity implements TermViewInter
                 view.getContext().startActivity(intent);
             }
         });
+
     }
 
     @Override
@@ -83,65 +86,65 @@ public class TermListActivity extends AppCompatActivity implements TermViewInter
     @Override
     public void setUpAdapterAndView(List<ListItemTerm> listOfTerms) {
         this.listOfTerms = listOfTerms;
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new CustomAdapter();
-        recyclerView.setAdapter(adapter);
+        termRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        termAdapter = new TermAdapter(listOfTerms);
+        termRecyclerView.setAdapter(termAdapter);
 
     }
 
-    private class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.CustomViewHolder> {
+//    private class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.CustomViewHolder> {
+//
+//        @NonNull
+//        @Override
+//        public CustomViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+//            View v = layoutInflater.inflate(R.layout.item_term, parent, false);
+//
+//            return new CustomViewHolder(v);
+//        }
+//
+//        @Override
+//        public void onBindViewHolder(@NonNull CustomViewHolder holder, int position) {
+//            ListItemTerm currentTerm = listOfTerms.get(position);
+//            ListAdapter courseList = (ListAdapter) currentTerm.getCoursesInTerm();
+//
+//
+//            holder.termText.setText(currentTerm.getTermName());
+//            holder.courseList.setAdapter(courseList);
+//        }
+//
+//        @Override
+//        public int getItemCount() {
+//            //Helps adapter decide how many items it needs to manage
+//            return listOfTerms.size();
+//        }
+//
+//        class CustomViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+//
+//            private TextView termText;
+//            private ListView courseList;
+//
+//            public CustomViewHolder(View itemView) {
+//                super(itemView);
+//
+//                this.termText = (TextView) itemView.findViewById(R.id.term_title);
+//                this.courseList = (ListView) itemView.findViewById(R.id.term_course_list);
+//
+//                this.termText.setOnClickListener(this);
+//
+//            }
+//
+//            @Override
+//            public void onClick(View v) {
+//                ListItemTerm listItemTerm = listOfTerms.get(
+//                       this.getAdapterPosition()
+//                );
+//
+//                controller.onListItemTermClick(listItemTerm, v
+//                );
+//
+//            }
+//        }
 
-        @NonNull
-        @Override
-        public CustomViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            View v = layoutInflater.inflate(R.layout.item_term, parent, false);
-
-            return new CustomViewHolder(v);
-        }
-
-        @Override
-        public void onBindViewHolder(@NonNull CustomViewHolder holder, int position) {
-            ListItemTerm currentTerm = listOfTerms.get(position);
-            ListAdapter courseList = (ListAdapter) currentTerm.getCoursesInTerm();
-
-
-            holder.termText.setText(currentTerm.getTermName());
-            holder.courseList.setAdapter(courseList);
-        }
-
-        @Override
-        public int getItemCount() {
-            //Helps adapter decide how many items it needs to manage
-            return listOfTerms.size();
-        }
-
-        class CustomViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-
-            private TextView termText;
-            private ListView courseList;
-
-            public CustomViewHolder(View itemView) {
-                super(itemView);
-
-                this.termText = (TextView) itemView.findViewById(R.id.term_title);
-                this.courseList = (ListView) itemView.findViewById(R.id.term_course_list);
-
-                this.termText.setOnClickListener(this);
-
-            }
-
-            @Override
-            public void onClick(View v) {
-                ListItemTerm listItemTerm = listOfTerms.get(
-                       this.getAdapterPosition()
-                );
-
-                controller.onListItemTermClick(listItemTerm, v
-                );
-
-            }
-        }
-
-
-    }
+//
+//    }
 }

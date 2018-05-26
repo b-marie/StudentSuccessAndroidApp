@@ -3,6 +3,7 @@ package org.beemarie.bhellermobileappdevelopment.data;
 import android.arch.lifecycle.LiveData;
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -32,10 +33,11 @@ public class ListItemTerm implements Parcelable{
     @ColumnInfo(name = "course_in_term")
     private LiveData<List<ListItemCourse>> coursesInTerm;
 
+
+    @Ignore
     public ListItemTerm(){}
 
-    public ListItemTerm(int termID, String termName, Date termStartDate, Date termEndDate, LiveData<List<ListItemCourse>> coursesInTerm) {
-        this.termID = termID;
+    public ListItemTerm(String termName, Date termStartDate, Date termEndDate, LiveData<List<ListItemCourse>> coursesInTerm) {
         this.termName = termName;
         this.termStartDate = termStartDate;
         this.termEndDate = termEndDate;
@@ -82,6 +84,7 @@ public class ListItemTerm implements Parcelable{
         this.coursesInTerm = coursesInTerm;
     }
 
+    @Ignore
     protected ListItemTerm(Parcel in) {
         termID = in.readInt();
         termName = in.readString();

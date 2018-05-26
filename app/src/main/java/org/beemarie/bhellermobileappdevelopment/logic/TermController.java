@@ -6,6 +6,8 @@ import org.beemarie.bhellermobileappdevelopment.data.DataSourceInterface;
 import org.beemarie.bhellermobileappdevelopment.data.ListItemTerm;
 import org.beemarie.bhellermobileappdevelopment.view.TermViewInterface;
 
+import java.util.List;
+
 public class TermController {
     private ListItemTerm temporaryListItemTerm;
     private int temporaryListItemTermPosition;
@@ -25,7 +27,7 @@ public class TermController {
                 listItemTerm.getTermName(),
                 listItemTerm.getTermStartDate(),
                 listItemTerm.getTermEndDate(),
-                listItemTerm.getCoursesInTerm(), viewRoot);
+                (List) listItemTerm.getCoursesInTerm(), viewRoot);
     }
 
 
