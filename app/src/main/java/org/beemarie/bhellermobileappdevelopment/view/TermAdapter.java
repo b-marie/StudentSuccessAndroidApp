@@ -18,8 +18,6 @@ import java.util.List;
 class TermAdapter extends RecyclerView.Adapter<TermAdapter.ViewHolder> {
 
     List<ListItemTerm> terms;
-    private CourseAdapter courseAdapter;
-    public RecyclerView courseList;
     LiveData<List<ListItemCourse>> courses;
 
     public TermAdapter(List<ListItemTerm> listOfTerms) {
@@ -38,14 +36,10 @@ class TermAdapter extends RecyclerView.Adapter<TermAdapter.ViewHolder> {
         holder.termName.setText(terms.get(position).getTermName());
         holder.termStart.setText(terms.get(position).getTermStartDate().toString());
         holder.termEnd.setText(terms.get(position).getTermEndDate().toString());
-        courses = terms.get(position).getCoursesInTerm();
 
-        holder.coursesList.setList(courses);
 
 
 //        courseList.setLayoutManager(new LinearLayoutManager(holder));
-        courseAdapter = new CourseAdapter(courses);
-        courseList.setAdapter(courseAdapter);
 
     }
 
@@ -58,7 +52,6 @@ class TermAdapter extends RecyclerView.Adapter<TermAdapter.ViewHolder> {
         public TextView termName;
         public TextView termStart;
         public TextView termEnd;
-        public RecyclerView coursesList;
 
 
         public ViewHolder(View itemView) {
@@ -66,7 +59,6 @@ class TermAdapter extends RecyclerView.Adapter<TermAdapter.ViewHolder> {
             termName = itemView.findViewById(R.id.term_title);
             termStart = itemView.findViewById(R.id.term_start_date);
             termEnd = itemView.findViewById(R.id.term_end_date);
-            courseList = itemView.findViewById(R.id.term_course_list);
         }
     }
 }

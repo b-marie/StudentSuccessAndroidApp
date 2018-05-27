@@ -31,12 +31,5 @@
         android:gravity="center_horizontal"
         android:text="End Date: Term End" />
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/term_course_list"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:padding="16dp"
-        style="@style/Text.Item"/>
 
 </LinearLayout>

@@ -35,7 +35,6 @@ public class TermListActivity extends AppCompatActivity implements TermViewInter
     private LayoutInflater layoutInflater;
     private RecyclerView termRecyclerView;
     private TermAdapter termAdapter;
-    private RecyclerView courseRecyclerView;
 
 
     private TermController controller;
@@ -51,7 +50,6 @@ public class TermListActivity extends AppCompatActivity implements TermViewInter
 
         termRecyclerView = (RecyclerView) findViewById(R.id.rec_list_term_activity);
         layoutInflater = getLayoutInflater();
-        courseRecyclerView = findViewById(R.id.term_course_list);
 
 //        controller = new TermController(this, AppDatabase);
 
