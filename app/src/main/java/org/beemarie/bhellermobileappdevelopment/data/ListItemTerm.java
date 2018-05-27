@@ -15,7 +15,7 @@ import java.util.List;
 
 //Model for Terms
 @Entity(tableName = "term_table")
-public class ListItemTerm implements Parcelable{
+public class ListItemTerm{
     @PrimaryKey(autoGenerate=true)
     @NonNull
     @ColumnInfo(name = "term_ID")
@@ -91,51 +91,51 @@ public class ListItemTerm implements Parcelable{
         this.coursesInTerm = coursesInTerm;
     }
 
-    @Ignore
-    protected ListItemTerm(Parcel in) {
-        termID = in.readInt();
-        termName = in.readString();
-        long tmpTermStartDate = in.readLong();
-        termStartDate = tmpTermStartDate != -1 ? new Date(tmpTermStartDate) : null;
-        long tmpTermEndDate = in.readLong();
-        termEndDate = tmpTermEndDate != -1 ? new Date(tmpTermEndDate) : null;
-        if (in.readByte() == 0x01) {
-            coursesInTerm = getCoursesInTerm();
-            in.readList((List) coursesInTerm, ListItemCourse.class.getClassLoader());
-        } else {
-            coursesInTerm = null;
-        }
-    }
+//    @Ignore
+//    protected ListItemTerm(Parcel in) {
+//        termID = in.readInt();
+//        termName = in.readString();
+//        long tmpTermStartDate = in.readLong();
+//        termStartDate = tmpTermStartDate != -1 ? new Date(tmpTermStartDate) : null;
+//        long tmpTermEndDate = in.readLong();
+//        termEndDate = tmpTermEndDate != -1 ? new Date(tmpTermEndDate) : null;
+//        if (in.readByte() == 0x01) {
+//            coursesInTerm = getCoursesInTerm();
+//            in.readList((List) coursesInTerm, ListItemCourse.class.getClassLoader());
+//        } else {
+//            coursesInTerm = null;
+//        }
+//    }
 
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(termID);
-        dest.writeString(termName);
-        dest.writeLong(termStartDate != null ? termStartDate.getTime() : -1L);
-        dest.writeLong(termEndDate != null ? termEndDate.getTime() : -1L);
-        if (coursesInTerm == null) {
-            dest.writeByte((byte) (0x00));
-        } else {
-            dest.writeByte((byte) (0x01));
-            dest.writeList((List) coursesInTerm);
-        }
-    }
-
-    @SuppressWarnings("unused")
-    public static final Parcelable.Creator<ListItemTerm> CREATOR = new Parcelable.Creator<ListItemTerm>() {
-        @Override
-        public ListItemTerm createFromParcel(Parcel in) {
-            return new ListItemTerm(in);
-        }
-
-        @Override
-        public ListItemTerm[] newArray(int size) {
-            return new ListItemTerm[size];
-        }
-    };
+//    @Override
+//    public int describeContents() {
+//        return 0;
+//    }
+//
+//    @Override
+//    public void writeToParcel(Parcel dest, int flags) {
+//        dest.writeInt(termID);
+//        dest.writeString(termName);
+//        dest.writeLong(termStartDate != null ? termStartDate.getTime() : -1L);
+//        dest.writeLong(termEndDate != null ? termEndDate.getTime() : -1L);
+//        if (coursesInTerm == null) {
+//            dest.writeByte((byte) (0x00));
+//        } else {
+//            dest.writeByte((byte) (0x01));
+//            dest.writeList((List) coursesInTerm);
+//        }
+//    }
+//
+//    @SuppressWarnings("unused")
+//    public static final Parcelable.Creator<ListItemTerm> CREATOR = new Parcelable.Creator<ListItemTerm>() {
+//        @Override
+//        public ListItemTerm createFromParcel(Parcel in) {
+//            return new ListItemTerm(in);
+//        }
+//
+//        @Override
+//        public ListItemTerm[] newArray(int size) {
+//            return new ListItemTerm[size];
+//        }
+//    };
 }

@@ -1,6 +1,8 @@
 package org.beemarie.bhellermobileappdevelopment.view;
 
+import android.arch.persistence.room.Room;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -17,6 +19,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import org.beemarie.bhellermobileappdevelopment.R;
+import org.beemarie.bhellermobileappdevelopment.data.AppDatabase;
 import org.beemarie.bhellermobileappdevelopment.data.ListItemCourse;
 import org.beemarie.bhellermobileappdevelopment.data.ListItemTerm;
 
@@ -26,16 +29,17 @@ import java.util.Date;
 import java.util.List;
 
 public class AddNewTermActivity extends AppCompatActivity {
-
-    public static final ListItemTerm EXTRA_TERM = new ListItemTerm();
-    public static final String EXTRA_REPLY = "EXTRA_REPLY";
+//
+//    public static final ListItemTerm EXTRA_TERM = new ListItemTerm();
+//    public static final String EXTRA_REPLY = "EXTRA_REPLY";
 
     private EditText termName;
     private EditText termStartDate;
     private EditText termEndDate;
     private RecyclerView courseListRecyclerView;
-    private LayoutInflater layoutInflater;
-    private CourseAdapter adapter;
+//    private LayoutInflater layoutInflater;
+    private CourseAdapter courseAdapter;
+    AppDatabase db;
 
     private List<ListItemCourse> listOfCourses;
 
@@ -44,25 +48,30 @@ public class AddNewTermActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_new_term);
+        new GetData().execute();
+
+        db = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, "production").build();
+
         termName = findViewById(R.id.add_term_term_number_entry);
         termStartDate = findViewById(R.id.add_term_term_start_date_entry);
         termEndDate = findViewById(R.id.add_term_term_end_date_entry);
-        setUpAdapterAndView(listOfCourses);
 
-        courseListRecyclerView = (RecyclerView) findViewById(R.id.add_term_course_recycler_view);
-        courseListRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new CourseAdapter(listOfCourses);
-        courseListRecyclerView.setAdapter(adapter);
+        final AppDatabase db = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, "production").build();
+
+
+//        setUpAdapterAndView(listOfCourses);
+//
+//        courseListRecyclerView = (RecyclerView) findViewById(R.id.add_term_course_recycler_view);
+//        courseListRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+//        courseAdapter = new CourseAdapter(listOfCourses);
+//        courseListRecyclerView.setAdapter(courseAdapter);
 
 
         final Button saveButton = findViewById(R.id.add_term_save_button);
         saveButton.setOnClickListener(new View.OnClickListener(){
             public void onClick(View view){
                 Intent replyIntent = new Intent();
-                if(TextUtils.isEmpty(termName.getText())){
-                    setResult(RESULT_CANCELED, replyIntent);
-
-                } else {
+                if(!termName.getText().toString().equals("") && !termStartDate.getText().toString().equals("") && !termEndDate.getText().toString().equals("")){
                     String newTermName = termName.getText().toString();
                     String newTermStartDateString = termStartDate.getText().toString();
                     String newTermEndDateString = termEndDate.getText().toString();
@@ -75,33 +84,68 @@ public class AddNewTermActivity extends AppCompatActivity {
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
-                    ListItemTerm newTerm = new ListItemTerm();
+                    final ListItemTerm newTerm = new ListItemTerm();
                     newTerm.setTermName(newTermName);
                     newTerm.setTermStartDate(newTermStartDate);
                     newTerm.setTermEndDate(newTermEndDate);
-//                    Intent intent = replyIntent.putExtra(newTerm);
-                    setResult(RESULT_OK, replyIntent);
+
+                    AsyncTask.execute(new Runnable() {
+                        @Override
+                        public void run() {
+                            db.termDao().insert(newTerm);
+                        }
+                    });
+
+                    Intent i = new Intent(AddNewTermActivity.this, TermListActivity.class);
+                    startActivity(i);
+                    finish();
+
                 }
                 finish();
             }
         });
     }
 
-    public void startAddTermActivity(int ID, String name, Date start, Date end, List<ListItemCourse> courses, View view) {
-        Intent i = new Intent(this, AddNewTermActivity.class);
-//        i.putExtra(EXTRA_TERM_NAME, name);
 
-        startActivity(i);
+    private class GetData extends AsyncTask<Void, Void, List<ListItemCourse>> {
+
+        @Override
+        protected List<ListItemCourse> doInBackground(Void... params) {
+            AppDatabase db = Room.databaseBuilder(AddNewTermActivity.this, AppDatabase.class, "database").build();
+
+            List<ListItemCourse> courses = db.courseDao().getAllCourses();
+            return courses;
+        }
+
+        @Override
+        protected void onPostExecute(List<ListItemCourse> courses) {
+            super.onPostExecute(courses);
+            loadRecyclerView(courses);
+        }
     }
 
-
-    public void setUpAdapterAndView(List<ListItemCourse> listOfCourses) {
-        this.listOfCourses = listOfCourses;
+    private void loadRecyclerView(List<ListItemCourse> courses) {
+        courseListRecyclerView = (RecyclerView) findViewById(R.id.add_term_course_recycler_view);
         courseListRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new CourseAdapter(this.listOfCourses);
-        courseListRecyclerView.setAdapter(adapter);
-
+        courseAdapter = new CourseAdapter(courses);
+        courseListRecyclerView.setAdapter(courseAdapter);
     }
+
+//    public void startAddTermActivity(int ID, String name, Date start, Date end, List<ListItemCourse> courses, View view) {
+//        Intent i = new Intent(this, AddNewTermActivity.class);
+////        i.putExtra(EXTRA_TERM_NAME, name);
+//
+//        startActivity(i);
+//    }
+//
+//
+//    public void setUpAdapterAndView(List<ListItemCourse> listOfCourses) {
+//        this.listOfCourses = listOfCourses;
+//        courseListRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+//        courseAdapter = new CourseAdapter(this.listOfCourses);
+//        courseListRecyclerView.setAdapter(courseAdapter);
+//
+//    }
 
 //
 //    private class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.CustomViewHolder> {

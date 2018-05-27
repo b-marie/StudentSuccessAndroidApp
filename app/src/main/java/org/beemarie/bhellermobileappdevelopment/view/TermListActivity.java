@@ -30,21 +30,21 @@ import java.util.Date;
 import java.util.List;
 
 public class TermListActivity extends AppCompatActivity {
-    private static final String EXTRA_TERM_NAME = "EXTRA_TERM_NAME";
-    private static final String EXTRA_COURSE_LIST = "EXTRA_COURSE_LIST";
-
-
-    private List<ListItemTerm> listOfTerms;
+//    private static final String EXTRA_TERM_NAME = "EXTRA_TERM_NAME";
+//    private static final String EXTRA_COURSE_LIST = "EXTRA_COURSE_LIST";
+//
+//
+//    private List<ListItemTerm> listOfTerms;
 
 //    private LayoutInflater layoutInflater;
     private RecyclerView termRecyclerView;
     private TermAdapter termAdapter;
-
-
-    private TermController controller;
-
     Button addTerm;
     Button home;
+
+//    private TermController controller;
+
+
 
 
     @Override
@@ -68,6 +68,7 @@ public class TermListActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(view.getContext(), AddNewTermActivity.class);
                 view.getContext().startActivity(intent);
+                finish();
             }
         });
 
@@ -79,8 +80,9 @@ public class TermListActivity extends AppCompatActivity {
         @Override
         protected List<ListItemTerm> doInBackground(Void... params) {
             AppDatabase db = Room.databaseBuilder(TermListActivity.this, AppDatabase.class, "database").build();
+//            db.termDao().deleteAllTerms();
 
-            ListItemTerm term = new ListItemTerm("Term One", new Date(2018, 1, 1), new Date(2018, 6, 30));
+            ListItemTerm term = new ListItemTerm("Term Two", new Date(2018, 1, 1), new Date(2018, 6, 30));
 
             db.termDao().insert(term);
             List<ListItemTerm> terms = db.termDao().getAllTerms();

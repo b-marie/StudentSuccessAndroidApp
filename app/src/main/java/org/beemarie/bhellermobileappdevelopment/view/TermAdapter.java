@@ -13,6 +13,7 @@ import org.beemarie.bhellermobileappdevelopment.R;
 import org.beemarie.bhellermobileappdevelopment.data.ListItemCourse;
 import org.beemarie.bhellermobileappdevelopment.data.ListItemTerm;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 class TermAdapter extends RecyclerView.Adapter<TermAdapter.ViewHolder> {
@@ -32,11 +33,14 @@ class TermAdapter extends RecyclerView.Adapter<TermAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        String pattern = "d MMM yyyy";
+        SimpleDateFormat dateFormatter = new SimpleDateFormat(pattern);
         holder.termName.setText(terms.get(position).getTermName());
-        holder.termStart.setText(terms.get(position).getTermStartDate().toString());
-        holder.termEnd.setText(terms.get(position).getTermEndDate().toString());
+        String startDate = dateFormatter.format(terms.get(position).getTermStartDate());
+        holder.termStart.setText(startDate);
+        String endDate = dateFormatter.format(terms.get(position).getTermEndDate());
+        holder.termEnd.setText(endDate);
 
-//        courseList.setLayoutManager(new LinearLayoutManager(holder));
 
     }
 

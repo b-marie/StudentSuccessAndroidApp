@@ -28,5 +28,8 @@ public interface TermDao {
     @Delete
     void deleteTerm(ListItemTerm term);
 
+    @Query("DELETE FROM term_table")
+    void deleteAllTerms();
+
 
 }

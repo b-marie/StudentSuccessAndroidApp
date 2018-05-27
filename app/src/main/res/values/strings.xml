@@ -26,4 +26,5 @@
     <string name="name">Name</string>
     <string name="term_number">Term Number</string>
     <string name="add_new_term">Add New Term</string>
+    <string name="add_term">Add Term</string>
 </resources>
