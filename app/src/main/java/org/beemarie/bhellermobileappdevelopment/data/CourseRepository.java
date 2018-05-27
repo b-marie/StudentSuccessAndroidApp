@@ -8,7 +8,7 @@ import java.util.List;
 
 public class CourseRepository {
     private CourseDao courseDao;
-    private LiveData<List<ListItemCourse>> allCourses;
+    private List<ListItemCourse> allCourses;
 
     public CourseRepository(Application application) {
         AppDatabase db = AppDatabase.getDatabase(application);
@@ -16,7 +16,7 @@ public class CourseRepository {
         allCourses = courseDao.getAllCourses();
     }
 
-    public LiveData<List<ListItemCourse>> getAllCourses() {
+    public List<ListItemCourse> getAllCourses() {
         return allCourses;
     }
 

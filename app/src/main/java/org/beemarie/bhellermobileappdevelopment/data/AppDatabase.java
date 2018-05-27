@@ -75,7 +75,8 @@ public abstract class AppDatabase extends RoomDatabase {
             ListItemCourse course1 = new ListItemCourse(1, "Intro to Basketweaving", new Date(2018, 02, 01), new Date(2018, 02, 28), "In Progress", mDao.getAllMentors(), aDao.getAllAssessments(), "Notes");
             cDao.insert(course1);
 
-            ListItemTerm term1 = new ListItemTerm(1, "Term One", new Date(2018, 1, 1), new Date(2018, 6, 30), cDao.getAllCourses());
+            ListItemTerm term1;
+            term1 = new ListItemTerm("Term One", new Date(2018, 1, 1), new Date(2018, 6, 30), cDao.getAllCourses());
             tDao.insert(term1);
             return null;
         }

@@ -8,7 +8,7 @@ import java.util.List;
 
 public class MentorRepository {
     private MentorDao mentorDao;
-    private LiveData<List<ListItemMentor>> allMentors;
+    private List<ListItemMentor> allMentors;
 
     public MentorRepository(Application application) {
         AppDatabase db = AppDatabase.getDatabase(application);
@@ -16,7 +16,7 @@ public class MentorRepository {
         allMentors = mentorDao.getAllMentors();
     }
 
-    public LiveData<List<ListItemMentor>> getAllMentors() {
+    public List<ListItemMentor> getAllMentors() {
         return allMentors;
     }
 

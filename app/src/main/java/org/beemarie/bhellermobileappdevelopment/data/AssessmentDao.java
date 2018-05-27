@@ -12,7 +12,7 @@ import java.util.List;
 @Dao
 public interface AssessmentDao {
     @Query("SELECT * FROM assessment_table")
-    LiveData<List<ListItemAssessment>> getAllAssessments();
+    List<ListItemAssessment> getAllAssessments();
 
     @Query("SELECT * FROM assessment_table WHERE assessment_ID IN (:assessmentIds)")
     List<ListItemAssessment> loadAllAssessmentsByIds(int[] assessmentIds);

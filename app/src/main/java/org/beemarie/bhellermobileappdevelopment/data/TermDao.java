@@ -11,7 +11,7 @@ import java.util.List;
 @Dao
 public interface TermDao {
     @Query("SELECT * FROM term_table")
-    LiveData<List<ListItemTerm>> getAllTerms();
+    List<ListItemTerm> getAllTerms();
 
     @Query("SELECT * FROM term_table WHERE term_ID IN (:termIds)")
     List<ListItemTerm> loadAllTermsByIds(int[] termIds);

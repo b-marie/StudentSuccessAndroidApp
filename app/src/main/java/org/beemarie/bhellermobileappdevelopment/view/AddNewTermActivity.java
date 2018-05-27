@@ -47,11 +47,13 @@ public class AddNewTermActivity extends AppCompatActivity {
         termName = findViewById(R.id.add_term_term_number_entry);
         termStartDate = findViewById(R.id.add_term_term_start_date_entry);
         termEndDate = findViewById(R.id.add_term_term_end_date_entry);
+        setUpAdapterAndView(listOfCourses);
 
         courseListRecyclerView = (RecyclerView) findViewById(R.id.add_term_course_recycler_view);
         courseListRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new CourseAdapter(listOfCourses);
         courseListRecyclerView.setAdapter(adapter);
+
 
         final Button saveButton = findViewById(R.id.add_term_save_button);
         saveButton.setOnClickListener(new View.OnClickListener(){
@@ -93,13 +95,13 @@ public class AddNewTermActivity extends AppCompatActivity {
     }
 
 
-//    public void setUpAdapterAndView(List<ListItemCourse> listOfCourses) {
-//        this.listOfCourses = listOfCourses;
-//        courseListRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-//        adapter = new CustomAdapter();
-//        courseListRecyclerView.setAdapter(adapter);
-//
-//    }
+    public void setUpAdapterAndView(List<ListItemCourse> listOfCourses) {
+        this.listOfCourses = listOfCourses;
+        courseListRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        adapter = new CourseAdapter(this.listOfCourses);
+        courseListRecyclerView.setAdapter(adapter);
+
+    }
 
 //
 //    private class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.CustomViewHolder> {

@@ -18,7 +18,6 @@ import java.util.List;
 class TermAdapter extends RecyclerView.Adapter<TermAdapter.ViewHolder> {
 
     List<ListItemTerm> terms;
-    LiveData<List<ListItemCourse>> courses;
 
     public TermAdapter(List<ListItemTerm> listOfTerms) {
         this.terms = listOfTerms;
@@ -28,7 +27,7 @@ class TermAdapter extends RecyclerView.Adapter<TermAdapter.ViewHolder> {
     @Override
     public TermAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_term, parent, false);
-        return new TermAdapter.ViewHolder(view);
+        return new ViewHolder(view);
     }
 
     @Override
@@ -36,8 +35,6 @@ class TermAdapter extends RecyclerView.Adapter<TermAdapter.ViewHolder> {
         holder.termName.setText(terms.get(position).getTermName());
         holder.termStart.setText(terms.get(position).getTermStartDate().toString());
         holder.termEnd.setText(terms.get(position).getTermEndDate().toString());
-
-
 
 //        courseList.setLayoutManager(new LinearLayoutManager(holder));
 

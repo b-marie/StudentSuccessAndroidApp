@@ -12,7 +12,7 @@ import java.util.List;
 @Dao
 public interface CourseDao {
     @Query("SELECT * FROM course_table")
-    LiveData<List<ListItemCourse>> getAllCourses();
+    List<ListItemCourse> getAllCourses();
 
     @Query("SELECT * FROM course_table WHERE course_ID IN (:courseIds)")
     List<ListItemCourse> loadAllCoursesByIds(int[] courseIds);

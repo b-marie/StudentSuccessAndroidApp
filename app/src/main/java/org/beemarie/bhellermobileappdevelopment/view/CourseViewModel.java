@@ -13,7 +13,7 @@ import java.util.List;
 
 public class CourseViewModel extends AndroidViewModel {
     private CourseRepository courseRepository;
-    private LiveData<List<ListItemCourse>> allCourses;
+    private List<ListItemCourse> allCourses;
 
     public CourseViewModel(Application application) {
         super(application);
@@ -21,7 +21,7 @@ public class CourseViewModel extends AndroidViewModel {
         allCourses = courseRepository.getAllCourses();
     }
 
-    LiveData<List<ListItemCourse>> getAllCourses() {return allCourses;}
+    List<ListItemCourse> getAllCourses() {return allCourses;}
 
     public void insert(ListItemCourse course) {courseRepository.insert(course); }
 }

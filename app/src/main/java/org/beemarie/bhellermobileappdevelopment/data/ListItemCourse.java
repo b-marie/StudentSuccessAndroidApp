@@ -30,16 +30,16 @@ public class ListItemCourse {
     private String courseStatus;
 
     @ColumnInfo(name = "course_mentors")
-    private LiveData<List<ListItemMentor>> courseMentors;
+    private List<ListItemMentor> courseMentors;
 
     @ColumnInfo(name = "course_assessments")
-    private LiveData<List<ListItemAssessment>> courseAssessments;
+    private List<ListItemAssessment> courseAssessments;
 
     @ColumnInfo(name = "course_notes")
     private String courseNotes;
 
 
-    public ListItemCourse(int courseID, String courseName, Date courseStartDate, Date courseEndDate, String courseStatus, LiveData<List<ListItemMentor>> courseMentors, LiveData<List<ListItemAssessment>> courseAssessments, String courseNotes) {
+    public ListItemCourse(int courseID, String courseName, Date courseStartDate, Date courseEndDate, String courseStatus, List<ListItemMentor> courseMentors, List<ListItemAssessment> courseAssessments, String courseNotes) {
         this.courseID = courseID;
         this.courseName = courseName;
         this.courseStartDate = courseStartDate;
@@ -91,19 +91,19 @@ public class ListItemCourse {
         this.courseStatus = courseStatus;
     }
 
-    public LiveData<List<ListItemMentor>> getCourseMentors() {
+    public List<ListItemMentor> getCourseMentors() {
         return courseMentors;
     }
 
-    public void setCourseMentors(LiveData<List<ListItemMentor>> courseMentors) {
+    public void setCourseMentors(List<ListItemMentor> courseMentors) {
         this.courseMentors = courseMentors;
     }
 
-    public LiveData<List<ListItemAssessment>> getCourseAssessments() {
+    public List<ListItemAssessment> getCourseAssessments() {
         return courseAssessments;
     }
 
-    public void setCourseAssessments(LiveData<List<ListItemAssessment>> courseAssessments) {
+    public void setCourseAssessments(List<ListItemAssessment> courseAssessments) {
         this.courseAssessments = courseAssessments;
     }
 

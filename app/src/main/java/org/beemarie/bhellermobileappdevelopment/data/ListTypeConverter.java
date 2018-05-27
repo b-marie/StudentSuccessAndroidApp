@@ -11,98 +11,98 @@ import java.util.List;
 
 public class ListTypeConverter {
     @TypeConverter
-    public String fromTermsList(LiveData<List<ListItemTerm>> terms) {
+    public String fromTermsList(List<ListItemTerm> terms) {
         if (terms == null) {
             return (null);
         }
         Gson gson = new Gson();
-        Type type = new TypeToken<LiveData<List<ListItemTerm>>>() {
+        Type type = new TypeToken<List<ListItemTerm>>() {
         }.getType();
         String jsonString = gson.toJson(terms, type);
         return jsonString;
     }
 
     @TypeConverter
-    public LiveData<List<ListItemTerm>> toTermsList(String termString) {
+    public List<ListItemTerm> toTermsList(String termString) {
         if (termString == null) {
             return (null);
         }
         Gson gson = new Gson();
-        Type type = new TypeToken<LiveData<List<ListItemTerm>>>() {
+        Type type = new TypeToken<List<ListItemTerm>>() {
         }.getType();
-        LiveData<List<ListItemTerm>> termsList = gson.fromJson(termString, type);
+        List<ListItemTerm> termsList = gson.fromJson(termString, type);
         return termsList;
     }
 
     @TypeConverter
-    public String fromCoursesList(LiveData<List<ListItemCourse>> courses) {
+    public String fromCoursesList(List<ListItemCourse> courses) {
         if (courses == null) {
             return (null);
         }
         Gson gson = new Gson();
-        Type type = new TypeToken<LiveData<List<ListItemCourse>>>() {
+        Type type = new TypeToken<List<ListItemCourse>>() {
         }.getType();
         String jsonString = gson.toJson(courses, type);
         return jsonString;
     }
 
     @TypeConverter
-    public LiveData<List<ListItemCourse>> toCoursesList(String courseString) {
+    public List<ListItemCourse> toCoursesList(String courseString) {
         if (courseString == null) {
             return (null);
         }
         Gson gson = new Gson();
-        Type type = new TypeToken<LiveData<List<ListItemCourse>>>() {
+        Type type = new TypeToken<List<ListItemCourse>>() {
         }.getType();
-        LiveData<List<ListItemCourse>> coursesList = gson.fromJson(courseString, type);
+        List<ListItemCourse> coursesList = gson.fromJson(courseString, type);
         return coursesList;
     }
 
     @TypeConverter
-    public String fromMentorsList(LiveData<List<ListItemMentor>> mentors) {
+    public String fromMentorsList(List<ListItemMentor> mentors) {
         if (mentors == null) {
             return (null);
         }
         Gson gson = new Gson();
-        Type type = new TypeToken<LiveData<List<ListItemMentor>>>() {
+        Type type = new TypeToken<List<ListItemMentor>>() {
         }.getType();
         String jsonString = gson.toJson(mentors, type);
         return jsonString;
     }
 
     @TypeConverter
-    public LiveData<List<ListItemMentor>> toMentorsList(String mentorString) {
+    public List<ListItemMentor> toMentorsList(String mentorString) {
         if (mentorString == null) {
             return (null);
         }
         Gson gson = new Gson();
-        Type type = new TypeToken<LiveData<List<ListItemMentor>>>() {
+        Type type = new TypeToken<List<ListItemMentor>>() {
         }.getType();
-        LiveData<List<ListItemMentor>> mentorsList = gson.fromJson(mentorString, type);
+        List<ListItemMentor> mentorsList = gson.fromJson(mentorString, type);
         return mentorsList;
     }
 
     @TypeConverter
-    public String fromAssessmentsList(LiveData<List<ListItemAssessment>> assessments) {
+    public String fromAssessmentsList(List<ListItemAssessment> assessments) {
         if (assessments == null) {
             return (null);
         }
         Gson gson = new Gson();
-        Type type = new TypeToken<LiveData<List<ListItemAssessment>>>() {
+        Type type = new TypeToken<List<ListItemAssessment>>() {
         }.getType();
         String jsonString = gson.toJson(assessments, type);
         return jsonString;
     }
 
     @TypeConverter
-    public LiveData<List<ListItemAssessment>> toAssessmentsList(String assessmentString) {
+    public List<ListItemAssessment> toAssessmentsList(String assessmentString) {
         if (assessmentString == null) {
             return (null);
         }
         Gson gson = new Gson();
-        Type type = new TypeToken<LiveData<List<ListItemAssessment>>>() {
+        Type type = new TypeToken<List<ListItemAssessment>>() {
         }.getType();
-        LiveData<List<ListItemAssessment>> assessmentsList = gson.fromJson(assessmentString, type);
+        List<ListItemAssessment> assessmentsList = gson.fromJson(assessmentString, type);
         return assessmentsList;
     }
 

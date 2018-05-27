@@ -13,7 +13,7 @@ import java.util.List;
 
 public class AssessmentViewModel extends AndroidViewModel {
     private AssessmentRepository assessmentRepository;
-    private LiveData<List<ListItemAssessment>> allAssessments;
+    private List<ListItemAssessment> allAssessments;
 
     public AssessmentViewModel(Application application) {
         super(application);
@@ -21,7 +21,7 @@ public class AssessmentViewModel extends AndroidViewModel {
         allAssessments = assessmentRepository.getAllAssessments();
     }
 
-    LiveData<List<ListItemAssessment>> getAllAssessments() {return allAssessments;}
+    List<ListItemAssessment> getAllAssessments() {return allAssessments;}
 
     public void insert(ListItemAssessment assessment) {assessmentRepository.insert(assessment); }
 }

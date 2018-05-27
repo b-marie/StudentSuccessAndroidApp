@@ -8,7 +8,7 @@ import java.util.List;
 
 public class TermRepository {
     private TermDao termDao;
-    private LiveData<List<ListItemTerm>> allTerms;
+    private List<ListItemTerm> allTerms;
 
     public TermRepository(Application application) {
         AppDatabase db = AppDatabase.getDatabase(application);
@@ -16,7 +16,7 @@ public class TermRepository {
         allTerms = termDao.getAllTerms();
     }
 
-    public LiveData<List<ListItemTerm>> getAllTerms() {
+    public List<ListItemTerm> getAllTerms() {
         return allTerms;
     }
 

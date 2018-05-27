@@ -31,13 +31,20 @@ public class ListItemTerm implements Parcelable{
     private Date termEndDate;
 
     @ColumnInfo(name = "course_in_term")
-    private LiveData<List<ListItemCourse>> coursesInTerm;
+    private List<ListItemCourse> coursesInTerm;
 
 
     @Ignore
     public ListItemTerm(){}
 
-    public ListItemTerm(String termName, Date termStartDate, Date termEndDate, LiveData<List<ListItemCourse>> coursesInTerm) {
+    @Ignore
+    public ListItemTerm(String termName, Date termStartDate, Date termEndDate) {
+        this.termName = termName;
+        this.termStartDate = termStartDate;
+        this.termEndDate = termEndDate;
+    }
+
+    public ListItemTerm(String termName, Date termStartDate, Date termEndDate, List<ListItemCourse> coursesInTerm) {
         this.termName = termName;
         this.termStartDate = termStartDate;
         this.termEndDate = termEndDate;
@@ -76,11 +83,11 @@ public class ListItemTerm implements Parcelable{
         this.termEndDate = termEndDate;
     }
 
-    public LiveData<List<ListItemCourse>> getCoursesInTerm() {
+    public List<ListItemCourse> getCoursesInTerm() {
         return coursesInTerm;
     }
 
-    public void setCoursesInTerm(LiveData<List<ListItemCourse>> coursesInTerm) {
+    public void setCoursesInTerm(List<ListItemCourse> coursesInTerm) {
         this.coursesInTerm = coursesInTerm;
     }
 

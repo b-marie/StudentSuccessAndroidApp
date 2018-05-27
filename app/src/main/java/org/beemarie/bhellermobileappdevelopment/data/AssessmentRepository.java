@@ -8,7 +8,7 @@ import java.util.List;
 
 public class AssessmentRepository {
     private AssessmentDao assessmentDao;
-    private LiveData<List<ListItemAssessment>> allAssessments;
+    private List<ListItemAssessment> allAssessments;
 
     public AssessmentRepository(Application application) {
         AppDatabase db = AppDatabase.getDatabase(application);
@@ -16,7 +16,7 @@ public class AssessmentRepository {
         allAssessments = assessmentDao.getAllAssessments();
     }
 
-    public LiveData<List<ListItemAssessment>> getAllAssessments() {
+    public List<ListItemAssessment> getAllAssessments() {
         return allAssessments;
     }
 
