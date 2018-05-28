@@ -4,6 +4,7 @@ package org.beemarie.bhellermobileappdevelopment.data;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
@@ -24,8 +25,17 @@ public class ListItemMentor {
     @ColumnInfo(name = "mentor_email")
    private String mentorEmail;
 
-    public ListItemMentor(int mentorID, String mentorName, String mentorPhoneNumber, String mentorEmail) {
-        this.mentorID = mentorID;
+
+
+    public ListItemMentor(String mentorName, String mentorPhoneNumber, String mentorEmail) {
+        this.mentorName = mentorName;
+        this.mentorPhoneNumber = mentorPhoneNumber;
+        this.mentorEmail = mentorEmail;
+    }
+
+    @Ignore
+    public ListItemMentor(int id, String mentorName, String mentorPhoneNumber, String mentorEmail) {
+        this.mentorID = id;
         this.mentorName = mentorName;
         this.mentorPhoneNumber = mentorPhoneNumber;
         this.mentorEmail = mentorEmail;

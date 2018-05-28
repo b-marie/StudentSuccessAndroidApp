@@ -21,17 +21,12 @@ public class TermController {
         this.dataSource = dataSource;
     }
 
-    public void onListItemTermClick(ListItemTerm listItemTerm, View viewRoot) {
-        view.startTermDetailActivity(
-                listItemTerm.getTermID(),
-                listItemTerm.getTermName(),
-                listItemTerm.getTermStartDate(),
-                listItemTerm.getTermEndDate(),
-                (List) listItemTerm.getCoursesInTerm(), viewRoot);
+    public void onListItemTermClick(ListItemTerm term) {
+
     }
 
 
-    public void getTermListFromDateSource() {
+    public void getTermListFromDataSource() {
         view.setUpAdapterAndView(
                 dataSource.getListOfTerms()
         );

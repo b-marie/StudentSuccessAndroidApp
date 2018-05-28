@@ -2,6 +2,7 @@ package org.beemarie.bhellermobileappdevelopment.view;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.persistence.room.Room;
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
@@ -9,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,8 +26,10 @@ import org.beemarie.bhellermobileappdevelopment.data.ListItemAssessment;
 import org.beemarie.bhellermobileappdevelopment.data.ListItemCourse;
 import org.beemarie.bhellermobileappdevelopment.data.ListItemMentor;
 import org.beemarie.bhellermobileappdevelopment.data.ListItemTerm;
+import org.beemarie.bhellermobileappdevelopment.logic.RecyclerItemClickListener;
 import org.beemarie.bhellermobileappdevelopment.logic.TermController;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -34,13 +38,14 @@ public class TermListActivity extends AppCompatActivity {
 //    private static final String EXTRA_COURSE_LIST = "EXTRA_COURSE_LIST";
 //
 //
-//    private List<ListItemTerm> listOfTerms;
+    private List<ListItemTerm> terms;
 
 //    private LayoutInflater layoutInflater;
     private RecyclerView termRecyclerView;
     private TermAdapter termAdapter;
     Button addTerm;
     Button home;
+    Context context;
 
 //    private TermController controller;
 
@@ -72,6 +77,28 @@ public class TermListActivity extends AppCompatActivity {
             }
         });
 
+//        termRecyclerView.setOnClickListener(new View.OnClickListener() {
+////            @Override
+////            public void onClick(View view) {
+////                int termID = terms.get(position).getTermID();
+////                Log.d("MyTag", "Term ID is " + termID);
+////                Intent intent = new Intent(view.getContext(), TermDetailActivity.class);
+////                intent.putExtra("term_id", termID);
+////                startActivity(intent);
+////            }
+////        });
+
+            termRecyclerView.addOnItemTouchListener(new RecyclerItemClickListener(this.getApplicationContext(), new RecyclerItemClickListener.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                int termID = terms.get(position).getTermID();
+                Log.d("MyTag", "Term ID is " + termID);
+                Intent intent = new Intent(view.getContext(), TermDetailActivity.class);
+                intent.putExtra("term_id", termID);
+                startActivity(intent);
+            }
+        }));
+
     }
 
 
@@ -99,9 +126,21 @@ public class TermListActivity extends AppCompatActivity {
     private void loadRecyclerView(List<ListItemTerm> terms) {
         termRecyclerView = (RecyclerView) findViewById(R.id.rec_list_term_activity);
         termRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        termAdapter = new TermAdapter(terms);
+        termAdapter = new TermAdapter(context, terms);
         termRecyclerView.setAdapter(termAdapter);
     }
 
-
+//    private void registerCallClickBack() {
+//
+//        termRecyclerView.addOnItemTouchListener(new RecyclerItemClickListener(this.getApplicationContext(), new RecyclerItemClickListener.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(View view, int position) {
+//                int termID = terms.get(position).getTermID();
+//                Log.d("MyTag", "Term ID is " + termID);
+//                Intent intent = new Intent(view.getContext(), TermDetailActivity.class);
+//                intent.putExtra("term_id", termID);
+//                startActivity(intent);
+//            }
+//        }));
+//    }
 }

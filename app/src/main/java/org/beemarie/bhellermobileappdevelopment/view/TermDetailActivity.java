@@ -16,6 +16,7 @@ public class TermDetailActivity extends AppCompatActivity {
     private static final String EXTRA_TERM_NAME = "EXTRA_TERM_NAME";
     private static final String EXTRA_TERM_START_DATE = "EXTRA_TERM_START_DATE";
     private static final String EXTRA_TERM_END_DATE = "EXTRA_TERM_END_DATE";
+    private static final String term_id = "Term ID";
 
 
     private TextView termName;
@@ -29,19 +30,17 @@ public class TermDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_term_detail);
 
         Intent i = getIntent();
-        String termNameExtra = i.getStringExtra(EXTRA_TERM_NAME);
-        String termStartExtra = i.getStringExtra(EXTRA_TERM_START_DATE);
-        String termEndExtra = i.getStringExtra(EXTRA_TERM_END_DATE);
+        String termIDExtra = i.getStringExtra(term_id);
 
 
 
         termName = (TextView) findViewById(R.id.term_detail_title);
-        termName.setText(termNameExtra);
-
-        startDate = (EditText) findViewById(R.id.start_date_edit);
-        startDate.setText(termStartExtra);
-
-        endDate = (EditText) findViewById(R.id.end_date_edit);
-        endDate.setText(termEndExtra);
+        termName.setText(term_id);
+//
+//        startDate = (EditText) findViewById(R.id.start_date_edit);
+//        startDate.setText(termStartExtra);
+//
+//        endDate = (EditText) findViewById(R.id.end_date_edit);
+//        endDate.setText(termEndExtra);
     }
 }
