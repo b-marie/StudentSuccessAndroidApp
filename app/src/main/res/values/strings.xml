@@ -27,4 +27,7 @@
     <string name="term_number">Term Number</string>
     <string name="add_new_term">Add New Term</string>
     <string name="add_term">Add Term</string>
+    <string name="add_new_mentor">Add New Mentor</string>
+    <string name="email">Email</string>
+    <string name="mentor_name">Mentor Name</string>
 </resources>

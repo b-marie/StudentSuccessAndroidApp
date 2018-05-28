@@ -28,4 +28,7 @@ public interface AssessmentDao {
 
     @Delete
     void deleteAssessment(ListItemAssessment assessment);
+
+    @Query("DELETE FROM assessment_table")
+    void deleteAllAssessments();
 }

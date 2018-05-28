@@ -28,4 +28,7 @@ public interface MentorDao {
 
     @Delete
     void deleteMentor(ListItemMentor mentor);
+
+    @Query("DELETE FROM mentor_table")
+    void deleteAllMentors();
 }

@@ -86,6 +86,11 @@ class TermAdapter extends RecyclerView.Adapter<TermAdapter.ViewHolder> {
 
     }
 
+    void setTerms(List<ListItemTerm> terms){
+        mWords = words;
+        notifyDataSetChanged();
+    }
+
     @Override
     public int getItemCount() {
         return terms.size();

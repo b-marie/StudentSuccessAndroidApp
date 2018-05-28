@@ -1,11 +1,14 @@
 package org.beemarie.bhellermobileappdevelopment.view;
 
 import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.arch.persistence.room.Room;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -46,6 +49,7 @@ public class TermListActivity extends AppCompatActivity {
     Button addTerm;
     Button home;
     Context context;
+    private TermViewModel termViewModel;
 
 //    private TermController controller;
 
@@ -56,6 +60,7 @@ public class TermListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_term_list);
+        termViewModel = ViewModelProviders.of(this).get(TermViewModel.class);
         new GetData().execute();
 
         home = (Button) findViewById(R.id.term_list_home_button);
@@ -77,6 +82,14 @@ public class TermListActivity extends AppCompatActivity {
             }
         });
 
+        termViewModel.getAllTerms().observe(this, new Observer<List<ListItemTerm>>() {
+            @Override
+            public void onChanged(@Nullable final List<ListItemTerm> terms) {
+                // Update the cached copy of the words in the adapter.
+                termAdapter.setTerms(terms);
+            }
+        });
+
 //        termRecyclerView.setOnClickListener(new View.OnClickListener() {
 ////            @Override
 ////            public void onClick(View view) {
@@ -87,17 +100,16 @@ public class TermListActivity extends AppCompatActivity {
 ////                startActivity(intent);
 ////            }
 ////        });
-
-            termRecyclerView.addOnItemTouchListener(new RecyclerItemClickListener(this.getApplicationContext(), new RecyclerItemClickListener.OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                int termID = terms.get(position).getTermID();
-                Log.d("MyTag", "Term ID is " + termID);
-                Intent intent = new Intent(view.getContext(), TermDetailActivity.class);
-                intent.putExtra("term_id", termID);
-                startActivity(intent);
-            }
-        }));
+//
+//            termRecyclerView.addOnItemTouchListener(new RecyclerItemClickListener(this.getApplicationContext(), new RecyclerItemClickListener.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(View view, int position) {
+//                int termID = terms.get(position).getTermID();
+//                Intent intent = new Intent(view.getContext(), TermDetailActivity.class);
+//                intent.putExtra("term_id", termID);
+//                startActivity(intent);
+//            }
+//        }));
 
     }
 

@@ -41,6 +41,9 @@ public class ListItemMentor {
         this.mentorEmail = mentorEmail;
     }
 
+    @Ignore
+    public ListItemMentor(){}
+
     public int getMentorID() {
         return mentorID;
     }

@@ -26,6 +26,7 @@ public class MentorListActivity extends AppCompatActivity {
     Button addMentor;
     Button home;
     Context context;
+    private List<ListItemMentor> mentors;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

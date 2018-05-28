@@ -28,4 +28,7 @@ public interface CourseDao {
 
     @Delete
     void deleteCourse(ListItemCourse course);
+
+    @Query("DELETE FROM course_table")
+    void deleteAllCourses();
 }
