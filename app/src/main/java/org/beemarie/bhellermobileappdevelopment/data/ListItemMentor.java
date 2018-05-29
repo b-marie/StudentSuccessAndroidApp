@@ -14,7 +14,6 @@ import android.support.annotation.NonNull;
 public class ListItemMentor implements Parcelable {
 
     @PrimaryKey(autoGenerate=true)
-    @NonNull
     @ColumnInfo(name = "mentor_ID")
    private int mentorID;
 

@@ -31,4 +31,9 @@ public interface MentorDao {
 
     @Query("DELETE FROM mentor_table")
     void deleteAllMentors();
+
+    @Query("SELECT COUNT(*) FROM mentor_table")
+    int getCountOfMentors();
+
+
 }

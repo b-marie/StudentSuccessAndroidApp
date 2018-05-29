@@ -12,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -34,14 +35,15 @@ public class MentorListActivity extends AppCompatActivity {
     private List<ListItemMentor> mentors;
     private MentorViewModel mentorViewModel;
     public static final int NEW_MENTOR_ACTIVITY_REQUEST_CODE = 1;
+    AppDatabase db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mentor_list);
 
+        db = Room.databaseBuilder(MentorListActivity.this, AppDatabase.class, "database").build();
 
-//        new GetData().execute();
 
         mentorRecyclerView = (RecyclerView) findViewById(R.id.mentor_list_recycler);
         mentorRecyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -79,18 +81,30 @@ public class MentorListActivity extends AppCompatActivity {
         });
     }
 
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    public void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == NEW_MENTOR_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
-            ListItemMentor mentor = getIntent().getExtras().getParcelable("EXTRA_MENTOR");
-            mentorViewModel.insert(mentor);
-        } else {
-//            Toast.makeText(
-//                    getApplicationContext(),
-//                    R.string.empty_not_saved,
-//                    Toast.LENGTH_LONG).show();
-        }
+
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                int count = db.mentorDao().getCountOfMentors();
+                Log.i("MentorListActivity", "Count of mentors is " + count);
+//                if (requestCode == NEW_MENTOR_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
+                    ListItemMentor mentor = data.getExtras().getParcelable("EXTRA_MENTOR");
+                    mentorViewModel.insert(mentor);
+//                } else {
+//                    Toast.makeText(
+//                            getApplicationContext(),
+//                            R.string.empty_not_saved,
+//                            Toast.LENGTH_LONG).show();
+//                }
+            }
+        });
+
+
+
+
     }
 
 //    private class GetData extends AsyncTask<Void, Void, List<ListItemMentor>> {
