@@ -1,5 +1,6 @@
 package org.beemarie.bhellermobileappdevelopment.view;
 
+import android.app.LauncherActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -37,21 +38,25 @@ public class MentorAdapter extends RecyclerView.Adapter<MentorAdapter.ViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
-        holder.mentorName.setText(mentors.get(position).getMentorName());
-//        holder.parentLayout.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Intent intent = new Intent(context, TermDetailActivity.class);
-//                intent.putExtra("term_id", mentors.get(position).getMentorID());
-//                context.startActivity(intent);
-//            }
-//        });
+        if(mentors != null) {
+            ListItemMentor current = mentors.get(position);
+            holder.mentorName.setText(current.getMentorName());
+        } else {
+            holder.mentorName.setText("No Mentors");
+        }
+    }
 
+    void setMentors(List<ListItemMentor> setMentors) {
+        mentors = setMentors;
+        notifyDataSetChanged();
     }
 
     @Override
     public int getItemCount() {
-        return mentors.size();
+        if(mentors != null) {
+            return mentors.size();
+        } else return 0;
+
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

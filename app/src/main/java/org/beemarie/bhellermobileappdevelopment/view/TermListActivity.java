@@ -82,13 +82,13 @@ public class TermListActivity extends AppCompatActivity {
             }
         });
 
-        termViewModel.getAllTerms().observe(this, new Observer<List<ListItemTerm>>() {
-            @Override
-            public void onChanged(@Nullable final List<ListItemTerm> terms) {
-                // Update the cached copy of the words in the adapter.
-                termAdapter.setTerms(terms);
-            }
-        });
+//        termViewModel.getAllTerms().observe(this, new Observer<List<ListItemTerm>>() {
+//            @Override
+//            public void onChanged(@Nullable final List<ListItemTerm> terms) {
+//                // Update the cached copy of the words in the adapter.
+//                termAdapter.setTerms(terms);
+//            }
+//        });
 
 //        termRecyclerView.setOnClickListener(new View.OnClickListener() {
 ////            @Override

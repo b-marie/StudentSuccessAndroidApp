@@ -13,7 +13,7 @@ import java.util.List;
 
 public class MentorViewModel extends AndroidViewModel {
     private MentorRepository mentorRepository;
-    private List<ListItemMentor> allMentors;
+    private LiveData<List<ListItemMentor>> allMentors;
 
     public MentorViewModel(Application application) {
         super(application);
@@ -21,7 +21,7 @@ public class MentorViewModel extends AndroidViewModel {
         allMentors = mentorRepository.getAllMentors();
     }
 
-    List<ListItemMentor> getAllMentors() {return allMentors;}
+    LiveData<List<ListItemMentor>> getAllMentors() {return allMentors;}
 
     public void insert(ListItemMentor mentor) {mentorRepository.insert(mentor); }
 }

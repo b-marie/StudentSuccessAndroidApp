@@ -30,4 +30,5 @@
     <string name="add_new_mentor">Add New Mentor</string>
     <string name="email">Email</string>
     <string name="mentor_name">Mentor Name</string>
+    <string name="empty_not_saved">Empty Not Saved</string>
 </resources>

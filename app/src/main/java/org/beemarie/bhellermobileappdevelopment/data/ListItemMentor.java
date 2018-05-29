@@ -6,10 +6,12 @@ import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 
 @Entity(tableName = "mentor_table")
-public class ListItemMentor {
+public class ListItemMentor implements Parcelable {
 
     @PrimaryKey(autoGenerate=true)
     @NonNull
@@ -42,7 +44,7 @@ public class ListItemMentor {
     }
 
     @Ignore
-    public ListItemMentor(){}
+    public ListItemMentor(Parcel in){}
 
     public int getMentorID() {
         return mentorID;
@@ -75,4 +77,30 @@ public class ListItemMentor {
     public void setMentorEmail(String mentorEmail) {
         this.mentorEmail = mentorEmail;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(mentorID);
+        dest.writeString(mentorName);
+        dest.writeString(mentorPhoneNumber);
+        dest.writeString(mentorEmail);
+    }
+
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<ListItemMentor> CREATOR = new Parcelable.Creator<ListItemMentor>() {
+        @Override
+        public ListItemMentor createFromParcel(Parcel in) {
+            return new ListItemMentor(in);
+        }
+
+        @Override
+        public ListItemMentor[] newArray(int size) {
+            return new ListItemMentor[size];
+        }
+    };
 }
