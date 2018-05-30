@@ -18,11 +18,11 @@
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rec_list_term_activity"
-        android:layout_width="274dp"
-        android:layout_height="305dp"
+        android:layout_width="329dp"
+        android:layout_height="324dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="205dp" />
+        android:layout_marginBottom="162dp" />
 
     <Button
         android:id="@+id/term_list_add_term_button"
@@ -30,7 +30,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="143dp"
+        android:layout_marginBottom="89dp"
         android:text="@string/add_term" />
 
     <Button

@@ -2,31 +2,58 @@ package org.beemarie.bhellermobileappdevelopment.view;
 
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.Toast;
 
 import org.beemarie.bhellermobileappdevelopment.R;
+import org.beemarie.bhellermobileappdevelopment.data.AppDatabase;
+import org.beemarie.bhellermobileappdevelopment.data.ListItemAssessment;
+import org.beemarie.bhellermobileappdevelopment.data.ListItemMentor;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 
 public class AddNewAssessment extends AppCompatActivity {
 
     EditText dueDate;
+    EditText assessmentName;
+    RadioGroup assessmentTypeRadioGroup;
+    RadioButton preAssessmentTypeSelection;
+    RadioButton objectiveAssessmentTypeSelection;
+    RadioButton performanceAssessmentTypeSelection;
     Calendar mCalendar;
+    Button saveButton;
+    RadioButton typeButton;
+    AppDatabase db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_new_assessment);
 
+        db = AppDatabase.getDatabase(getApplicationContext());
+
         mCalendar = Calendar.getInstance();
 
         dueDate = (EditText) findViewById(R.id.add_assessment_due_date_entry);
+        saveButton = (Button) findViewById(R.id.add_assessment_save_button);
+        assessmentName = findViewById(R.id.add_assessment_name_entry);
+        assessmentTypeRadioGroup = (RadioGroup) findViewById(R.id.add_assessment_type_group);
+        preAssessmentTypeSelection = (RadioButton) findViewById(R.id.add_assessment_pre_assessment_entry);
+        objectiveAssessmentTypeSelection = (RadioButton) findViewById(R.id.add_assessment_objective_assessment_entry);
+        performanceAssessmentTypeSelection = (RadioButton) findViewById(R.id.add_assessment_performance_assessment_entry);
 
         final DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
             @Override
@@ -43,6 +70,40 @@ public class AddNewAssessment extends AppCompatActivity {
             public void onClick(View v) {
                 new DatePickerDialog(AddNewAssessment.this, date, mCalendar.get(Calendar.YEAR), mCalendar.get(Calendar.MONTH), mCalendar.get(Calendar.DAY_OF_MONTH)).show();
             }
+        });
+
+        saveButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+//                        final Intent replyIntent = new Intent(getApplicationContext(), MentorListActivity.class);
+                if (assessmentName.getText().toString().equals("") && dueDate.getText().toString().equals("")) {
+                    //Add a toast to say they need to enter text
+                    Toast.makeText(
+                            getApplicationContext(),
+                            R.string.please_enter_text,
+                            Toast.LENGTH_LONG).show();
+                } else {
+                    AsyncTask.execute(new Runnable() {
+                        @Override
+                        public void run() {
+                            Log.i("AddNewAssessment", "Got to the adding of assessment");
+                            String newAssessmentName = assessmentName.getText().toString();
+                            String assessmentDueDate = dueDate.getText().toString();
+                            Date newAssessmentDueDate = new Date(assessmentDueDate);
+                            int radioID = assessmentTypeRadioGroup.getCheckedRadioButtonId();
+                            typeButton = (RadioButton) findViewById(radioID);
+                            String assessmentType = typeButton.getText().toString();
+                            ListItemAssessment assessment = new ListItemAssessment(newAssessmentName, assessmentType, newAssessmentDueDate);
+                            db.assessmentDao().insert(assessment);
+                        }
+
+                    });
+                    Intent intent = new Intent(view.getContext(), AssessmentListActivity.class);
+                    view.getContext().startActivity(intent);
+
+                }
+                finish();
+            }
+
         });
 
 

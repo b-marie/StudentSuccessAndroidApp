@@ -17,11 +17,11 @@
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/assessment_list_recycler"
-        android:layout_width="274dp"
-        android:layout_height="281dp"
+        android:layout_width="329dp"
+        android:layout_height="324dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="205dp" />
+        android:layout_marginBottom="162dp" />
 
     <Button
         android:id="@+id/assessment_list_add_assessment_button"
@@ -29,7 +29,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="143dp"
+        android:layout_marginBottom="91dp"
         android:text="Add Assessment" />
 
     <Button

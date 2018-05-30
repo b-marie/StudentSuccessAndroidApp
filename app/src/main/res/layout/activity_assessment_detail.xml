@@ -1,9 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".view.AssessmentDetailActivity">
 
-</android.support.constraint.ConstraintLayout>
+    <TextView
+        android:id="@+id/assessment_detail_assessment_name"
+        style="@style/Text.Title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="22dp"
+        android:text="@string/assessment_name" />
+
+    <TextView
+        android:id="@+id/assessment_detail_assessment_type_label"
+        style="@style/Text.Title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="131dp"
+        android:text="@string/assessment_type" />
+
+    <TextView
+        android:id="@+id/assessment_detail_assessment_type"
+        style="@style/Text.Item"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/assessment_detail_assessment_type_label"
+        android:layout_centerHorizontal="true"
+        android:text="@string/assessment_type" />
+
+    <TextView
+        android:id="@+id/assessment_detail_assessment_due_date_label"
+        style="@style/Text.Title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="220dp"
+        android:text="@string/assessment_due_date" />
+
+    <TextView
+        android:id="@+id/assessment_detail_assessment_due_date"
+        style="@style/Text.Item"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/assessment_detail_assessment_due_date_label"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="-220dp"
+        android:text="@string/assessment_due_date" />
+
+    <Button
+        android:id="@+id/assessment_detail_edit_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="87dp"
+        android:text="@string/edit" />
+
+    <Button
+        android:id="@+id/assessment_detail_home_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="28dp"
+        android:text="@string/home" />
+</RelativeLayout>

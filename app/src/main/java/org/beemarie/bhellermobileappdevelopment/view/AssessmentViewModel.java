@@ -6,6 +6,7 @@ import android.arch.lifecycle.LiveData;
 
 import org.beemarie.bhellermobileappdevelopment.data.AssessmentRepository;
 import org.beemarie.bhellermobileappdevelopment.data.ListItemAssessment;
+import org.beemarie.bhellermobileappdevelopment.data.ListItemMentor;
 import org.beemarie.bhellermobileappdevelopment.data.ListItemTerm;
 import org.beemarie.bhellermobileappdevelopment.data.TermRepository;
 
@@ -13,7 +14,7 @@ import java.util.List;
 
 public class AssessmentViewModel extends AndroidViewModel {
     private AssessmentRepository assessmentRepository;
-    private List<ListItemAssessment> allAssessments;
+    private LiveData<List<ListItemAssessment>> allAssessments;
 
     public AssessmentViewModel(Application application) {
         super(application);
@@ -21,7 +22,11 @@ public class AssessmentViewModel extends AndroidViewModel {
         allAssessments = assessmentRepository.getAllAssessments();
     }
 
-    List<ListItemAssessment> getAllAssessments() {return allAssessments;}
+    LiveData<List<ListItemAssessment>> getAllAssessments() {return allAssessments;}
 
     public void insert(ListItemAssessment assessment) {assessmentRepository.insert(assessment); }
+
+    public void update(ListItemAssessment assessment) {assessmentRepository.update(assessment); }
+
+    public void delete(ListItemAssessment assessment) {assessmentRepository.delete(assessment); }
 }

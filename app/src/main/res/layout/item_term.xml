@@ -5,6 +5,7 @@
     android:id="@+id/root_list_term_item"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@drawable/customborder"
     android:orientation="vertical">
 
 
@@ -14,14 +15,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
-        android:text="Term Number" />
+        android:text="@string/term_number" />
 
     <TextView
         android:id="@+id/term_start_date"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
-        android:text="Start Date: Term Start" />
+        android:text="@string/start_date_term_start" />
 
 
     <TextView
@@ -29,7 +30,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
-        android:text="End Date: Term End" />
+        android:text="@string/end_date_term_end"
+        android:paddingBottom="10dp"/>
 
 
 </LinearLayout>

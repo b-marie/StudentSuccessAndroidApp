@@ -6,16 +6,20 @@ import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
+import android.arch.persistence.room.Update;
 
 import java.util.List;
 
 @Dao
 public interface AssessmentDao {
     @Query("SELECT * FROM assessment_table")
-    List<ListItemAssessment> getAllAssessments();
+    LiveData<List<ListItemAssessment>> getAllAssessments();
 
     @Query("SELECT * FROM assessment_table WHERE assessment_ID IN (:assessmentIds)")
     List<ListItemAssessment> loadAllAssessmentsByIds(int[] assessmentIds);
+
+    @Query("SELECT * FROM assessment_table WHERE assessment_ID = (:assessmentId)")
+    ListItemAssessment getAssessmentByID(int assessmentId);
 
     @Query("SELECT * FROM assessment_table WHERE assessment_name LIKE :assessment LIMIT 1")
     ListItemAssessment findAssessmentByName(String assessment);
@@ -31,4 +35,7 @@ public interface AssessmentDao {
 
     @Query("DELETE FROM assessment_table")
     void deleteAllAssessments();
+
+    @Update
+    void updateAssessment(ListItemAssessment... assessment);
 }

@@ -2,6 +2,7 @@ package org.beemarie.bhellermobileappdevelopment.data;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
@@ -12,6 +13,7 @@ import java.util.Date;
 public class ListItemAssessment {
 
     @PrimaryKey(autoGenerate=true)
+    @NonNull
     @ColumnInfo(name = "assessment_ID")
     private int assessmentID;
 
@@ -24,8 +26,15 @@ public class ListItemAssessment {
     @ColumnInfo(name = "assessment_due_date")
     private Date assessmentDueDate;
 
+    @Ignore
     public ListItemAssessment(int assessmentID, String assessmentName, String assessmentType, Date assessmentDueDate) {
         this.assessmentID = assessmentID;
+        this.assessmentName = assessmentName;
+        this.assessmentType = assessmentType;
+        this.assessmentDueDate = assessmentDueDate;
+    }
+
+    public ListItemAssessment(String assessmentName, String assessmentType, Date assessmentDueDate) {
         this.assessmentName = assessmentName;
         this.assessmentType = assessmentType;
         this.assessmentDueDate = assessmentDueDate;

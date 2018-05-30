@@ -2,7 +2,8 @@
 <android.support.constraint.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="@color/colorAccent">
 
     <TextView
         android:id="@+id/course_title"
@@ -10,6 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
-        android:text="Course Name" />
+        android:background="@drawable/customborder"
+        android:text="@string/course_name" />
 
 </android.support.constraint.ConstraintLayout>
