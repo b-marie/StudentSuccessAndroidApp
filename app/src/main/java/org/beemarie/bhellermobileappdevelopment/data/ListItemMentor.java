@@ -13,7 +13,9 @@ import android.support.annotation.NonNull;
 @Entity(tableName = "mentor_table")
 public class ListItemMentor implements Parcelable {
 
+
     @PrimaryKey(autoGenerate=true)
+    @NonNull
     @ColumnInfo(name = "mentor_ID")
    private int mentorID;
 
@@ -26,14 +28,6 @@ public class ListItemMentor implements Parcelable {
     @ColumnInfo(name = "mentor_email")
    private String mentorEmail;
 
-
-
-    public ListItemMentor(String mentorName, String mentorPhoneNumber, String mentorEmail) {
-        this.mentorName = mentorName;
-        this.mentorPhoneNumber = mentorPhoneNumber;
-        this.mentorEmail = mentorEmail;
-    }
-
     @Ignore
     public ListItemMentor(int id, String mentorName, String mentorPhoneNumber, String mentorEmail) {
         this.mentorID = id;
@@ -42,8 +36,23 @@ public class ListItemMentor implements Parcelable {
         this.mentorEmail = mentorEmail;
     }
 
+
+
+    public ListItemMentor(String mentorName, String mentorPhoneNumber, String mentorEmail) {
+        this.mentorName = mentorName;
+        this.mentorPhoneNumber = mentorPhoneNumber;
+        this.mentorEmail = mentorEmail;
+    }
+
+
+
+
     @Ignore
     public ListItemMentor(Parcel in){}
+
+    @Ignore
+    public ListItemMentor(Parcelable parcelableExtra) {
+    }
 
     public int getMentorID() {
         return mentorID;

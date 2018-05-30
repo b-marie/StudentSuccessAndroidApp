@@ -31,4 +31,5 @@
     <string name="email">Email</string>
     <string name="mentor_name">Mentor Name</string>
     <string name="empty_not_saved">Empty Not Saved</string>
+    <string name="please_enter_text">Please enter text in all fields</string>
 </resources>

@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import org.beemarie.bhellermobileappdevelopment.R;
 import org.beemarie.bhellermobileappdevelopment.data.AppDatabase;
@@ -29,8 +30,10 @@ public class AddNewMentor extends AppCompatActivity {
     private EditText mentorPhoneNumber;
     private EditText mentorEmail;
     AppDatabase db;
+    public static final String EXTRA_MENTOR = "EXTRA_MENTOR";
 
     Button saveButton;
+
 
 
     @Override
@@ -39,7 +42,7 @@ public class AddNewMentor extends AppCompatActivity {
         setContentView(R.layout.activity_add_new_mentor);
 
 
-        db = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, "production").build();
+        db = AppDatabase.getDatabase(getApplicationContext());
 
         saveButton = (Button) findViewById(R.id.add_mentor_save_button);
         mentorName = findViewById(R.id.add_mentor_name_entry);
@@ -48,9 +51,13 @@ public class AddNewMentor extends AppCompatActivity {
 
                 saveButton.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View view) {
-                        final Intent replyIntent = new Intent(getApplicationContext(), MentorListActivity.class);
+//                        final Intent replyIntent = new Intent(getApplicationContext(), MentorListActivity.class);
                         if (mentorName.getText().toString().equals("") && mentorPhoneNumber.getText().toString().equals("") && mentorEmail.getText().toString().equals("")) {
-                            setResult(RESULT_CANCELED, replyIntent);
+                            //Add a toast to say they need to enter text
+                            Toast.makeText(
+                                getApplicationContext(),
+                                R.string.please_enter_text,
+                                Toast.LENGTH_LONG).show();
                         } else {
                             AsyncTask.execute(new Runnable() {
                                 @Override
@@ -60,11 +67,13 @@ public class AddNewMentor extends AppCompatActivity {
                                         String newMentorPhoneNumber = mentorPhoneNumber.getText().toString();
                                         String newMentorEmail = mentorEmail.getText().toString();
                                         ListItemMentor mentor = new ListItemMentor(newMentorName, newMentorPhoneNumber, newMentorEmail);
-                                        db.mentorDao().insert(mentor);
-                                        replyIntent.putExtra("EXTRA_MENTOR", (Parcelable) mentor);
-//                                        setResult(RESULT_OK, replyIntent);
-                                        startActivityForResult(replyIntent, RESULT_OK);
+//                                        db.mentorDao().insert(mentor);
+                                        Intent intent = getIntent();
+//                                        Intent intent = new Intent(AddNewMentor.this, MentorListActivity.class);
+                                        intent.putExtra(EXTRA_MENTOR, (Parcelable) mentor);
+                                        setResult(RESULT_OK, intent);
                                         finish();
+//                                        startActivity(intent);
                                     }
 
                             });

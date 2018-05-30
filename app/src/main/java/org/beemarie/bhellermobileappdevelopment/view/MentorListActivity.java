@@ -1,5 +1,6 @@
 package org.beemarie.bhellermobileappdevelopment.view;
 
+import android.app.LauncherActivity;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
@@ -7,6 +8,8 @@ import android.arch.persistence.room.Room;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -42,13 +45,20 @@ public class MentorListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mentor_list);
 
-        db = Room.databaseBuilder(MentorListActivity.this, AppDatabase.class, "database").build();
+        db = AppDatabase.getDatabase(getApplicationContext());
 
 
         mentorRecyclerView = (RecyclerView) findViewById(R.id.mentor_list_recycler);
         mentorRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mentorAdapter = new MentorAdapter(context, mentors);
         mentorRecyclerView.setAdapter(mentorAdapter);
+
+
+//        //Get data from AddNewMentor
+//        Bundle extras = getIntent().getExtras();
+//
+//        ListItemMentor newMentor = extras.getParcelable("EXTRA_MENTOR");
+//        mentorViewModel.insert(newMentor);
 
         //Get the viewmodel
         mentorViewModel = ViewModelProviders.of(this).get(MentorViewModel.class);
@@ -83,22 +93,32 @@ public class MentorListActivity extends AppCompatActivity {
 
     public void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
+        Log.i("MentorListActivity", "Got to onActivityResult");
+        final Intent intent = getIntent();
 
         AsyncTask.execute(new Runnable() {
+
             @Override
             public void run() {
-                int count = db.mentorDao().getCountOfMentors();
-                Log.i("MentorListActivity", "Count of mentors is " + count);
-//                if (requestCode == NEW_MENTOR_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
-                    ListItemMentor mentor = data.getExtras().getParcelable("EXTRA_MENTOR");
-                    mentorViewModel.insert(mentor);
-//                } else {
-//                    Toast.makeText(
-//                            getApplicationContext(),
-//                            R.string.empty_not_saved,
-//                            Toast.LENGTH_LONG).show();
-//                }
+                Log.i("MentorListActivity", "Got to Runnable");
+                if(requestCode == NEW_MENTOR_ACTIVITY_REQUEST_CODE) {
+                    Log.i("MentorListActivity", "Got to Activity Request Code");
+                    Bundle extras = intent.getExtras();
+                    ListItemMentor newMentor = extras.getParcelable("EXTRA_MENTOR");
+                    Log.i("MentorListActivity", newMentor.getMentorName());
+                    mentorViewModel.insert(newMentor);
+                }
+
+
+                //collect intent
+////                Intent intent = getIntent();
+//                ListItemMentor mentor = new ListItemMentor(data.getExtras().getParcelable(AddNewMentor.EXTRA_MENTOR));
+//                Log.i("MentorListActivity", mentor.getMentorName());
+//                //collect property values
+//                mentorViewModel.insert(mentor);
+
+//                    ListItemMentor mentor = data.getExtras().getParcelable("EXTRA_MENTOR");
+//                    mentorViewModel.insert(mentor);
             }
         });
 

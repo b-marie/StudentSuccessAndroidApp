@@ -63,17 +63,17 @@ public abstract class AppDatabase extends RoomDatabase {
 
         @Override
         protected Void doInBackground(final Void... params) {
-            tDao.deleteAllTerms();
-            cDao.deleteAllCourses();
+//            tDao.deleteAllTerms();
+//            cDao.deleteAllCourses();
             mDao.deleteAllMentors();
-            aDao.deleteAllAssessments();
+//            aDao.deleteAllAssessments();
 
 //            //Insert fake assessment
 //            ListItemAssessment assessment1 = new ListItemAssessment(1, "Pre-Assessment", "Objective Assessment", new Date(2018, 3, 15));
 //            aDao.insert(assessment1);
 //
             //Insert fake mentor
-            ListItemMentor mentor1 = new ListItemMentor(1, "Bob Jones", "534-234-6234", "BJones@wgu.edu");
+            ListItemMentor mentor1 = new ListItemMentor("Bob Jones", "534-234-6234", "BJones@wgu.edu");
             mDao.insert(mentor1);
 //
 //            //Insert fake course
