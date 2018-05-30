@@ -6,6 +6,7 @@ import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
+import android.arch.persistence.room.Update;
 
 import java.util.List;
 
@@ -16,6 +17,9 @@ public interface MentorDao {
 
     @Query("SELECT * FROM mentor_table WHERE mentor_ID IN (:mentorIds)")
     List<ListItemMentor> loadAllMentorsByIds(int[] mentorIds);
+
+    @Query("SELECT * FROM mentor_table WHERE mentor_ID = (:mentorId)")
+    ListItemMentor getMentorByID(int mentorId);
 
     @Query("SELECT * FROM mentor_table WHERE mentor_name LIKE :mentor LIMIT 1")
     ListItemMentor findMentorByName(String mentor);
@@ -34,6 +38,9 @@ public interface MentorDao {
 
     @Query("SELECT COUNT(*) FROM mentor_table")
     int getCountOfMentors();
+
+    @Update
+    void updateMentor(ListItemMentor... mentors);
 
 
 }

@@ -67,45 +67,18 @@ public class AddNewMentor extends AppCompatActivity {
                                         String newMentorPhoneNumber = mentorPhoneNumber.getText().toString();
                                         String newMentorEmail = mentorEmail.getText().toString();
                                         ListItemMentor mentor = new ListItemMentor(newMentorName, newMentorPhoneNumber, newMentorEmail);
-//                                        db.mentorDao().insert(mentor);
-                                        Intent intent = getIntent();
-//                                        Intent intent = new Intent(AddNewMentor.this, MentorListActivity.class);
-                                        intent.putExtra(EXTRA_MENTOR, (Parcelable) mentor);
-                                        setResult(RESULT_OK, intent);
-                                        finish();
-//                                        startActivity(intent);
+                                        db.mentorDao().insert(mentor);
                                     }
 
                             });
+                            Intent intent = new Intent(view.getContext(), MentorListActivity.class);
+                            view.getContext().startActivity(intent);
 
                         }
                         finish();
                     }
 
                 });
-
-
-
-//    public void addNewMentor() {
-//            if(!mentorName.getText().toString().equals("") && !mentorPhoneNumber.getText().toString().equals("") && !mentorEmail.getText().toString().equals("")){
-//                String newMentorName = mentorName.getText().toString();
-//                String newMentorPhoneNumber = mentorPhoneNumber.getText().toString();
-//                String newMentorEmail = mentorEmail.getText().toString();
-//                final ListItemMentor newMentor = new ListItemMentor(newMentorName, newMentorPhoneNumber, newMentorEmail);
-////                AsyncTask.execute(new Runnable() {
-////                    @Override
-////                    public void run() {
-////                        db.mentorDao().insert(newMentor);
-////                    }
-////                });
-//                Intent replyIntent = new Intent();
-//                replyIntent.putExtra("EXTRA_MENTOR", (Parcelable) newMentor);
-//                setResult(RESULT_OK, replyIntent);
-//            }
-//            finish();
-//
-//    }
-
 
     }
 }

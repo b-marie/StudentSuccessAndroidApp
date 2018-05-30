@@ -24,4 +24,8 @@ public class MentorViewModel extends AndroidViewModel {
     LiveData<List<ListItemMentor>> getAllMentors() {return allMentors;}
 
     public void insert(ListItemMentor mentor) {mentorRepository.insert(mentor); }
+
+    public void update(ListItemMentor mentor) {mentorRepository.update(mentor); }
+
+    public void delete(ListItemMentor mentor) {mentorRepository.delete(mentor); }
 }

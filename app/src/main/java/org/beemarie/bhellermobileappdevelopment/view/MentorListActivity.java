@@ -47,18 +47,13 @@ public class MentorListActivity extends AppCompatActivity {
 
         db = AppDatabase.getDatabase(getApplicationContext());
 
+        context = this.getApplicationContext();
+
 
         mentorRecyclerView = (RecyclerView) findViewById(R.id.mentor_list_recycler);
         mentorRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mentorAdapter = new MentorAdapter(context, mentors);
         mentorRecyclerView.setAdapter(mentorAdapter);
-
-
-//        //Get data from AddNewMentor
-//        Bundle extras = getIntent().getExtras();
-//
-//        ListItemMentor newMentor = extras.getParcelable("EXTRA_MENTOR");
-//        mentorViewModel.insert(newMentor);
 
         //Get the viewmodel
         mentorViewModel = ViewModelProviders.of(this).get(MentorViewModel.class);
@@ -89,6 +84,7 @@ public class MentorListActivity extends AppCompatActivity {
                 startActivityForResult(intent, NEW_MENTOR_ACTIVITY_REQUEST_CODE);
             }
         });
+
     }
 
     public void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
@@ -102,23 +98,8 @@ public class MentorListActivity extends AppCompatActivity {
             public void run() {
                 Log.i("MentorListActivity", "Got to Runnable");
                 if(requestCode == NEW_MENTOR_ACTIVITY_REQUEST_CODE) {
-                    Log.i("MentorListActivity", "Got to Activity Request Code");
-                    Bundle extras = intent.getExtras();
-                    ListItemMentor newMentor = extras.getParcelable("EXTRA_MENTOR");
-                    Log.i("MentorListActivity", newMentor.getMentorName());
-                    mentorViewModel.insert(newMentor);
                 }
 
-
-                //collect intent
-////                Intent intent = getIntent();
-//                ListItemMentor mentor = new ListItemMentor(data.getExtras().getParcelable(AddNewMentor.EXTRA_MENTOR));
-//                Log.i("MentorListActivity", mentor.getMentorName());
-//                //collect property values
-//                mentorViewModel.insert(mentor);
-
-//                    ListItemMentor mentor = data.getExtras().getParcelable("EXTRA_MENTOR");
-//                    mentorViewModel.insert(mentor);
             }
         });
 
@@ -127,28 +108,4 @@ public class MentorListActivity extends AppCompatActivity {
 
     }
 
-//    private class GetData extends AsyncTask<Void, Void, List<ListItemMentor>> {
-//
-//        @Override
-//        protected LiveData<List<ListItemMentor>> doInBackground(Void... params) {
-//            AppDatabase db = Room.databaseBuilder(MentorListActivity.this, AppDatabase.class, "database").build();
-////            db.termDao().deleteAllTerms();
-//
-//            ListItemMentor mentor = new ListItemMentor("Bob Ross", "541-220-2330", "Bob.Ross@wgu.edu");
-//
-//            db.mentorDao().insert(mentor);
-//            LiveData<List<ListItemMentor>> mentors = db.mentorDao().getAllMentors();
-//            return mentors;
-//        }
-//
-//        @Override
-//        protected void onPostExecute(List<ListItemMentor> mentors) {
-//            super.onPostExecute(mentors);
-//            loadRecyclerView(mentors);
-//        }
-//    }
-//
-//    private void loadRecyclerView(List<ListItemMentor> mentors) {
-//
-//    }
 }

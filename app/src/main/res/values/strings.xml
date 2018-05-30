@@ -32,4 +32,7 @@
     <string name="mentor_name">Mentor Name</string>
     <string name="empty_not_saved">Empty Not Saved</string>
     <string name="please_enter_text">Please enter text in all fields</string>
+    <string name="delete_mentor">Delete Mentor</string>
+    <string name="update_mentor">Update Mentor</string>
+
 </resources>

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,9 +18,14 @@ import org.beemarie.bhellermobileappdevelopment.data.ListItemMentor;
 import java.util.List;
 
 public class MentorAdapter extends RecyclerView.Adapter<MentorAdapter.MentorViewHolder> {
+
+
+
     public class MentorViewHolder extends RecyclerView.ViewHolder {
         public TextView mentorName;
 //        RelativeLayout parentLayout;
+
+        
 
 
         public MentorViewHolder(View itemView) {
@@ -30,8 +36,11 @@ public class MentorAdapter extends RecyclerView.Adapter<MentorAdapter.MentorView
     }
     public static final String TAG = "RecyclerViewAdapter";
     List<ListItemMentor> mentors;
-    private Context context;
     MentorViewHolder viewHolder;
+    View.OnClickListener mClickListener;
+    Context context;
+
+
 
     public MentorAdapter(Context context, List<ListItemMentor> listOfMentors) {
         this.context = context;
@@ -43,8 +52,11 @@ public class MentorAdapter extends RecyclerView.Adapter<MentorAdapter.MentorView
     @Override
     public MentorViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_mentor, parent, false);
-        return new MentorViewHolder(view);
+        MentorViewHolder holder = new MentorViewHolder(view);
+        return holder;
     }
+
+
 
     @Override
     public void onBindViewHolder(@NonNull MentorViewHolder holder, final int position) {
@@ -54,6 +66,21 @@ public class MentorAdapter extends RecyclerView.Adapter<MentorAdapter.MentorView
         } else {
             holder.mentorName.setText("No Mentors");
         }
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.i("UpdateMentorActivity", "Clicked on " + mentors.get(position).getMentorName());
+                Intent intent = new Intent(context, UpdateMentorActivity.class);
+                intent.putExtra("mentorName", mentors.get(position).getMentorName());
+                intent.putExtra("mentorPhoneNumber", mentors.get(position).getMentorPhoneNumber());
+                intent.putExtra("mentorEmail", mentors.get(position).getMentorEmail());
+                intent.putExtra("mentorID", mentors.get(position).getMentorID());
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(intent);
+            }
+
+        });
+
     }
 
     void setMentors(List<ListItemMentor> setMentors) {
@@ -68,6 +95,7 @@ public class MentorAdapter extends RecyclerView.Adapter<MentorAdapter.MentorView
         } else return 0;
 
     }
+    
 
 
 }
