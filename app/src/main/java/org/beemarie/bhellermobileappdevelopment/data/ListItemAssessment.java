@@ -12,7 +12,6 @@ import java.util.Date;
 public class ListItemAssessment {
 
     @PrimaryKey(autoGenerate=true)
-    @NonNull
     @ColumnInfo(name = "assessment_ID")
     private int assessmentID;
 

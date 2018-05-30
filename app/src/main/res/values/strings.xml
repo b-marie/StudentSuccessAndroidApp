@@ -34,5 +34,12 @@
     <string name="please_enter_text">Please enter text in all fields</string>
     <string name="delete_mentor">Delete Mentor</string>
     <string name="update_mentor">Update Mentor</string>
+    <string name="add_new_assessment">Add New Assessment</string>
+    <string name="pre_assessment">Pre-Assessment</string>
+    <string name="assessment_type">Assessment Type</string>
+    <string name="performance_assessment">Performance Assessment</string>
+    <string name="objective_assessment">Objective Assessment</string>
+    <string name="due_date">Due Date</string>
+    <string name="assessment_name">Assessment Name</string>
 
 </resources>

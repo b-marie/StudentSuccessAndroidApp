@@ -27,5 +27,14 @@ public class AssessmentListActivity extends AppCompatActivity {
                 view.getContext().startActivity(intent);
             }
         });
+
+        addAssessment = (Button) findViewById(R.id.assessment_list_add_assessment_button);
+        addAssessment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(view.getContext(), AddNewAssessment.class);
+                view.getContext().startActivity(intent);
+            }
+        });
     }
 }
