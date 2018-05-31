@@ -9,6 +9,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -67,17 +68,21 @@ public abstract class AppDatabase extends RoomDatabase {
 //            cDao.deleteAllCourses();
 //            mDao.deleteAllMentors();
 //            aDao.deleteAllAssessments();
-
+//
 //            //Insert fake assessment
-//            ListItemAssessment assessment1 = new ListItemAssessment(1, "Pre-Assessment", "Objective Assessment", new Date(2018, 3, 15));
+//            ListItemAssessment assessment1 = new ListItemAssessment("Pre-Assessment", "Objective Assessment", new Date(2018, 3, 15));
 //            aDao.insert(assessment1);
 //
-            //Insert fake mentor
+////            Insert fake mentor
 //            ListItemMentor mentor1 = new ListItemMentor("Bob Jones", "534-234-6234", "BJones@wgu.edu");
 //            mDao.insert(mentor1);
 //
 //            //Insert fake course
-//            ListItemCourse course1 = new ListItemCourse(1, "Intro to Basketweaving", new Date(2018, 02, 01), new Date(2018, 02, 28), "In Progress", mDao.getAllMentors(), aDao.getAllAssessments(), "Notes");
+//            ArrayList<ListItemMentor> mentors = new ArrayList<>();
+//            mentors.add(mentor1);
+//            ArrayList<ListItemAssessment> assessments = new ArrayList<>();
+//            assessments.add(assessment1);
+//            ListItemCourse course1 = new ListItemCourse("Intro to Basketweaving", new Date(2018, 02, 01), new Date(2018, 02, 28), "In Progress", mentors, assessments, "Notes");
 //            cDao.insert(course1);
 //
 //            ListItemTerm term1;

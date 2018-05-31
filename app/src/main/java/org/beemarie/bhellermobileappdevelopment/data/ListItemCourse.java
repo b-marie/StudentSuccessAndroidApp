@@ -5,6 +5,7 @@ import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
+import android.arch.persistence.room.TypeConverter;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
@@ -16,6 +17,7 @@ import java.util.List;
 //Model for courses
 @Entity(tableName = "course_table")
 public class ListItemCourse implements Parcelable{
+
     @PrimaryKey(autoGenerate=true)
     @NonNull
     @ColumnInfo(name = "course_ID")

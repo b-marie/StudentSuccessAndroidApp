@@ -37,7 +37,7 @@ public interface CourseDao {
     void deleteAllCourses();
 
     @Update
-    void updateCourse(ListItemCourse... course);
+    void updateCourse(ListItemCourse course);
 
     @Query("DELETE FROM course_table WHERE course_ID = (:courseId)")
     void deleteByID(int courseId);

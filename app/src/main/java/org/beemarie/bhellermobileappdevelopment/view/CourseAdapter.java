@@ -65,6 +65,7 @@ class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseViewHolder>
             public void onClick(View view) {
                 Log.i("UpdateCourseActivity", "Clicked on " + courses.get(position).getCourseName());
                 Intent intent = new Intent(context, CourseDetailActivity.class);
+                intent.putExtra("courseID", courses.get(position).getCourseID());
                 intent.putExtra("courseName", courses.get(position).getCourseName());
                 intent.putExtra("courseStartDate", courses.get(position).getCourseStartDate());
                 intent.putExtra("courseEndDate", courses.get(position).getCourseEndDate());

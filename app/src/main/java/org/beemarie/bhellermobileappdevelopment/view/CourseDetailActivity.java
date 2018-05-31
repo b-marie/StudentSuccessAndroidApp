@@ -185,29 +185,22 @@ public class CourseDetailActivity extends AppCompatActivity {
 
     private ListItemCourse getIncomingIntent() {
         Log.d("CourseDetailActivity", "Checking for incoming intents");
-            if (getIntent().hasExtra("courseName")) {
                 Log.d("CourseDetailActivity", "Found intent extras");
+                int courseID = getIntent().getIntExtra("courseID", 0);
                 String courseName = getIntent().getStringExtra("courseName");
-                String courseStatus = getIntent().getStringExtra("courseStatus");
-                String courseNotes = getIntent().getStringExtra("courseNotes");
                 Date courseStartDate = (Date) getIntent().getSerializableExtra("courseStartDate");
                 Date courseEndDate = (Date) getIntent().getSerializableExtra("courseEndDate");
-                int courseID = getIntent().getIntExtra("courseID", 0);
+                String courseStatus = getIntent().getStringExtra("courseStatus");
                 Bundle bundle = getIntent().getExtras();
                 ArrayList<ListItemMentor> courseMentors = bundle.getParcelableArrayList("courseMentors");
                 ArrayList<ListItemAssessment> courseAssessments = bundle.getParcelableArrayList("courseAssessments");
+                String courseNotes = getIntent().getStringExtra("courseNotes");
+
 
                 ListItemCourse course = new ListItemCourse(courseID, courseName, courseStartDate, courseEndDate, courseStatus,
                         courseMentors, courseAssessments, courseNotes);
                 setCourse(course);
                 return course;
-            } else {
-                ArrayList<ListItemMentor> mentors = new ArrayList<>();
-                ArrayList<ListItemAssessment> assessments = new ArrayList<>();
-                ListItemCourse course = new ListItemCourse(0, "default", new Date(2018, 1, 1), new Date(2018, 1, 1), "default", mentors, assessments, "default");
-                setCourse(course);
-                return course;
-            }
     }
 
     private void setCourse(ListItemCourse course) {
