@@ -5,10 +5,12 @@ import android.arch.lifecycle.LiveData;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -64,7 +66,7 @@ public class CourseDetailActivity extends AppCompatActivity {
 
         final ListItemCourse currentCourse = getIncomingIntent();
 
-        populateMentorsList();
+        populateMentorsList(currentCourse);
 
         TextView courseName = findViewById(R.id.course_detail_course_name);
         TextView courseStatus = findViewById(R.id.course_detail_status);
@@ -73,13 +75,95 @@ public class CourseDetailActivity extends AppCompatActivity {
 
         LinearLayout mentorListViewLayout = (LinearLayout) findViewById(R.id.course_detail_mentor_view_layout);
 
-        Spinner mentorDropdown = findViewById(R.id.course_detail_mentor_list);
+        final Spinner mentorDropdown = findViewById(R.id.course_detail_mentor_list);
         Spinner assessmentsDropdown = findViewById(R.id.course_detail_assessment_list);
 
 
-
         Button editButton = (Button) findViewById(R.id.course_detail_edit_button);
+        editButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View view) {
+                AsyncTask.execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        Log.i("CourseDetailActivity", "Clicked on " + currentCourse.getCourseName());
+                        Intent intent = new Intent(context, UpdateCourseActivity.class);
+                        intent.putExtra("courseName", currentCourse.getCourseName());
+                        intent.putExtra("courseStartDate", currentCourse.getCourseStartDate());
+                        intent.putExtra("courseEndDate", currentCourse.getCourseEndDate());
+                        intent.putExtra("courseStatus", currentCourse.getCourseStatus());
+                        Bundle bundle = new Bundle();
+                        bundle.putParcelableArrayList("courseMentors", currentCourse.getCourseMentors());
+                        bundle.putParcelableArrayList("courseAssessments", currentCourse.getCourseAssessments());
+                        intent.putExtras(bundle);
+                        intent.putExtra("courseNotes", currentCourse.getCourseNotes());
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        context.startActivity(intent);
+                    }
+
+                });
+            }
+
+
+        });
+
+
+
         Button addMentorButton = (Button) findViewById(R.id.course_detail_add_mentor_button);
+        addMentorButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View view) {
+                AsyncTask.execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        List<ListItemMentor> mentorsList = db.mentorDao().getAllMentorsList();
+                        int i = mentorDropdown.getSelectedItemPosition();
+                        ListItemMentor mentorToAdd = mentorsList.get(i);
+                        Log.i("CourseDetailActivity", "Mentor to add is " + mentorToAdd.getMentorName());
+                        ArrayList<ListItemMentor> newMentorList = currentCourse.getCourseMentors();
+                        newMentorList.add(mentorToAdd);
+                        Log.i("CourseDetailActivity", "Size of mentor list is " + newMentorList.size());
+                        int currentCourseID = currentCourse.getCourseID();
+                        String currentCourseName = currentCourse.getCourseName();
+                        String currentCourseStatus = currentCourse.getCourseStatus();
+                        Date currentCourseStartDate = currentCourse.getCourseStartDate();
+                        Date currentCourseEndDate = currentCourse.getCourseEndDate();
+                        ArrayList<ListItemAssessment> currentCourseAssessments = currentCourse.getCourseAssessments();
+                        String currentCourseNotes = currentCourse.getCourseNotes();
+                        ListItemCourse updatedCourse = new ListItemCourse(currentCourseID, currentCourseName,
+                                currentCourseStartDate, currentCourseEndDate, currentCourseStatus, newMentorList,
+                                currentCourseAssessments, currentCourseNotes);
+                        db.courseDao().updateCourse(updatedCourse);
+                        Log.i("CourseDetailActivity", "Updated course name is " + updatedCourse.getCourseName());
+                        ListItemCourse checkCourse = db.courseDao().getCourseByID(currentCourseID);
+                        Log.i("CourseDetailActivity", "Length of updated course mentor list is " + checkCourse.getCourseMentors().size());
+
+                        //Refresh current activity
+//                        try{
+
+//                            intent.putExtra("courseName", currentCourse.getCourseName());
+//                            intent.putExtra("courseStatus", currentCourse.getCourseStatus());
+//                            intent.putExtra("courseNotes", currentCourse.getCourseNotes());
+//                            intent.putExtra("courseStartDate", currentCourse.getCourseStartDate());
+//                            intent.putExtra("courseEndDate", currentCourse.getCourseEndDate());
+//                            intent.putExtra("courseID", currentCourse.getCourseID());
+//                            Bundle bundle = new Bundle();
+//                            bundle.putParcelableArrayList("courseMentors", currentCourse.getCourseMentors());
+//                            bundle.putParcelableArrayList("courseAssessments", currentCourse.getCourseAssessments());
+//                            intent.putExtras(bundle);
+//                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                            finish();
+//                            context.startActivity(intent);}
+//                        catch (Exception e) {
+//                            e.printStackTrace();
+//                        }
+                    }
+
+                });
+                Intent intent = new Intent(context, CourseListActivity.class);
+                view.getContext().startActivity(intent);
+            }
+        });
 
 
         Button homeButton = (Button) findViewById(R.id.course_detail_home_button);
@@ -96,39 +180,37 @@ public class CourseDetailActivity extends AppCompatActivity {
         Button courseNotesButton = (Button) findViewById(R.id.course_detail_course_notes_button);
 
 
-
-
     }
 
 
-    private ListItemCourse getIncomingIntent(){
+    private ListItemCourse getIncomingIntent() {
         Log.d("CourseDetailActivity", "Checking for incoming intents");
-        if(getIntent().hasExtra("courseName")) {
-            Log.d("CourseDetailActivity", "Found intent extras");
-            String courseName = getIntent().getStringExtra("courseName");
-            String courseStatus = getIntent().getStringExtra("courseStatus");
-            String courseNotes = getIntent().getStringExtra("courseNotes");
-            Date courseStartDate = (Date) getIntent().getSerializableExtra("courseStartDate");
-            Date courseEndDate = (Date) getIntent().getSerializableExtra("courseEndDate");
-            int courseID = getIntent().getIntExtra("courseID", 0);
-            Bundle bundle = getIntent().getExtras();
-            ArrayList<ListItemMentor> courseMentors = bundle.getParcelableArrayList("courseMentors");
-            ArrayList<ListItemAssessment> courseAssessments = bundle.getParcelableArrayList("courseAssessments");
+            if (getIntent().hasExtra("courseName")) {
+                Log.d("CourseDetailActivity", "Found intent extras");
+                String courseName = getIntent().getStringExtra("courseName");
+                String courseStatus = getIntent().getStringExtra("courseStatus");
+                String courseNotes = getIntent().getStringExtra("courseNotes");
+                Date courseStartDate = (Date) getIntent().getSerializableExtra("courseStartDate");
+                Date courseEndDate = (Date) getIntent().getSerializableExtra("courseEndDate");
+                int courseID = getIntent().getIntExtra("courseID", 0);
+                Bundle bundle = getIntent().getExtras();
+                ArrayList<ListItemMentor> courseMentors = bundle.getParcelableArrayList("courseMentors");
+                ArrayList<ListItemAssessment> courseAssessments = bundle.getParcelableArrayList("courseAssessments");
 
-
-            ListItemCourse course = new ListItemCourse(courseID, courseName, courseStartDate, courseEndDate, courseStatus, courseMentors, courseAssessments, courseNotes);
-            setCourse(course);
-            return course;
-        } else {
-            ArrayList<ListItemMentor> mentors = new ArrayList<>();
-            ArrayList<ListItemAssessment> assessments = new ArrayList<>();
-            ListItemCourse course = new ListItemCourse(0, "default", new Date(2018, 1, 1), new Date(2018, 1, 1), "default", mentors, assessments, "default");
-            setCourse(course);
-            return course;
-        }
+                ListItemCourse course = new ListItemCourse(courseID, courseName, courseStartDate, courseEndDate, courseStatus,
+                        courseMentors, courseAssessments, courseNotes);
+                setCourse(course);
+                return course;
+            } else {
+                ArrayList<ListItemMentor> mentors = new ArrayList<>();
+                ArrayList<ListItemAssessment> assessments = new ArrayList<>();
+                ListItemCourse course = new ListItemCourse(0, "default", new Date(2018, 1, 1), new Date(2018, 1, 1), "default", mentors, assessments, "default");
+                setCourse(course);
+                return course;
+            }
     }
 
-    private void setCourse(ListItemCourse course){
+    private void setCourse(ListItemCourse course) {
         String pattern = "MM/dd/yyyy";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
 
@@ -149,18 +231,21 @@ public class CourseDetailActivity extends AppCompatActivity {
         courseEndDate.setText(cEndDate);
 
         ArrayList<ListItemMentor> courseMentors = course.getCourseMentors();
-//        ListItemMentor courseMentor = courseMentors.get(0);
+        if(courseMentors == null) {
+            courseMentors = new ArrayList<ListItemMentor>();
+        }
+        Log.i("CourseDetailActivity", "Course mentors number is " + courseMentors.size());
 
         ArrayList<ListItemAssessment> courseAssessments = course.getCourseAssessments();
 //        ListItemAssessment courseAssessment1 = courseAssessments.get(0);
 
     }
 
-    private void populateMentorsList(){
+    private void populateMentorsList(final ListItemCourse course) {
         AsyncTask.execute(new Runnable() {
             @Override
             public void run() {
-                if(db.mentorDao().getAllMentorsList().isEmpty()){
+                if (db.mentorDao().getAllMentorsList().isEmpty()) {
                     return;
                 } else {
                     //Populate the dropdown
@@ -174,19 +259,32 @@ public class CourseDetailActivity extends AppCompatActivity {
                     adapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
                     mentorDropdown.setAdapter(adapter);
                     mentorDropdown.setSelection(0);
+                    mentorDropdown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
+                        public void onItemSelected(AdapterView<?>  parent, View view, int pos, long id){
+                            Object item = parent.getItemAtPosition(pos);
+                        }
+                        public void onNothingSelected(AdapterView<?> parent) {
+
+                        }
+                    });
                     //Populate the current course list
                     LinearLayout mentorListViewLayout = (LinearLayout) findViewById(R.id.course_detail_mentor_view_layout);
-                    if(currentCourse.getCourseMentors().isEmpty()) {
+                    ArrayList<ListItemMentor> currentCourseMentors = new ArrayList<ListItemMentor>(course.getCourseMentors());
+                    if (currentCourseMentors.isEmpty()) {
                         TextView noMentors = new TextView(context);
                         noMentors.setText("No Mentors");
                         mentorListViewLayout.addView(noMentors);
                     } else {
-                        currentCourseMentors = currentCourse.getCourseMentors();
+                        currentCourseMentors = course.getCourseMentors();
                         final TextView[] mentorTextViews = new TextView[currentCourseMentors.size()];
 
-                        for(int i = 0; i < currentCourseMentors.size(); i++) {
+                        for (int i = 0; i < currentCourseMentors.size(); i++) {
                             final TextView rowTextView = new TextView(context);
-                            rowTextView.setText(currentCourseMentors.get(i).getMentorName() + "\n Phone Number: " + currentCourseMentors.get(i).getMentorPhoneNumber() + "\n Email: " + currentCourseMentors.get(i).getMentorEmail());
+                            String text = currentCourseMentors.get(i).getMentorName() +
+                                    "\n Phone Number: " + currentCourseMentors.get(i).getMentorPhoneNumber() +
+                                    "\n Email: " + currentCourseMentors.get(i).getMentorEmail();
+                            rowTextView.setText(text);
+                            rowTextView.setTextColor(getResources().getColor(R.color.black));
                             mentorListViewLayout.addView(rowTextView);
                             mentorTextViews[i] = rowTextView;
                         }

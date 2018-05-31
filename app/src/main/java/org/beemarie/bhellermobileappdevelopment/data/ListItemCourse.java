@@ -64,6 +64,9 @@ public class ListItemCourse implements Parcelable{
         this.courseNotes = courseNotes;
     }
 
+    @Ignore
+    public ListItemCourse() {}
+
 
     public int getCourseID() {
         return courseID;
@@ -106,11 +109,20 @@ public class ListItemCourse implements Parcelable{
     }
 
     public ArrayList<ListItemMentor> getCourseMentors() {
-        return courseMentors;
+        if(courseMentors != null) {
+            return courseMentors;
+        } else {
+            return new ArrayList<ListItemMentor>();
+        }
+
     }
 
     public void setCourseMentors(ArrayList<ListItemMentor> courseMentors) {
         this.courseMentors = courseMentors;
+    }
+
+    public void addCourseMentor(ListItemMentor mentor) {
+        this.courseMentors.add(mentor);
     }
 
     public ArrayList<ListItemAssessment> getCourseAssessments() {

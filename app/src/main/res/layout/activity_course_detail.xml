@@ -86,7 +86,8 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/course_detail_course_mentor_label"
                 android:layout_centerHorizontal="true"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                style="@style/Dropdown">
 
             </LinearLayout>
 

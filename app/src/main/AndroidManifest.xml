@@ -31,7 +31,8 @@
         <activity android:name=".view.AddNewAssessment" />
         <activity android:name=".view.AddNewMentor" />
         <activity android:name=".view.UpdateMentorActivity" />
-        <activity android:name=".view.UpdateAssessmentActivity"></activity>
+        <activity android:name=".view.UpdateAssessmentActivity" />
+        <activity android:name=".view.UpdateCourseActivity"></activity>
     </application>
 
 </manifest>

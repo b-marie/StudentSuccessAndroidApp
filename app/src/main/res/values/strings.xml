@@ -52,5 +52,7 @@
     <string name="add_mentor">Add Mentor</string>
     <string name="add_assessment">Add Assessment</string>
     <string name="course_assessments">Course Assessments</string>
+    <string name="update_course">Update Course</string>
+    <string name="delete_course">Delete Course</string>
 
 </resources>
