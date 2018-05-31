@@ -48,5 +48,9 @@
     <string name="assessment_due_date">Assessment Due Date</string>
     <string name="edit">Edit</string>
     <string name="add_new_course">Add New Course</string>
+    <string name="course_dates">Course Dates</string>
+    <string name="add_mentor">Add Mentor</string>
+    <string name="add_assessment">Add Assessment</string>
+    <string name="course_assessments">Course Assessments</string>
 
 </resources>
