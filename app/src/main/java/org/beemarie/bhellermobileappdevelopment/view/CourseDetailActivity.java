@@ -1,13 +1,18 @@
 package org.beemarie.bhellermobileappdevelopment.view;
 
 import android.app.LauncherActivity;
+import android.arch.lifecycle.LiveData;
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import org.beemarie.bhellermobileappdevelopment.R;
@@ -20,6 +25,7 @@ import org.w3c.dom.Text;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class CourseDetailActivity extends AppCompatActivity {
 
@@ -38,6 +44,12 @@ public class CourseDetailActivity extends AppCompatActivity {
     Button addAssessmentButton;
     Button courseNotesButton;
 
+    List<ListItemMentor> courseMentors;
+    ArrayList<ListItemMentor> currentCourseMentors;
+    LinearLayout mentorListViewLayout;
+
+    ListItemCourse currentCourse;
+
     Context context;
     AppDatabase db;
 
@@ -50,16 +62,21 @@ public class CourseDetailActivity extends AppCompatActivity {
 
         context = this.getApplicationContext();
 
-        final ListItemCourse course = getIncomingIntent();
+        final ListItemCourse currentCourse = getIncomingIntent();
+
+        populateMentorsList();
 
         TextView courseName = findViewById(R.id.course_detail_course_name);
         TextView courseStatus = findViewById(R.id.course_detail_status);
         TextView courseStartDate = findViewById(R.id.course_detail_course_start_date);
         TextView courseEndDate = findViewById(R.id.course_detail_course_end_date);
-        TextView courseMentorName = findViewById(R.id.course_detail_mentor_name);
-        TextView courseMentorPhoneNumber = findViewById(R.id.course_detail_mentor_phone_number);
-        TextView courseMentorEmail = findViewById(R.id.course_detail_mentor_email);
-        TextView courseAssessmentName = findViewById(R.id.course_detail_course_assessment_name);
+
+        LinearLayout mentorListViewLayout = (LinearLayout) findViewById(R.id.course_detail_mentor_view_layout);
+
+        Spinner mentorDropdown = findViewById(R.id.course_detail_mentor_list);
+        Spinner assessmentsDropdown = findViewById(R.id.course_detail_assessment_list);
+
+
 
         Button editButton = (Button) findViewById(R.id.course_detail_edit_button);
         Button addMentorButton = (Button) findViewById(R.id.course_detail_add_mentor_button);
@@ -134,19 +151,48 @@ public class CourseDetailActivity extends AppCompatActivity {
         ArrayList<ListItemMentor> courseMentors = course.getCourseMentors();
 //        ListItemMentor courseMentor = courseMentors.get(0);
 
-        TextView courseMentorName = findViewById(R.id.course_detail_mentor_name);
-//        courseMentorName.setText(courseMentor.getMentorName());
-
-        TextView courseMentorPhoneNumber = findViewById(R.id.course_detail_mentor_phone_number);
-//        courseMentorPhoneNumber.setText(courseMentor.getMentorPhoneNumber());
-
-        TextView courseMentorEmail = findViewById(R.id.course_detail_mentor_email);
-//        courseMentorEmail.setText(courseMentor.getMentorEmail());
-
         ArrayList<ListItemAssessment> courseAssessments = course.getCourseAssessments();
 //        ListItemAssessment courseAssessment1 = courseAssessments.get(0);
 
-        TextView courseAssessmentName = findViewById(R.id.course_detail_course_assessment_name);
-//        courseAssessmentName.setText(courseAssessment1.getAssessmentName());
+    }
+
+    private void populateMentorsList(){
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                if(db.mentorDao().getAllMentorsList().isEmpty()){
+                    return;
+                } else {
+                    //Populate the dropdown
+                    courseMentors = db.mentorDao().getAllMentorsList();
+                    ArrayList<String> mentorNames = new ArrayList<>();
+                    for (int i = 0; i < courseMentors.size(); i++) {
+                        mentorNames.add(courseMentors.get(i).getMentorName());
+                    }
+                    Spinner mentorDropdown = findViewById(R.id.course_detail_mentor_list);
+                    ArrayAdapter<String> adapter = new ArrayAdapter<>(context, R.layout.support_simple_spinner_dropdown_item, mentorNames);
+                    adapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+                    mentorDropdown.setAdapter(adapter);
+                    mentorDropdown.setSelection(0);
+                    //Populate the current course list
+                    LinearLayout mentorListViewLayout = (LinearLayout) findViewById(R.id.course_detail_mentor_view_layout);
+                    if(currentCourse.getCourseMentors().isEmpty()) {
+                        TextView noMentors = new TextView(context);
+                        noMentors.setText("No Mentors");
+                        mentorListViewLayout.addView(noMentors);
+                    } else {
+                        currentCourseMentors = currentCourse.getCourseMentors();
+                        final TextView[] mentorTextViews = new TextView[currentCourseMentors.size()];
+
+                        for(int i = 0; i < currentCourseMentors.size(); i++) {
+                            final TextView rowTextView = new TextView(context);
+                            rowTextView.setText(currentCourseMentors.get(i).getMentorName() + "\n Phone Number: " + currentCourseMentors.get(i).getMentorPhoneNumber() + "\n Email: " + currentCourseMentors.get(i).getMentorEmail());
+                            mentorListViewLayout.addView(rowTextView);
+                            mentorTextViews[i] = rowTextView;
+                        }
+                    }
+                }
+            }
+        });
     }
 }

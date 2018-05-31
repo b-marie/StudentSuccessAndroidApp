@@ -191,4 +191,51 @@ public class ListItemCourse implements Parcelable{
             return new ListItemCourse[size];
         }
     };
+
+    public ListItemMentor findMentorByID(int mentorID) {
+        ListItemMentor mentor;
+        ArrayList<ListItemMentor> mentors = this.getCourseMentors();
+        if(mentors.isEmpty()) {
+            return null;
+        } else {
+            for(int i = 0; i < mentors.size(); i++) {
+                if(mentors.get(i).getMentorID() == mentorID) {
+                    mentor = mentors.get(i);
+                    return mentor;
+                }
+            }
+        }
+        return mentor = new ListItemMentor();
+    }
+
+    public boolean isMentorInList(int mentorID) {
+        ArrayList<ListItemMentor> mentors = this.getCourseMentors();
+        if(mentors.isEmpty()) {
+            return false;
+        } else {
+            for(int i = 0; i < mentors.size(); i++) {
+                if(mentors.get(i).getMentorID() == mentorID) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public void removeMentorByID(int mentorID){
+        if(isMentorInList(mentorID)) {
+            ArrayList<ListItemMentor> mentors = this.getCourseMentors();
+            if(mentors.isEmpty()) {
+                return;
+            } else {
+                for(int i = 0; i < mentors.size(); i++) {
+                    if(mentors.get(i).getMentorID() == mentorID)  {
+                        ListItemMentor mentor = mentors.get(i);
+                        mentors.remove(mentor);
+                        return;
+                    }
+                }
+            }
+        }
+    }
 }

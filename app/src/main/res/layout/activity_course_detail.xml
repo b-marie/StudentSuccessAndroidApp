@@ -9,7 +9,7 @@
 
         <RelativeLayout
             android:layout_width="380dp"
-            android:layout_height="800dp">
+            android:layout_height="1000dp">
 
             <TextView
                 android:id="@+id/course_detail_course_name"
@@ -26,7 +26,7 @@
                 style="@style/Text.Title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/course_detail_assessment_name"
+                android:layout_below="@+id/course_detail_course_name"
                 android:layout_centerHorizontal="true"
                 android:text="@string/course_status" />
 
@@ -80,6 +80,27 @@
                 android:text="@string/course_mentor" />
 
 
+            <LinearLayout
+                android:id="@+id/course_detail_mentor_view_layout"
+                android:layout_width="189dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/course_detail_course_mentor_label"
+                android:layout_centerHorizontal="true"
+                android:orientation="vertical">
+
+            </LinearLayout>
+
+            <Spinner
+                android:id="@+id/course_detail_mentor_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/course_detail_mentor_view_layout"
+                android:layout_centerHorizontal="true"
+                android:background="@android:drawable/btn_dropdown"
+                android:spinnerMode="dropdown"
+                style="@style/Dropdown"/>
+
+
             <Button
                 android:id="@+id/course_detail_edit_button"
                 android:layout_width="wrap_content"
@@ -88,34 +109,11 @@
                 android:layout_centerHorizontal="true"
                 android:text="@string/edit" />
 
-            <TextView
-                android:id="@+id/course_detail_mentor_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:text="@string/mentor_name" />
-
-            <TextView
-                android:id="@+id/course_detail_mentor_phone_number"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/course_detail_mentor_name"
-                android:layout_centerHorizontal="true"
-                android:text="@string/phone_number" />
-
-            <TextView
-                android:id="@+id/course_detail_mentor_email"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/course_detail_mentor_phone_number"
-                android:layout_centerHorizontal="true"
-                android:text="@string/e_mail" />
-
             <Button
                 android:id="@+id/course_detail_add_mentor_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/course_detail_mentor_email"
+                android:layout_below="@+id/course_detail_mentor_list"
                 android:layout_centerHorizontal="true"
                 android:text="@string/add_mentor" />
 
@@ -128,6 +126,22 @@
                 android:layout_centerHorizontal="true"
                 android:text="@string/course_assessments" />
 
+            <View
+                android:id="@+id/course_detail_assessment_view"
+                android:layout_width="189dp"
+                android:layout_height="10dp"
+                android:layout_below="@+id/course_detail_assessments_label"
+                android:layout_centerHorizontal="true" />
+
+            <Spinner
+                android:id="@+id/course_detail_assessment_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/course_detail_assessment_view"
+                android:layout_centerHorizontal="true"
+                android:background="@android:drawable/btn_dropdown"
+                android:spinnerMode="dropdown" />
+
             <Button
                 android:id="@+id/course_detail_home_button"
                 android:layout_width="wrap_content"
@@ -136,19 +150,11 @@
                 android:layout_centerHorizontal="true"
                 android:text="@string/home" />
 
-            <TextView
-                android:id="@+id/course_detail_course_assessment_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/course_detail_assessments_label"
-                android:layout_centerHorizontal="true"
-                android:text="@string/assessment_name" />
-
             <Button
                 android:id="@+id/course_detail_add_assessment_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/course_detail_course_assessment_name"
+                android:layout_below="@+id/course_detail_assessment_list"
                 android:layout_centerHorizontal="true"
                 android:text="@string/add_assessment" />
 
@@ -158,7 +164,9 @@
                 android:layout_height="wrap_content"
                 android:layout_above="@+id/course_detail_edit_button"
                 android:layout_centerHorizontal="true"
-                android:text="@string/course_notes" />
+                android:text="Course Notes" />
+
+
 
 
         </RelativeLayout>

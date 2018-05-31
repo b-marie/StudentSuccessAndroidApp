@@ -8,12 +8,16 @@ import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
 import android.arch.persistence.room.Update;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Dao
 public interface MentorDao {
     @Query("SELECT * FROM mentor_table")
     LiveData<List<ListItemMentor>> getAllMentors();
+
+    @Query("SELECT * FROM mentor_table")
+    List<ListItemMentor> getAllMentorsList();
 
     @Query("SELECT * FROM mentor_table WHERE mentor_ID IN (:mentorIds)")
     List<ListItemMentor> loadAllMentorsByIds(int[] mentorIds);

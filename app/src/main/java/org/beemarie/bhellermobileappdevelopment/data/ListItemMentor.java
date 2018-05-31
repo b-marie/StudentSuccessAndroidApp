@@ -36,6 +36,9 @@ public class ListItemMentor implements Parcelable {
         this.mentorEmail = mentorEmail;
     }
 
+    @Ignore
+    public ListItemMentor(){}
+
 
 
     public ListItemMentor(String mentorName, String mentorPhoneNumber, String mentorEmail) {
