@@ -7,6 +7,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ListTypeConverter {
@@ -83,6 +84,30 @@ public class ListTypeConverter {
     }
 
     @TypeConverter
+    public String fromMentorsArrayList(ArrayList<ListItemMentor> mentors) {
+        if (mentors == null) {
+            return (null);
+        }
+        Gson gson = new Gson();
+        Type type = new TypeToken<List<ListItemMentor>>() {
+        }.getType();
+        String jsonString = gson.toJson(mentors, type);
+        return jsonString;
+    }
+
+    @TypeConverter
+    public ArrayList<ListItemMentor> toMentorsArrayList(String mentorString) {
+        if (mentorString == null) {
+            return (null);
+        }
+        Gson gson = new Gson();
+        Type type = new TypeToken<List<ListItemMentor>>() {
+        }.getType();
+        ArrayList<ListItemMentor> mentorsList = gson.fromJson(mentorString, type);
+        return mentorsList;
+    }
+
+    @TypeConverter
     public String fromAssessmentsList(List<ListItemAssessment> assessments) {
         if (assessments == null) {
             return (null);
@@ -103,6 +128,30 @@ public class ListTypeConverter {
         Type type = new TypeToken<List<ListItemAssessment>>() {
         }.getType();
         List<ListItemAssessment> assessmentsList = gson.fromJson(assessmentString, type);
+        return assessmentsList;
+    }
+
+    @TypeConverter
+    public String fromAssessmentsArrayList(ArrayList<ListItemAssessment> assessments) {
+        if (assessments == null) {
+            return (null);
+        }
+        Gson gson = new Gson();
+        Type type = new TypeToken<List<ListItemAssessment>>() {
+        }.getType();
+        String jsonString = gson.toJson(assessments, type);
+        return jsonString;
+    }
+
+    @TypeConverter
+    public ArrayList<ListItemAssessment> toAssessmentsArrayList(String assessmentString) {
+        if (assessmentString == null) {
+            return (null);
+        }
+        Gson gson = new Gson();
+        Type type = new TypeToken<List<ListItemAssessment>>() {
+        }.getType();
+        ArrayList<ListItemAssessment> assessmentsList = gson.fromJson(assessmentString, type);
         return assessmentsList;
     }
 

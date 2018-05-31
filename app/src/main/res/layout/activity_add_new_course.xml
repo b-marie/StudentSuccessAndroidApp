@@ -10,7 +10,7 @@
 
         <RelativeLayout
             android:layout_width="wrap_content"
-            android:layout_height="1000dp">
+            android:layout_height="600dp">
 
             <TextView
                 android:id="@+id/add_course_title"
@@ -111,45 +111,13 @@
                     android:text="@string/completed" />
             </RadioGroup>
 
-            <TextView
-                android:id="@+id/add_course_course_mentor_label"
-                style="@style/Text.Item"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/add_course_course_status_radio_group"
-                android:layout_centerHorizontal="true"
-                android:text="@string/course_mentor" />
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/add_course_course_mentor_recycler_view"
-                android:layout_width="259dp"
-                android:layout_height="168dp"
-                android:layout_below="@+id/add_course_course_mentor_label"
-                android:layout_centerHorizontal="true" />
-
-            <TextView
-                android:id="@+id/add_course_course_assessments_label"
-                style="@style/Text.Item"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/add_course_course_mentor_recycler_view"
-                android:layout_centerHorizontal="true"
-                android:text="@string/assessments" />
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/add_course_course_assessments_recycler_view"
-                android:layout_width="259dp"
-                android:layout_height="168dp"
-                android:layout_below="@+id/add_course_course_assessments_label"
-                android:layout_centerHorizontal="true" />
-
             <Button
                 android:id="@+id/add_course_save_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
+                android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true"
-                android:layout_marginBottom="66dp"
+                android:layout_marginTop="453dp"
                 android:text="@string/save" />
 
         </RelativeLayout>

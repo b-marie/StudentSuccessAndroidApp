@@ -1,5 +1,6 @@
 package org.beemarie.bhellermobileappdevelopment.view;
 
+import android.arch.lifecycle.LiveData;
 import android.arch.persistence.room.Room;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -48,7 +49,7 @@ public class AddNewTermActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_new_term);
-        new GetData().execute();
+//        new GetData().execute();
 
         db = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, "production").build();
 
@@ -107,29 +108,29 @@ public class AddNewTermActivity extends AppCompatActivity {
     }
 
 
-    private class GetData extends AsyncTask<Void, Void, List<ListItemCourse>> {
-
-        @Override
-        protected List<ListItemCourse> doInBackground(Void... params) {
-            AppDatabase db = Room.databaseBuilder(AddNewTermActivity.this, AppDatabase.class, "database").build();
-
-            List<ListItemCourse> courses = db.courseDao().getAllCourses();
-            return courses;
-        }
-
-        @Override
-        protected void onPostExecute(List<ListItemCourse> courses) {
-            super.onPostExecute(courses);
-            loadRecyclerView(courses);
-        }
-    }
-
-    private void loadRecyclerView(List<ListItemCourse> courses) {
-        courseListRecyclerView = (RecyclerView) findViewById(R.id.add_term_course_recycler_view);
-        courseListRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        courseAdapter = new CourseAdapter(courses);
-        courseListRecyclerView.setAdapter(courseAdapter);
-    }
+//    private class GetData extends AsyncTask<Void, Void, List<ListItemCourse>> {
+//
+//        @Override
+//        protected LiveData<List<ListItemCourse>> doInBackground(Void... params) {
+//            AppDatabase db = Room.databaseBuilder(AddNewTermActivity.this, AppDatabase.class, "database").build();
+//
+//            LiveData<List<ListItemCourse>> courses = db.courseDao().getAllCourses();
+//            return courses;
+//        }
+//
+//        @Override
+//        protected void onPostExecute(List<ListItemCourse> courses) {
+//            super.onPostExecute(courses);
+//            loadRecyclerView(courses);
+//        }
+//    }
+//
+//    private void loadRecyclerView(List<ListItemCourse> courses) {
+//        courseListRecyclerView = (RecyclerView) findViewById(R.id.add_term_course_recycler_view);
+//        courseListRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+//        courseAdapter = new CourseAdapter(courses);
+//        courseListRecyclerView.setAdapter(courseAdapter);
+//    }
 
 //    public void startAddTermActivity(int ID, String name, Date start, Date end, List<ListItemCourse> courses, View view) {
 //        Intent i = new Intent(this, AddNewTermActivity.class);

@@ -48,10 +48,5 @@
     <string name="assessment_due_date">Assessment Due Date</string>
     <string name="edit">Edit</string>
     <string name="add_new_course">Add New Course</string>
-    <string name="planned">Planned</string>
-    <string name="in_progress">In Progress</string>
-    <string name="completed">Completed</string>
-    <string name="set_end_date_reminder">Set End Date Reminder</string>
-    <string name="set_start_date_reminder">Set Start Date Reminder</string>
 
 </resources>

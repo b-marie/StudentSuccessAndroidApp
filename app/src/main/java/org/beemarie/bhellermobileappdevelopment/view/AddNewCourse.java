@@ -24,6 +24,7 @@ import android.widget.Toast;
 import org.beemarie.bhellermobileappdevelopment.R;
 import org.beemarie.bhellermobileappdevelopment.data.AppDatabase;
 import org.beemarie.bhellermobileappdevelopment.data.ListItemAssessment;
+import org.beemarie.bhellermobileappdevelopment.data.ListItemCourse;
 import org.beemarie.bhellermobileappdevelopment.data.ListItemMentor;
 
 import java.text.SimpleDateFormat;
@@ -45,18 +46,11 @@ public class AddNewCourse extends AppCompatActivity {
     RadioButton courseStatusInProgress;
     RadioButton courseStatusCompleted;
     RadioButton statusButton;
-    RecyclerView courseMentorRecyclerView;
-    RecyclerView courseAssessmentsRecyclerView;
     Button saveButton;
     Context context;
     AppDatabase db;
     Calendar mCalendar;
-    MentorListAdapter mentorAdapter;
-    MentorViewModel mentorViewModel;
-    ArrayList<ListItemMentor> mentors;
-    AssessmentAdapter assessmentAdapter;
-    AssessmentViewModel assessmentViewModel;
-    ArrayList<ListItemAssessment> assessments;
+
 
 
     @Override
@@ -71,43 +65,14 @@ public class AddNewCourse extends AppCompatActivity {
         mCalendar = Calendar.getInstance();
 
 
-//        //Set up mentor recycler view
-//        courseMentorRecyclerView = (RecyclerView) findViewById(R.id.add_course_course_mentor_recycler_view);
-//        courseMentorRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-//        mentorAdapter = new MentorListAdapter(context, mentors);
-//        courseMentorRecyclerView.setAdapter(mentorAdapter);
-//
-//        //Get the viewmodel
-//        mentorViewModel = ViewModelProviders.of(this).get(MentorViewModel.class);
-//
-//        //Add an observer to return mentors
-//        mentorViewModel.getAllMentors().observe(this, new Observer<List<ListItemMentor>>() {
-//            @Override
-//            public void onChanged(@Nullable final List<ListItemMentor> mentors) {
-//                //Update cached list of mentors in the adapter
-//                mentorAdapter.setMentors(mentors);
-//            }
-//        });
-//
-//
-//        //Set assessment list recycler
-//        courseAssessmentsRecyclerView = (RecyclerView) findViewById(R.id.add_course_course_assessments_recycler_view);
-//        courseAssessmentsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-//        assessmentAdapter = new AssessmentAdapter(context, assessments);
-//        courseAssessmentsRecyclerView.setAdapter(assessmentAdapter);
-//
-//        //Get the viewmodel
-//        assessmentViewModel = ViewModelProviders.of(this).get(AssessmentViewModel.class);
-//
-//        //Add an observer to return mentors
-//        assessmentViewModel.getAllAssessments().observe(this, new Observer<List<ListItemAssessment>>() {
-//            @Override
-//            public void onChanged(@Nullable final List<ListItemAssessment> assessments) {
-//                //Update cached list of mentors in the adapter
-//                assessmentAdapter.setAssessments(assessments);
-//            }
-//        });
-
+        courseStart = findViewById(R.id.add_course_start_date_entry);
+        courseEnd = findViewById(R.id.add_course_end_date_entry);
+        courseName = findViewById(R.id.add_course_name_entry);
+        courseStatusGroup = (RadioGroup) findViewById(R.id.add_course_course_status_radio_group);
+        courseStatusPlanned = (RadioButton) findViewById(R.id.add_course_planned_status);
+        courseStatusInProgress = (RadioButton) findViewById(R.id.add_course_in_progress_status);
+        courseStatusCompleted = (RadioButton) findViewById(R.id.add_course_completed_status);
+        saveButton = (Button) findViewById(R.id.add_course_save_button);
         final DatePickerDialog.OnDateSetListener startDate = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
@@ -165,12 +130,14 @@ public class AddNewCourse extends AppCompatActivity {
                             statusButton = (RadioButton) findViewById(statusID);
                             String courseStatus = statusButton.getText().toString();
                             String courseNotes = "";
-                            ListItemAssessment assessment = new ListItemAssessment(newAssessmentName, assessmentType, newAssessmentDueDate);
-                            db.assessmentDao().insert(assessment);
+                            ArrayList<ListItemMentor> courseMentors = new ArrayList<>();
+                            ArrayList<ListItemAssessment> courseAssessments = new ArrayList<>();
+                            ListItemCourse course = new ListItemCourse(newCourseName, newCourseStartDate, newCourseEndDate, courseStatus, courseMentors, courseAssessments, courseNotes);
+                            db.courseDao().insert(course);
                         }
 
                     });
-                    Intent intent = new Intent(view.getContext(), AssessmentListActivity.class);
+                    Intent intent = new Intent(view.getContext(), CourseListActivity.class);
                     view.getContext().startActivity(intent);
 
                 }
