@@ -1,6 +1,6 @@
 package org.beemarie.bhellermobileappdevelopment.view;
 
-import android.app.LauncherActivity;
+
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -9,7 +9,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import org.beemarie.bhellermobileappdevelopment.R;
@@ -17,9 +16,8 @@ import org.beemarie.bhellermobileappdevelopment.data.ListItemMentor;
 
 import java.util.List;
 
-public class MentorAdapter extends RecyclerView.Adapter<MentorAdapter.MentorViewHolder> {
-
-
+//Adapter used for when Mentor List is in a list with courses
+public class MentorListAdapter extends RecyclerView.Adapter<MentorListAdapter.MentorViewHolder> {
 
     public class MentorViewHolder extends RecyclerView.ViewHolder {
         public TextView mentorName;
@@ -32,13 +30,13 @@ public class MentorAdapter extends RecyclerView.Adapter<MentorAdapter.MentorView
     }
     public static final String TAG = "RecyclerViewAdapter";
     List<ListItemMentor> mentors;
-    MentorViewHolder viewHolder;
+    MentorListAdapter.MentorViewHolder viewHolder;
     View.OnClickListener mClickListener;
     Context context;
 
 
 
-    public MentorAdapter(Context context, List<ListItemMentor> listOfMentors) {
+    public MentorListAdapter(Context context, List<ListItemMentor> listOfMentors) {
         this.context = context;
 //        LayoutInflater inflater = LayoutInflater.from(context);
         this.mentors = listOfMentors;
@@ -46,16 +44,16 @@ public class MentorAdapter extends RecyclerView.Adapter<MentorAdapter.MentorView
 
     @NonNull
     @Override
-    public MentorViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public MentorListAdapter.MentorViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_mentor, parent, false);
-        MentorViewHolder holder = new MentorViewHolder(view);
+        MentorListAdapter.MentorViewHolder holder = new MentorListAdapter.MentorViewHolder(view);
         return holder;
     }
 
 
 
     @Override
-    public void onBindViewHolder(@NonNull MentorViewHolder holder, final int position) {
+    public void onBindViewHolder(@NonNull MentorListAdapter.MentorViewHolder holder, final int position) {
         if(mentors != null) {
             ListItemMentor current = mentors.get(position);
             holder.mentorName.setText(current.getMentorName());
@@ -91,7 +89,4 @@ public class MentorAdapter extends RecyclerView.Adapter<MentorAdapter.MentorView
         } else return 0;
 
     }
-    
-
-
 }

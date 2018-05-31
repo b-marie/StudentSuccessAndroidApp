@@ -8,7 +8,7 @@ import java.util.List;
 
 public class CourseRepository {
     private CourseDao courseDao;
-    private List<ListItemCourse> allCourses;
+    private LiveData<List<ListItemCourse>> allCourses;
 
     public CourseRepository(Application application) {
         AppDatabase db = AppDatabase.getDatabase(application);
@@ -16,7 +16,7 @@ public class CourseRepository {
         allCourses = courseDao.getAllCourses();
     }
 
-    public List<ListItemCourse> getAllCourses() {
+    public LiveData<List<ListItemCourse>> getAllCourses() {
         return allCourses;
     }
 
@@ -37,6 +37,44 @@ public class CourseRepository {
             return null;
         }
 
+    }
+
+    public void update (ListItemCourse course) {
+        new CourseRepository.updateAsyncTask(courseDao).execute(course);
+    }
+
+    private static class updateAsyncTask extends AsyncTask<ListItemCourse, Void, Void> {
+
+        private CourseDao mAsyncTaskDao;
+
+        updateAsyncTask(CourseDao dao) {
+            mAsyncTaskDao = dao;
+        }
+
+        @Override
+        protected Void doInBackground(final ListItemCourse... params) {
+            mAsyncTaskDao.updateCourse(params[0]);
+            return null;
+        }
+    }
+
+    public void delete (ListItemCourse course) {
+        new CourseRepository.deleteAsyncTask(courseDao).execute(course);
+    }
+
+    private static class deleteAsyncTask extends AsyncTask<ListItemCourse, Void, Void> {
+
+        private CourseDao mAsyncTaskDao;
+
+        deleteAsyncTask(CourseDao dao) {
+            mAsyncTaskDao = dao;
+        }
+
+        @Override
+        protected Void doInBackground(final ListItemCourse... params) {
+            mAsyncTaskDao.deleteCourse(params[0]);
+            return null;
+        }
     }
 
 }

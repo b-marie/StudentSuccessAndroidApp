@@ -2,7 +2,9 @@
 <android.support.constraint.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/colorAccent">
+    android:background="@color/colorAccent"
+    android:clickable="true"
+    android:focusable="true">
 
     <TextView
         android:id="@+id/assessment_title"
