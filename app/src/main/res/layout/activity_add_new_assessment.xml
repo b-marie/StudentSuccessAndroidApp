@@ -33,9 +33,10 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="166dp"
+        android:layout_marginBottom="169dp"
         android:clickable="true"
         android:ems="10"
+        android:focusable="true"
         android:hint="@string/due_date"
         android:inputType="date" />
 
@@ -78,11 +79,31 @@
     </RadioGroup>
 
     <TextView
+        android:id="@+id/add_assessment_course_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/add_assessment_course_list"
+        android:layout_centerHorizontal="true"
+        android:text="@string/assign_to_course" />
+
+    <TextView
         android:id="@+id/add_assessment_type_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/add_assessment_type_group"
         android:layout_centerHorizontal="true"
         android:text="@string/assessment_type" />
+
+    <Spinner
+        android:id="@+id/add_assessment_course_list"
+        style="@style/Dropdown"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginBottom="82dp"
+        android:background="@android:drawable/btn_dropdown"
+        android:spinnerMode="dropdown" />
 
 </RelativeLayout>

@@ -4,11 +4,13 @@ import android.app.Application;
 import android.arch.lifecycle.LiveData;
 import android.os.AsyncTask;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class CourseRepository {
     private CourseDao courseDao;
     private LiveData<List<ListItemCourse>> allCourses;
+    private String courseName;
 
     public CourseRepository(Application application) {
         AppDatabase db = AppDatabase.getDatabase(application);
@@ -18,6 +20,17 @@ public class CourseRepository {
 
     public LiveData<List<ListItemCourse>> getAllCourses() {
         return allCourses;
+    }
+
+    public ListItemCourse getCourseByID(int ID) {
+        ListItemCourse courseToReturn = courseDao.getCourseByID(ID);
+        return courseToReturn;
+    }
+
+    public List<ListItemCourse> getAllCoursesList()
+    {
+        ArrayList<ListItemCourse> listToReturn = new ArrayList<ListItemCourse>(courseDao.getAllCoursesArrayList());
+        return listToReturn;
     }
 
     public void insert(ListItemCourse course) {

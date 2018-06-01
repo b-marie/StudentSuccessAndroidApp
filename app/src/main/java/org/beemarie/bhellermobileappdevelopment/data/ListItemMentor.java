@@ -4,14 +4,24 @@ package org.beemarie.bhellermobileappdevelopment.data;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.ForeignKey;
 import android.arch.persistence.room.Ignore;
+import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
 
-@Entity(tableName = "mentor_table")
-public class ListItemMentor implements Parcelable {
+import static android.arch.persistence.room.ForeignKey.CASCADE;
+
+@Entity(tableName = "mentor_table", indices = {@Index("mentor_ID"), @Index("mentor_course_ID")},
+        foreignKeys = {
+                @ForeignKey(
+                        entity=ListItemCourse.class,
+                        parentColumns="course_ID",
+                        childColumns="mentor_course_ID",
+                        onDelete = CASCADE)})
+public class ListItemMentor{
 
 
     @PrimaryKey(autoGenerate=true)
@@ -28,12 +38,16 @@ public class ListItemMentor implements Parcelable {
     @ColumnInfo(name = "mentor_email")
    private String mentorEmail;
 
+    @ColumnInfo(name="mentor_course_ID")
+    private int mentorCourseID;
+
     @Ignore
-    public ListItemMentor(int id, String mentorName, String mentorPhoneNumber, String mentorEmail) {
+    public ListItemMentor(int id, String mentorName, String mentorPhoneNumber, String mentorEmail, int mentorCourseID) {
         this.mentorID = id;
         this.mentorName = mentorName;
         this.mentorPhoneNumber = mentorPhoneNumber;
         this.mentorEmail = mentorEmail;
+        this.mentorCourseID = mentorCourseID;
     }
 
     @Ignore
@@ -41,10 +55,11 @@ public class ListItemMentor implements Parcelable {
 
 
 
-    public ListItemMentor(String mentorName, String mentorPhoneNumber, String mentorEmail) {
+    public ListItemMentor(String mentorName, String mentorPhoneNumber, String mentorEmail, int mentorCourseID) {
         this.mentorName = mentorName;
         this.mentorPhoneNumber = mentorPhoneNumber;
         this.mentorEmail = mentorEmail;
+        this.mentorCourseID = mentorCourseID;
     }
 
 
@@ -89,29 +104,38 @@ public class ListItemMentor implements Parcelable {
         this.mentorEmail = mentorEmail;
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
+    public int getMentorCourseID() {
+        return mentorCourseID;
     }
 
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(mentorID);
-        dest.writeString(mentorName);
-        dest.writeString(mentorPhoneNumber);
-        dest.writeString(mentorEmail);
+    public void setMentorCourseID(int mentorCourseID) {
+        this.mentorCourseID = mentorCourseID;
     }
-
-    @SuppressWarnings("unused")
-    public static final Parcelable.Creator<ListItemMentor> CREATOR = new Parcelable.Creator<ListItemMentor>() {
-        @Override
-        public ListItemMentor createFromParcel(Parcel in) {
-            return new ListItemMentor(in);
-        }
-
-        @Override
-        public ListItemMentor[] newArray(int size) {
-            return new ListItemMentor[size];
-        }
-    };
+//
+//    @Override
+//    public int describeContents() {
+//        return 0;
+//    }
+//
+//    @Override
+//    public void writeToParcel(Parcel dest, int flags) {
+//        dest.writeInt(mentorID);
+//        dest.writeString(mentorName);
+//        dest.writeString(mentorPhoneNumber);
+//        dest.writeString(mentorEmail);
+//        dest.writeInt(mentorCourseID);
+//    }
+//
+//    @SuppressWarnings("unused")
+//    public static final Parcelable.Creator<ListItemMentor> CREATOR = new Parcelable.Creator<ListItemMentor>() {
+//        @Override
+//        public ListItemMentor createFromParcel(Parcel in) {
+//            return new ListItemMentor(in);
+//        }
+//
+//        @Override
+//        public ListItemMentor[] newArray(int size) {
+//            return new ListItemMentor[size];
+//        }
+//    };
 }

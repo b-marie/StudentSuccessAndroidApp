@@ -1,7 +1,9 @@
 package org.beemarie.bhellermobileappdevelopment.view;
 
+import android.app.DatePickerDialog;
 import android.arch.lifecycle.LiveData;
 import android.arch.persistence.room.Room;
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
@@ -14,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.ListView;
@@ -26,8 +29,10 @@ import org.beemarie.bhellermobileappdevelopment.data.ListItemTerm;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class AddNewTermActivity extends AppCompatActivity {
 //
@@ -37,35 +42,62 @@ public class AddNewTermActivity extends AppCompatActivity {
     private EditText termName;
     private EditText termStartDate;
     private EditText termEndDate;
-    private RecyclerView courseListRecyclerView;
-//    private LayoutInflater layoutInflater;
-    private CourseAdapter courseAdapter;
+    Calendar mCalendar;
     AppDatabase db;
-
-    private List<ListItemCourse> listOfCourses;
+    Context context;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_new_term);
-//        new GetData().execute();
 
-        db = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, "production").build();
+        mCalendar = Calendar.getInstance();
 
+        //Find database
+        db = AppDatabase.getDatabase(getApplicationContext());
+
+        //Instantiate XML items
         termName = findViewById(R.id.add_term_term_number_entry);
         termStartDate = findViewById(R.id.add_term_term_start_date_entry);
         termEndDate = findViewById(R.id.add_term_term_end_date_entry);
 
-        final AppDatabase db = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, "production").build();
+        //Add start date picker
+        final DatePickerDialog.OnDateSetListener startDate = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                mCalendar.set(Calendar.YEAR, year);
+                mCalendar.set(Calendar.MONTH, monthOfYear);
+                mCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                updateStartLabel();
+            }
+        };
 
+        termStartDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new DatePickerDialog(AddNewTermActivity.this, startDate, mCalendar.get(Calendar.YEAR), mCalendar.get(Calendar.MONTH), mCalendar.get(Calendar.DAY_OF_MONTH)).show();
+            }
+        });
 
-//        setUpAdapterAndView(listOfCourses);
-//
-//        courseListRecyclerView = (RecyclerView) findViewById(R.id.add_term_course_recycler_view);
-//        courseListRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-//        courseAdapter = new CourseAdapter(listOfCourses);
-//        courseListRecyclerView.setAdapter(courseAdapter);
+        //Add end date picker
+        final DatePickerDialog.OnDateSetListener endDate = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                mCalendar.set(Calendar.YEAR, year);
+                mCalendar.set(Calendar.MONTH, monthOfYear);
+                mCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                updateEndLabel();
+            }
+        };
+
+        termEndDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new DatePickerDialog(AddNewTermActivity.this, endDate, mCalendar.get(Calendar.YEAR), mCalendar.get(Calendar.MONTH), mCalendar.get(Calendar.DAY_OF_MONTH)).show();
+            }
+        });
+
 
 
         final Button saveButton = findViewById(R.id.add_term_save_button);
@@ -78,17 +110,14 @@ public class AddNewTermActivity extends AppCompatActivity {
                     String newTermEndDateString = termEndDate.getText().toString();
                     Date newTermStartDate = new Date();
                     Date newTermEndDate = new Date();
-                    SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+                    SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
                     try {
                         newTermStartDate = formatter.parse(newTermStartDateString);
                         newTermEndDate = formatter.parse(newTermEndDateString);
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
-                    final ListItemTerm newTerm = new ListItemTerm();
-                    newTerm.setTermName(newTermName);
-                    newTerm.setTermStartDate(newTermStartDate);
-                    newTerm.setTermEndDate(newTermEndDate);
+                    final ListItemTerm newTerm = new ListItemTerm(newTermName, newTermStartDate, newTermEndDate);
 
                     AsyncTask.execute(new Runnable() {
                         @Override
@@ -107,101 +136,18 @@ public class AddNewTermActivity extends AppCompatActivity {
         });
     }
 
+    private void updateStartLabel() {
+        String dateFormat = "MM/dd/yyyy";
+        SimpleDateFormat sdf = new SimpleDateFormat(dateFormat, Locale.US);
 
-//    private class GetData extends AsyncTask<Void, Void, List<ListItemCourse>> {
-//
-//        @Override
-//        protected LiveData<List<ListItemCourse>> doInBackground(Void... params) {
-//            AppDatabase db = Room.databaseBuilder(AddNewTermActivity.this, AppDatabase.class, "database").build();
-//
-//            LiveData<List<ListItemCourse>> courses = db.courseDao().getAllCourses();
-//            return courses;
-//        }
-//
-//        @Override
-//        protected void onPostExecute(List<ListItemCourse> courses) {
-//            super.onPostExecute(courses);
-//            loadRecyclerView(courses);
-//        }
-//    }
-//
-//    private void loadRecyclerView(List<ListItemCourse> courses) {
-//        courseListRecyclerView = (RecyclerView) findViewById(R.id.add_term_course_recycler_view);
-//        courseListRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-//        courseAdapter = new CourseAdapter(courses);
-//        courseListRecyclerView.setAdapter(courseAdapter);
-//    }
+        termStartDate.setText(sdf.format(mCalendar.getTime()));
+    }
 
-//    public void startAddTermActivity(int ID, String name, Date start, Date end, List<ListItemCourse> courses, View view) {
-//        Intent i = new Intent(this, AddNewTermActivity.class);
-////        i.putExtra(EXTRA_TERM_NAME, name);
-//
-//        startActivity(i);
-//    }
-//
-//
-//    public void setUpAdapterAndView(List<ListItemCourse> listOfCourses) {
-//        this.listOfCourses = listOfCourses;
-//        courseListRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-//        courseAdapter = new CourseAdapter(this.listOfCourses);
-//        courseListRecyclerView.setAdapter(courseAdapter);
-//
-//    }
+    private void updateEndLabel() {
+        String dateFormat = "MM/dd/yyyy";
+        SimpleDateFormat sdf = new SimpleDateFormat(dateFormat, Locale.US);
 
-//
-//    private class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.CustomViewHolder> {
-//
-//        @NonNull
-//        @Override
-//        public CustomViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-//            View v = layoutInflater.inflate(R.layout.item_course, parent, false);
-//
-//            return new CustomAdapter.CustomViewHolder(v);
-//        }
-//
-//        @Override
-//        public void onBindViewHolder(@NonNull CustomAdapter.CustomViewHolder holder, int position) {
-//            ListItemCourse currentCourse = listOfCourses.get(position);
-//            ListAdapter courseList = (ListAdapter) currentCourse.getCourseID();
-//
-//
-//            holder.termText.setText(currentCourse.getCourseName());
-//            holder.courseList.setAdapter(courseList);
-//        }
-//
-//        @Override
-//        public int getItemCount() {
-//            //Helps adapter decide how many items it needs to manage
-//            return listOfCourses.size();
-//        }
-//
-//        class CustomViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-//
-//            private TextView termText;
-//            private ListView courseList;
-//
-//            public CustomViewHolder(View itemView) {
-//                super(itemView);
-//
-//                this.termText = (TextView) itemView.findViewById(R.id.term_title);
-//                this.courseList = (ListView) itemView.findViewById(R.id.term_course_list);
-//
-//                this.termText.setOnClickListener(this);
-//
-//            }
-//
-//            @Override
-//            public void onClick(View v) {
-//                ListItemCourse listItemCourse = listOfCourses.get(
-//                        this.getAdapterPosition()
-//                );
-//
-//                controller.onListItemTermClick(listItemCourse, v
-//                );
-//
-//            }
-//        }
-//
-//
-//    }
+        termEndDate.setText(sdf.format(mCalendar.getTime()));
+    }
+
 }

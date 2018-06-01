@@ -10,6 +10,7 @@ import org.beemarie.bhellermobileappdevelopment.data.ListItemMentor;
 import org.beemarie.bhellermobileappdevelopment.data.ListItemTerm;
 import org.beemarie.bhellermobileappdevelopment.data.TermRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class CourseViewModel extends AndroidViewModel {
@@ -24,9 +25,16 @@ public class CourseViewModel extends AndroidViewModel {
 
     LiveData<List<ListItemCourse>> getAllCourses() {return allCourses;}
 
+    List<ListItemCourse> getAllCoursesArrayList() {return courseRepository.getAllCoursesList(); }
+
     public void insert(ListItemCourse course) {courseRepository.insert(course); }
 
     public void update(ListItemCourse course) {courseRepository.update(course); }
 
     public void delete(ListItemCourse course) {courseRepository.delete(course); }
+
+    public ListItemCourse getCourseByID(int ID) {
+        ListItemCourse courseToReturn = courseRepository.getCourseByID(ID);
+        return courseToReturn;
+        }
 }

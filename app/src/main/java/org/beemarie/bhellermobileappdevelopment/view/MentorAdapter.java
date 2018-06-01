@@ -67,10 +67,12 @@ public class MentorAdapter extends RecyclerView.Adapter<MentorAdapter.MentorView
             public void onClick(View view) {
                 Log.i("UpdateMentorActivity", "Clicked on " + mentors.get(position).getMentorName());
                 Intent intent = new Intent(context, MentorDetailActivity.class);
+                intent.putExtra("mentorID", mentors.get(position).getMentorID());
                 intent.putExtra("mentorName", mentors.get(position).getMentorName());
                 intent.putExtra("mentorPhoneNumber", mentors.get(position).getMentorPhoneNumber());
                 intent.putExtra("mentorEmail", mentors.get(position).getMentorEmail());
-                intent.putExtra("mentorID", mentors.get(position).getMentorID());
+                intent.putExtra("mentorCourseID", mentors.get(position).getMentorCourseID());
+
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(intent);
             }

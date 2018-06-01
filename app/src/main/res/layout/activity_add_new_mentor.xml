@@ -69,4 +69,24 @@
         android:layout_alignParentLeft="true"
         android:text="@string/save" />
 
+    <Spinner
+        android:id="@+id/add_mentor_course_list"
+        style="@style/Dropdown"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginBottom="187dp"
+        android:background="@android:drawable/btn_dropdown"
+        android:spinnerMode="dropdown" />
+
+    <TextView
+        android:id="@+id/add_mentor_course_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/add_mentor_course_list"
+        android:layout_centerHorizontal="true"
+        android:text="@string/assign_to_course" />
+
 </RelativeLayout>

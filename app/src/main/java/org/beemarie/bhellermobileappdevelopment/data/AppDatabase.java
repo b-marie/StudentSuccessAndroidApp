@@ -5,6 +5,7 @@ import android.arch.persistence.room.Database;
 import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
 import android.arch.persistence.room.TypeConverters;
+import android.arch.persistence.room.migration.Migration;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
@@ -13,7 +14,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-@Database(entities = {ListItemTerm.class, ListItemCourse.class, ListItemAssessment.class, ListItemMentor.class}, version = 1, exportSchema = false)
+@Database(entities = {ListItemTerm.class, ListItemCourse.class, ListItemAssessment.class, ListItemMentor.class}, version = 2, exportSchema = false)
 @TypeConverters({DateTypeConverter.class, ListTypeConverter.class})
 public abstract class AppDatabase extends RoomDatabase {
     public abstract TermDao termDao();
@@ -69,27 +70,40 @@ public abstract class AppDatabase extends RoomDatabase {
 //            mDao.deleteAllMentors();
 //            aDao.deleteAllAssessments();
 //
+//            ListItemTerm term1;
+//            term1 = new ListItemTerm("Term One", new Date(2018, 1, 1), new Date(2018, 6, 30));
+//            tDao.insert(term1);
+//
+//            ListItemCourse course1 = new ListItemCourse("Intro to Basketweaving", new Date(2018, 02, 01), new Date(2018, 02, 28), "In Progress", "Notes", 1);
+//            cDao.insert(course1);
+////
 //            //Insert fake assessment
-//            ListItemAssessment assessment1 = new ListItemAssessment("Pre-Assessment", "Objective Assessment", new Date(2018, 3, 15));
+//            ListItemAssessment assessment1 = new ListItemAssessment("Pre-Assessment", "Objective Assessment", new Date(2018, 3, 15), 1);
 //            aDao.insert(assessment1);
 //
 ////            Insert fake mentor
-//            ListItemMentor mentor1 = new ListItemMentor("Bob Jones", "534-234-6234", "BJones@wgu.edu");
+//            ListItemMentor mentor1 = new ListItemMentor("Bob Jones", "534-234-6234", "BJones@wgu.edu", 1);
 //            mDao.insert(mentor1);
-//
-//            //Insert fake course
-//            ArrayList<ListItemMentor> mentors = new ArrayList<>();
-//            mentors.add(mentor1);
-//            ArrayList<ListItemAssessment> assessments = new ArrayList<>();
-//            assessments.add(assessment1);
-//            ListItemCourse course1 = new ListItemCourse("Intro to Basketweaving", new Date(2018, 02, 01), new Date(2018, 02, 28), "In Progress", mentors, assessments, "Notes");
-//            cDao.insert(course1);
-//
-//            ListItemTerm term1;
-//            term1 = new ListItemTerm("Term One", new Date(2018, 1, 1), new Date(2018, 6, 30), cDao.getAllCourses());
-//            tDao.insert(term1);
+
+            //Insert fake course
+
+
+
             return null;
         }
     }
+
+//    static final Migration MIGRATION_1_2 = new Migration(1, 2) {
+//        @Override
+//        public void migrate(SupportSQLiteDatabase database) {
+//            database.execSQL("ALTER TABLE term_table DROP COLUMN courses_in_term" );
+//            database.execSQL("ALTER TABLE course_table DROP COLUMN course_mentors, course_assessments");
+//            database.execSQL("ALTER TABLE course_table ADD COLUMN course_term_ID");
+//            database.execSQL("ALTER TABLE mentor_table ADD COLUMN mentor_course_ID");
+//            database.execSQL("ALTER TABLE assessment_table ADD COLUMN assessment_course_ID");
+//        }
+//    };
+
+
 
 }

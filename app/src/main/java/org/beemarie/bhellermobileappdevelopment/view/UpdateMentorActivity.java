@@ -21,6 +21,8 @@ public class UpdateMentorActivity extends AppCompatActivity {
     private EditText mentorPhoneNumber;
     private EditText mentorEmail;
     AppDatabase db;
+    Button updateButton;
+    Button deleteButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,10 +32,6 @@ public class UpdateMentorActivity extends AppCompatActivity {
 
         final ListItemMentor mentor = getIncomingIntent();
         final int mentorID = mentor.getMentorID();
-
-
-        Button updateButton;
-        Button deleteButton;
 
         updateButton = (Button) findViewById(R.id.update_mentor_save_button);
         deleteButton = (Button) findViewById(R.id.update_mentor_delete_button);
@@ -59,7 +57,8 @@ public class UpdateMentorActivity extends AppCompatActivity {
                             String updatedMentorName = mentorName.getText().toString();
                             String updatedMentorPhoneNumber = mentorPhoneNumber.getText().toString();
                             String updatedMentorEmail = mentorEmail.getText().toString();
-                            ListItemMentor mentor = new ListItemMentor(ID, updatedMentorName, updatedMentorPhoneNumber, updatedMentorEmail);
+                            int mentorCourseID = mentor.getMentorCourseID();
+                            ListItemMentor mentor = new ListItemMentor(ID, updatedMentorName, updatedMentorPhoneNumber, updatedMentorEmail, mentorCourseID);
                             db.mentorDao().updateMentor(mentor);
                         }
 
@@ -106,17 +105,19 @@ public class UpdateMentorActivity extends AppCompatActivity {
         Log.d("UpdateMentorActivity", "Checking for incoming intents");
         if(getIntent().hasExtra("mentorName") && getIntent().hasExtra("mentorPhoneNumber")) {
             Log.d("UpdateMentorActivity", "Found intent extras");
+            int mentorID = getIntent().getIntExtra("mentorID", 0);
             String mentorName = getIntent().getStringExtra("mentorName");
             String mentorPhoneNumber = getIntent().getStringExtra("mentorPhoneNumber");
             String mentorEmail = getIntent().getStringExtra("mentorEmail");
-            int mentorID = getIntent().getIntExtra("mentorID", 0);
+            int mentorCourseID = getIntent().getIntExtra("mentorCourseID", 0);
 
 
-            ListItemMentor mentor = new ListItemMentor(mentorID, mentorName, mentorPhoneNumber, mentorEmail);
+
+            ListItemMentor mentor = new ListItemMentor(mentorID, mentorName, mentorPhoneNumber, mentorEmail, mentorCourseID);
             setMentor(mentor);
             return mentor;
         } else {
-            ListItemMentor mentor = new ListItemMentor(0, "default", "default", "default");
+            ListItemMentor mentor = new ListItemMentor(0, "default", "default", "default", 0);
             setMentor(mentor);
             return mentor;
         }

@@ -17,7 +17,7 @@
         android:text="@string/terms" />
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/rec_list_term_activity"
+        android:id="@+id/term_list_recycler"
         android:layout_width="329dp"
         android:layout_height="324dp"
         android:layout_alignParentBottom="true"

@@ -9,119 +9,78 @@
     >
 
     <TextView
-        android:id="@+id/term_detail_title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:id="@+id/term_detail_term_name"
         style="@style/Text.Title"
-        android:padding="16dp"
-        tools:text="Term One"/>
-
-
-    <EditText
-        android:id="@+id/start_date_edit"
-        android:layout_width="202dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginEnd="41dp"
-        android:layout_marginRight="41dp"
-        android:layout_marginTop="53dp"
-        android:ems="10"
-        android:inputType="date"
-        android:hint="@string/start_date"/>
-
-    <TextView
-        android:id="@+id/lbl_start_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/term_detail_title"
-        android:layout_toStartOf="@+id/start_date_edit"
-        android:layout_toLeftOf="@+id/start_date_edit"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="22dp"
+        android:text="@string/term_number" />
+
+    <TextView
+        android:id="@+id/term_detail_term_dates_label"
+        style="@style/Text.Title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/term_detail_term_name"
+        android:layout_centerHorizontal="true"
+        android:text="Term Start - Term End" />
+
+
+    <TextView
+        android:id="@+id/term_detail_term_end"
+        style="@style/Text.Item"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/term_detail_term_name"
+        android:layout_alignLeft="@+id/term_detail_term_name"
+        android:layout_below="@+id/term_detail_term_dates_label"
         android:text="@string/start_date" />
 
     <TextView
-        android:id="@+id/lbl_end_date"
+        android:id="@+id/term_detail_term_start"
+        style="@style/Text.Item"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="110dp"
-        android:layout_below="@id/lbl_start_date"
-        android:layout_toStartOf="@+id/end_date_edit"
-        android:layout_toLeftOf="@+id/end_date_edit"
-        android:text="@string/end_date" />
-
-
-    <EditText
-        android:id="@+id/end_date_edit"
-        android:layout_width="202dp"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:layout_below="@+id/start_date_edit"
-        android:layout_marginEnd="41dp"
-        android:layout_marginRight="41dp"
-        android:ems="10"
-        android:inputType="date"
-        android:hint="@string/end_date" />
+        android:layout_below="@+id/term_detail_term_dates_label"
+        android:layout_marginEnd="79dp"
+        android:layout_marginRight="79dp"
+        android:text="@string/end_date" />
 
-    <View
-        android:id="@+id/detail_course_list_view"
-        android:layout_width="285dp"
-        android:layout_height="186dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="50dp"
-        android:layout_marginLeft="50dp"
-        android:layout_marginTop="159dp">
-
-        <android.support.v7.widget.RecyclerView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-    </View>
-
-    <Button
-        android:id="@+id/term_detail_view_courses_button"
+    <TextView
+        android:id="@+id/term_detail_term_courses_label"
+        style="@style/Text.Title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/detail_course_list_view"
+        android:layout_below="@+id/term_detail_term_start"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="160dp"
-        android:text="@string/view_courses" />
+        android:text="Courses" />
 
-    <Button
-        android:id="@+id/term_detail_view_add_courses_button"
-        android:layout_width="wrap_content"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/term_detail_course_recycler_view"
+        android:layout_width="271dp"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/term_detail_view_courses_button"
-        android:layout_centerHorizontal="true"
-        android:text="@string/add_courses" />
-
-    <Button
-        android:id="@+id/term_detail_view_save_term_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/term_detail_view_add_courses_button"
-        android:layout_centerHorizontal="true"
-        android:text="Save Term" />
-
-    <Button
-        android:id="@+id/term_detail_view_delete_term_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/term_detail_view_save_term_button"
-        android:layout_centerHorizontal="true"
-        android:text="Delete Term" />
+        android:layout_below="@+id/term_detail_term_courses_label"
+        android:layout_centerHorizontal="true" />
 
     <Button
         android:id="@+id/term_detail_home_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/term_detail_view_delete_term_button"
+        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:text="Delete Term" />
+        android:text="@string/home" />
+
+    <Button
+        android:id="@+id/term_detail_edit_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/term_detail_home_button"
+        android:layout_centerHorizontal="true"
+        android:text="@string/edit" />
 
 
 </RelativeLayout>

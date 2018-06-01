@@ -15,7 +15,7 @@ import java.util.List;
 
 //Model for Terms
 @Entity(tableName = "term_table")
-public class ListItemTerm{
+public class ListItemTerm {
     @PrimaryKey(autoGenerate=true)
     @NonNull
     @ColumnInfo(name = "term_ID")
@@ -30,25 +30,24 @@ public class ListItemTerm{
     @ColumnInfo(name = "term_end")
     private Date termEndDate;
 
-    @ColumnInfo(name = "course_in_term")
-    private List<ListItemCourse> coursesInTerm;
-
 
     @Ignore
     public ListItemTerm(){}
 
-    @Ignore
     public ListItemTerm(String termName, Date termStartDate, Date termEndDate) {
         this.termName = termName;
         this.termStartDate = termStartDate;
         this.termEndDate = termEndDate;
     }
 
-    public ListItemTerm(String termName, Date termStartDate, Date termEndDate, List<ListItemCourse> coursesInTerm) {
+
+    @Ignore
+    public ListItemTerm(int termID, String termName, Date termStartDate, Date termEndDate) {
+        this.termID = termID;
         this.termName = termName;
         this.termStartDate = termStartDate;
         this.termEndDate = termEndDate;
-        this.coursesInTerm = coursesInTerm;
+//        this.coursesInTerm = coursesInTerm;
     }
 
     public int getTermID() {
@@ -82,14 +81,14 @@ public class ListItemTerm{
     public void setTermEndDate(Date termEndDate) {
         this.termEndDate = termEndDate;
     }
-
-    public List<ListItemCourse> getCoursesInTerm() {
-        return coursesInTerm;
-    }
-
-    public void setCoursesInTerm(List<ListItemCourse> coursesInTerm) {
-        this.coursesInTerm = coursesInTerm;
-    }
+//
+//    public List<ListItemCourse> getCoursesInTerm() {
+//        return coursesInTerm;
+//    }
+//
+//    public void setCoursesInTerm(List<ListItemCourse> coursesInTerm) {
+//        this.coursesInTerm = coursesInTerm;
+//    }
 
 //    @Ignore
 //    protected ListItemTerm(Parcel in) {

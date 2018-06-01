@@ -37,21 +37,16 @@ import java.util.Date;
 import java.util.List;
 
 public class TermListActivity extends AppCompatActivity {
-//    private static final String EXTRA_TERM_NAME = "EXTRA_TERM_NAME";
-//    private static final String EXTRA_COURSE_LIST = "EXTRA_COURSE_LIST";
-//
-//
-    private List<ListItemTerm> terms;
 
-//    private LayoutInflater layoutInflater;
+    private List<ListItemTerm> terms;
+    int NEW_TERM_ACTIVITY_REQUEST_CODE = 1;
     private RecyclerView termRecyclerView;
     private TermAdapter termAdapter;
     Button addTerm;
     Button home;
     Context context;
     private TermViewModel termViewModel;
-
-//    private TermController controller;
+    AppDatabase db;
 
 
 
@@ -60,8 +55,27 @@ public class TermListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_term_list);
+
+        db = AppDatabase.getDatabase(getApplicationContext());
+
+        context = this.getApplicationContext();
+
+        termRecyclerView = (RecyclerView) findViewById(R.id.term_list_recycler);
+        termRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        termAdapter = new TermAdapter(context, terms);
+        termRecyclerView.setAdapter(termAdapter);
+
+        //Get the viewmodel
         termViewModel = ViewModelProviders.of(this).get(TermViewModel.class);
-        new GetData().execute();
+
+        //Add an observer to return mentors
+        termViewModel.getAllTerms().observe(this, new Observer<List<ListItemTerm>>() {
+            @Override
+            public void onChanged(@Nullable final List<ListItemTerm> terms) {
+                //Update cached list of mentors in the adapter
+                termAdapter.setTerms(terms);
+            }
+        });
 
         home = (Button) findViewById(R.id.term_list_home_button);
         home.setOnClickListener(new View.OnClickListener() {
@@ -82,77 +96,26 @@ public class TermListActivity extends AppCompatActivity {
             }
         });
 
-//        termViewModel.getAllTerms().observe(this, new Observer<List<ListItemTerm>>() {
-//            @Override
-//            public void onChanged(@Nullable final List<ListItemTerm> terms) {
-//                // Update the cached copy of the words in the adapter.
-//                termAdapter.setTerms(terms);
-//            }
-//        });
-
-//        termRecyclerView.setOnClickListener(new View.OnClickListener() {
-////            @Override
-////            public void onClick(View view) {
-////                int termID = terms.get(position).getTermID();
-////                Log.d("MyTag", "Term ID is " + termID);
-////                Intent intent = new Intent(view.getContext(), TermDetailActivity.class);
-////                intent.putExtra("term_id", termID);
-////                startActivity(intent);
-////            }
-////        });
-//
-//            termRecyclerView.addOnItemTouchListener(new RecyclerItemClickListener(this.getApplicationContext(), new RecyclerItemClickListener.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(View view, int position) {
-//                int termID = terms.get(position).getTermID();
-//                Intent intent = new Intent(view.getContext(), TermDetailActivity.class);
-//                intent.putExtra("term_id", termID);
-//                startActivity(intent);
-//            }
-//        }));
 
     }
 
+    public void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        final Intent intent = getIntent();
 
-    private class GetData extends AsyncTask<Void, Void, List<ListItemTerm>> {
+        AsyncTask.execute(new Runnable() {
 
-        @Override
-        protected List<ListItemTerm> doInBackground(Void... params) {
-            AppDatabase db = Room.databaseBuilder(TermListActivity.this, AppDatabase.class, "database").build();
-//            db.termDao().deleteAllTerms();
+            @Override
+            public void run() {
+                if(requestCode == NEW_TERM_ACTIVITY_REQUEST_CODE) {
+                }
 
-            ListItemTerm term = new ListItemTerm("Term Two", new Date(2018, 1, 1), new Date(2018, 6, 30));
+            }
+        });
 
-            db.termDao().insert(term);
-            List<ListItemTerm> terms = db.termDao().getAllTerms();
-            return terms;
-        }
 
-        @Override
-        protected void onPostExecute(List<ListItemTerm> terms) {
-            super.onPostExecute(terms);
-            loadRecyclerView(terms);
-        }
+
+
     }
 
-    private void loadRecyclerView(List<ListItemTerm> terms) {
-        termRecyclerView = (RecyclerView) findViewById(R.id.rec_list_term_activity);
-        termRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        termAdapter = new TermAdapter(context, terms);
-        termRecyclerView.setAdapter(termAdapter);
-    }
-
-//    private void registerCallClickBack() {
-//
-//        termRecyclerView.addOnItemTouchListener(new RecyclerItemClickListener(this.getApplicationContext(), new RecyclerItemClickListener.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(View view, int position) {
-//                int termID = terms.get(position).getTermID();
-//                Log.d("MyTag", "Term ID is " + termID);
-//                Intent intent = new Intent(view.getContext(), TermDetailActivity.class);
-//                intent.putExtra("term_id", termID);
-//                startActivity(intent);
-//            }
-//        }));
-//    }
 }

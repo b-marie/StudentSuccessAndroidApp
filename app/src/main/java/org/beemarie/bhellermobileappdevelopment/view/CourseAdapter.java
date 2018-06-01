@@ -70,11 +70,8 @@ class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseViewHolder>
                 intent.putExtra("courseStartDate", courses.get(position).getCourseStartDate());
                 intent.putExtra("courseEndDate", courses.get(position).getCourseEndDate());
                 intent.putExtra("courseStatus", courses.get(position).getCourseStatus());
-                Bundle bundle = new Bundle();
-                bundle.putParcelableArrayList("courseMentors", courses.get(position).getCourseMentors());
-                bundle.putParcelableArrayList("courseAssessments", courses.get(position).getCourseAssessments());
-                intent.putExtras(bundle);
                 intent.putExtra("courseNotes", courses.get(position).getCourseNotes());
+                intent.putExtra("courseTermID", courses.get(position).getCourseTermID());
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(intent);
             }

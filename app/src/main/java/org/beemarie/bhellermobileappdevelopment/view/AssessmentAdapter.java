@@ -57,12 +57,13 @@ public class AssessmentAdapter extends RecyclerView.Adapter<AssessmentAdapter.As
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.i("UpdateAssessActivity", "Clicked on " + assessments.get(position).getAssessmentName());
+                Log.i("AssessDetailActivity", "Clicked on " + assessments.get(position).getAssessmentName());
                 Intent intent = new Intent(context, AssessmentDetailActivity.class);
+                intent.putExtra("assessmentID", assessments.get(position).getAssessmentID());
                 intent.putExtra("assessmentName", assessments.get(position).getAssessmentName());
                 intent.putExtra("assessmentType", assessments.get(position).getAssessmentType());
                 intent.putExtra("assessmentDueDate", assessments.get(position).getAssessmentDueDate());
-                intent.putExtra("assessmentID", assessments.get(position).getAssessmentID());
+                intent.putExtra("assessmentCourseID", assessments.get(position).getAssessmentCourseID());
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(intent);
             }

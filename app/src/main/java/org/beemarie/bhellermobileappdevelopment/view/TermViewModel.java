@@ -11,7 +11,7 @@ import java.util.List;
 
 public class TermViewModel extends AndroidViewModel {
     private TermRepository termRepository;
-    private List<ListItemTerm> allTerms;
+    private LiveData<List<ListItemTerm>> allTerms;
 
     public TermViewModel(Application application) {
         super(application);
@@ -19,9 +19,13 @@ public class TermViewModel extends AndroidViewModel {
         allTerms = termRepository.getAllTerms();
     }
 
-    List<ListItemTerm> getAllTerms() {return allTerms;}
+    LiveData<List<ListItemTerm>> getAllTerms() {return allTerms;}
 
     public void insert(ListItemTerm term) {termRepository.insert(term); }
+
+    public void update(ListItemTerm term) {termRepository.update(term); }
+
+    public void delete(ListItemTerm term) {termRepository.delete(term); }
 
 
 

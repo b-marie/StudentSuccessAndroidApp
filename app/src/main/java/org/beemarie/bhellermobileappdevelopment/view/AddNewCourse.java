@@ -13,11 +13,14 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.Toast;
 
@@ -26,6 +29,7 @@ import org.beemarie.bhellermobileappdevelopment.data.AppDatabase;
 import org.beemarie.bhellermobileappdevelopment.data.ListItemAssessment;
 import org.beemarie.bhellermobileappdevelopment.data.ListItemCourse;
 import org.beemarie.bhellermobileappdevelopment.data.ListItemMentor;
+import org.beemarie.bhellermobileappdevelopment.data.ListItemTerm;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -50,6 +54,7 @@ public class AddNewCourse extends AppCompatActivity {
     Context context;
     AppDatabase db;
     Calendar mCalendar;
+    List<ListItemTerm> terms;
 
 
 
@@ -64,6 +69,8 @@ public class AddNewCourse extends AppCompatActivity {
 
         mCalendar = Calendar.getInstance();
 
+        populateTermList();
+
 
         courseStart = findViewById(R.id.add_course_start_date_entry);
         courseEnd = findViewById(R.id.add_course_end_date_entry);
@@ -73,6 +80,8 @@ public class AddNewCourse extends AppCompatActivity {
         courseStatusInProgress = (RadioButton) findViewById(R.id.add_course_in_progress_status);
         courseStatusCompleted = (RadioButton) findViewById(R.id.add_course_completed_status);
         saveButton = (Button) findViewById(R.id.add_course_save_button);
+        final Spinner termDropdown = findViewById(R.id.add_course_term_list);
+
         final DatePickerDialog.OnDateSetListener startDate = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
@@ -130,9 +139,14 @@ public class AddNewCourse extends AppCompatActivity {
                             statusButton = (RadioButton) findViewById(statusID);
                             String courseStatus = statusButton.getText().toString();
                             String courseNotes = "";
-                            ArrayList<ListItemMentor> courseMentors = new ArrayList<>();
-                            ArrayList<ListItemAssessment> courseAssessments = new ArrayList<>();
-                            ListItemCourse course = new ListItemCourse(newCourseName, newCourseStartDate, newCourseEndDate, courseStatus, courseMentors, courseAssessments, courseNotes);
+
+                            List<ListItemTerm> termList = db.termDao().getAllTermsArrayList();
+                            int i = termDropdown.getSelectedItemPosition();
+                            ListItemTerm termToAdd = termList.get(i);
+                            int courseTermID = termToAdd.getTermID();
+
+
+                            ListItemCourse course = new ListItemCourse(newCourseName, newCourseStartDate, newCourseEndDate, courseStatus, courseNotes, courseTermID);
                             db.courseDao().insert(course);
                         }
 
@@ -160,5 +174,36 @@ public class AddNewCourse extends AppCompatActivity {
         SimpleDateFormat sdf = new SimpleDateFormat(dateFormat, Locale.US);
 
         courseEnd.setText(sdf.format(mCalendar.getTime()));
+    }
+
+    private void populateTermList() {
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                if (db.termDao().getAllTermsArrayList().isEmpty()) {
+                    return;
+                } else {
+                    //Populate the dropdown
+                    terms = db.termDao().getAllTermsArrayList();
+                    ArrayList<String> termNames = new ArrayList<>();
+                    for (int i = 0; i < terms.size(); i++) {
+                        termNames.add(terms.get(i).getTermName());
+                    }
+                    Spinner termDropdown = findViewById(R.id.add_course_term_list);
+                    ArrayAdapter<String> adapter = new ArrayAdapter<>(context, R.layout.support_simple_spinner_dropdown_item, termNames);
+                    adapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+                    termDropdown.setAdapter(adapter);
+                    termDropdown.setSelection(0);
+                    termDropdown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
+                        public void onItemSelected(AdapterView<?>  parent, View view, int pos, long id){
+                            Object item = parent.getItemAtPosition(pos);
+                        }
+                        public void onNothingSelected(AdapterView<?> parent) {
+
+                        }
+                    });
+                }
+            }
+        });
     }
 }

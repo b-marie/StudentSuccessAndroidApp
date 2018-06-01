@@ -128,10 +128,9 @@ public class UpdateCourseActivity extends AppCompatActivity {
                             statusButton = (RadioButton) findViewById(statusID);
                             String updateCourseStatus = statusButton.getText().toString();
                             String courseNotes = course.getCourseNotes();
-                            ArrayList<ListItemMentor> courseMentors = course.getCourseMentors();
-                            ArrayList<ListItemAssessment> courseAssessments = course.getCourseAssessments();
+                            int courseTermID = course.getCourseTermID();
 
-                            ListItemCourse updateCourse = new ListItemCourse(updateCourseID, updateCourseName, updateCourseStartDate, updateCourseEndDate, updateCourseStatus, courseMentors,courseAssessments, courseNotes);
+                            ListItemCourse updateCourse = new ListItemCourse(updateCourseID, updateCourseName, updateCourseStartDate, updateCourseEndDate, updateCourseStatus, courseNotes, courseTermID);
                             db.courseDao().updateCourse(updateCourse);
                         }
 
@@ -186,24 +185,22 @@ public class UpdateCourseActivity extends AppCompatActivity {
         Log.d("CourseDetailActivity", "Checking for incoming intents");
         if (getIntent().hasExtra("courseName")) {
             Log.d("CourseDetailActivity", "Found intent extras");
+            int courseID = getIntent().getIntExtra("courseID", 0);
             String courseName = getIntent().getStringExtra("courseName");
-            String courseStatus = getIntent().getStringExtra("courseStatus");
-            String courseNotes = getIntent().getStringExtra("courseNotes");
             Date courseStartDate = (Date) getIntent().getSerializableExtra("courseStartDate");
             Date courseEndDate = (Date) getIntent().getSerializableExtra("courseEndDate");
-            int courseID = getIntent().getIntExtra("courseID", 0);
-            Bundle bundle = getIntent().getExtras();
-            ArrayList<ListItemMentor> courseMentors = bundle.getParcelableArrayList("courseMentors");
-            ArrayList<ListItemAssessment> courseAssessments = bundle.getParcelableArrayList("courseAssessments");
+            String courseStatus = getIntent().getStringExtra("courseStatus");
+            String courseNotes = getIntent().getStringExtra("courseNotes");
+            int courseTermID = getIntent().getIntExtra("courseTermID", 0);
 
             ListItemCourse course = new ListItemCourse(courseID, courseName, courseStartDate, courseEndDate, courseStatus,
-                    courseMentors, courseAssessments, courseNotes);
+                    courseNotes, courseTermID);
             setCourse(course);
             return course;
         } else {
-            ArrayList<ListItemMentor> mentors = new ArrayList<>();
-            ArrayList<ListItemAssessment> assessments = new ArrayList<>();
-            ListItemCourse course = new ListItemCourse(0, "default", new Date(2018, 1, 1), new Date(2018, 1, 1), "default", mentors, assessments, "default");
+            ListItemCourse course = new ListItemCourse(0, "default",
+                    new Date(2018, 1, 1), new Date(2018, 1, 1),
+                    "default", "default", 0);
             setCourse(course);
             return course;
         }

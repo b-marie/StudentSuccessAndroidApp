@@ -8,7 +8,7 @@ import java.util.List;
 
 public class TermRepository {
     private TermDao termDao;
-    private List<ListItemTerm> allTerms;
+    private LiveData<List<ListItemTerm>> allTerms;
 
     public TermRepository(Application application) {
         AppDatabase db = AppDatabase.getDatabase(application);
@@ -16,7 +16,7 @@ public class TermRepository {
         allTerms = termDao.getAllTerms();
     }
 
-    public List<ListItemTerm> getAllTerms() {
+    public LiveData<List<ListItemTerm>> getAllTerms() {
         return allTerms;
     }
 
@@ -38,6 +38,44 @@ public class TermRepository {
             return null;
         }
 
+    }
+
+    public void update (ListItemTerm term) {
+        new TermRepository.updateAsyncTask(termDao).execute(term);
+    }
+
+    private static class updateAsyncTask extends AsyncTask<ListItemTerm, Void, Void> {
+
+        private TermDao mAsyncTaskDao;
+
+        updateAsyncTask(TermDao dao) {
+            mAsyncTaskDao = dao;
+        }
+
+        @Override
+        protected Void doInBackground(final ListItemTerm... params) {
+            mAsyncTaskDao.updateTerm(params[0]);
+            return null;
+        }
+    }
+
+    public void delete (ListItemTerm term) {
+        new TermRepository.deleteAsyncTask(termDao).execute(term);
+    }
+
+    private static class deleteAsyncTask extends AsyncTask<ListItemTerm, Void, Void> {
+
+        private TermDao mAsyncTaskDao;
+
+        deleteAsyncTask(TermDao dao) {
+            mAsyncTaskDao = dao;
+        }
+
+        @Override
+        protected Void doInBackground(final ListItemTerm... params) {
+            mAsyncTaskDao.deleteTerm(params[0]);
+            return null;
+        }
     }
 
 

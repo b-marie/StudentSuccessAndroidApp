@@ -115,10 +115,31 @@
                 android:id="@+id/add_course_save_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
+                android:layout_alignParentBottom="true"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="453dp"
+                android:layout_marginBottom="38dp"
                 android:text="@string/save" />
+
+            <TextView
+                android:id="@+id/add_course_term_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="141dp"
+                android:text="@string/assign_to_term" />
+
+            <Spinner
+                android:id="@+id/add_course_term_list"
+                style="@style/Dropdown"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/add_course_term_label"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="-141dp"
+                android:background="@android:drawable/btn_dropdown"
+                android:spinnerMode="dropdown" />
+
 
         </RelativeLayout>
 

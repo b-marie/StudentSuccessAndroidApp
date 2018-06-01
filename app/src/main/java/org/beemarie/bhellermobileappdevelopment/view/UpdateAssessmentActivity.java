@@ -96,7 +96,9 @@ public class UpdateAssessmentActivity extends AppCompatActivity {
                             int radioID = assessmentTypeRadioGroup.getCheckedRadioButtonId();
                             typeButton = (RadioButton) findViewById(radioID);
                             String assessmentType = typeButton.getText().toString();
-                            ListItemAssessment assessment = new ListItemAssessment(ID, newAssessmentName, assessmentType, newAssessmentDueDate);
+                            int assessmentCourseID = assessment.getAssessmentCourseID();
+                            ListItemAssessment assessment = new ListItemAssessment(ID, newAssessmentName,
+                                    assessmentType, newAssessmentDueDate, assessmentCourseID);
                             db.assessmentDao().updateAssessment(assessment);
                         }
 
@@ -150,17 +152,20 @@ public class UpdateAssessmentActivity extends AppCompatActivity {
         Log.d("UpdateAssessActivity", "Checking for incoming intents");
         if(getIntent().hasExtra("assessmentName") && getIntent().hasExtra("assessmentName")) {
             Log.d("UpdateAssessActivity", "Found intent extras");
+            int assessmentID = getIntent().getIntExtra("assessmentID", 0);
             String assessmentName = getIntent().getStringExtra("assessmentName");
             String assessmentType = getIntent().getStringExtra("assessmentType");
             Date assessmentDueDate = (Date) getIntent().getSerializableExtra("assessmentDueDate");
-            int assessmentID = getIntent().getIntExtra("assessmentID", 0);
+            int assessmentCourseID = getIntent().getIntExtra("assessmentCourseID", 0);
 
 
-            ListItemAssessment assessment = new ListItemAssessment(assessmentID, assessmentName, assessmentType, assessmentDueDate);
+            ListItemAssessment assessment = new ListItemAssessment(assessmentID, assessmentName,
+                    assessmentType, assessmentDueDate, assessmentCourseID);
             setAssessment(assessment);
             return assessment;
         } else {
-            ListItemAssessment assessment = new ListItemAssessment(0, "default", "default", new Date(2018, 1, 1));
+            ListItemAssessment assessment = new ListItemAssessment(0, "default",
+                    "default", new Date(2018, 1, 1), 0);
             setAssessment(assessment);
             return assessment;
         }

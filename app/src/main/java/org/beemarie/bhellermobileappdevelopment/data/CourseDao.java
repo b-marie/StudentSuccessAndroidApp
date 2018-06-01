@@ -8,12 +8,16 @@ import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
 import android.arch.persistence.room.Update;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Dao
 public interface CourseDao {
     @Query("SELECT * FROM course_table")
     LiveData<List<ListItemCourse>> getAllCourses();
+
+    @Query("SELECT * FROM course_table")
+    List<ListItemCourse> getAllCoursesArrayList();
 
     @Query("SELECT * FROM course_table WHERE course_ID IN (:courseIds)")
     List<ListItemCourse> loadAllCoursesByIds(int[] courseIds);
@@ -41,4 +45,5 @@ public interface CourseDao {
 
     @Query("DELETE FROM course_table WHERE course_ID = (:courseId)")
     void deleteByID(int courseId);
+
 }
