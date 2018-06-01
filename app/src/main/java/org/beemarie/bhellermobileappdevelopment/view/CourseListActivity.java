@@ -60,7 +60,7 @@ public class CourseListActivity extends AppCompatActivity {
         //Get the viewmodel
         courseViewModel = ViewModelProviders.of(this).get(CourseViewModel.class);
 
-        //Add an observer to return mentors
+        //Add an observer to return courses
         courseViewModel.getAllCourses().observe(this, new Observer<List<ListItemCourse>>() {
             @Override
             public void onChanged(@Nullable final List<ListItemCourse> courses) {

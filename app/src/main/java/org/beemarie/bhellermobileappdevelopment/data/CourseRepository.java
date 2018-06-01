@@ -10,7 +10,11 @@ import java.util.List;
 public class CourseRepository {
     private CourseDao courseDao;
     private LiveData<List<ListItemCourse>> allCourses;
+    List<ListItemCourse> courses;
     private String courseName;
+    ListItemCourse courseToReturn;
+
+    public CourseRepository(){}
 
     public CourseRepository(Application application) {
         AppDatabase db = AppDatabase.getDatabase(application);
@@ -22,15 +26,25 @@ public class CourseRepository {
         return allCourses;
     }
 
-    public ListItemCourse getCourseByID(int ID) {
-        ListItemCourse courseToReturn = courseDao.getCourseByID(ID);
+    public ListItemCourse getCourseByID(final int ID) {
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                courseToReturn = courseDao.getCourseByID(ID);
+            }
+        });
         return courseToReturn;
     }
 
     public List<ListItemCourse> getAllCoursesList()
     {
-        ArrayList<ListItemCourse> listToReturn = new ArrayList<ListItemCourse>(courseDao.getAllCoursesArrayList());
-        return listToReturn;
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                courses = courseDao.getAllCoursesArrayList();
+            }
+        });
+        return courses;
     }
 
     public void insert(ListItemCourse course) {
@@ -86,6 +100,29 @@ public class CourseRepository {
         @Override
         protected Void doInBackground(final ListItemCourse... params) {
             mAsyncTaskDao.deleteCourse(params[0]);
+            return null;
+        }
+    }
+
+    public List<ListItemCourse> getAllCoursesAsList () {
+        List<ListItemCourse> courses =  getAsyncTask.getCourses();
+        return courses;
+    }
+
+    private static class getAsyncTask extends AsyncTask<Void, Void, List<ListItemCourse>> {
+
+        private static CourseDao mAsyncTaskDao;
+        private List<ListItemCourse> courses;
+        getAsyncTask(CourseDao dao) {
+            mAsyncTaskDao = dao;
+        }
+
+        public static List<ListItemCourse> getCourses() {
+            return mAsyncTaskDao.getAllCoursesArrayList();
+        }
+
+        @Override
+        protected List<ListItemCourse> doInBackground(Void... voids) {
             return null;
         }
     }

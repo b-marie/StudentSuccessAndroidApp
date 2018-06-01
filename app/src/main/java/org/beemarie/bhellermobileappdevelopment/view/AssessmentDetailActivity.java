@@ -1,5 +1,6 @@
 package org.beemarie.bhellermobileappdevelopment.view;
 
+import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -43,7 +44,10 @@ public class AssessmentDetailActivity extends AppCompatActivity {
 
         context = this.getApplicationContext();
 
+        courseRepository = new CourseRepository(this.getApplication());
+
         final ListItemAssessment assessment = getIncomingIntent();
+
 
         assessmentName = findViewById(R.id.assessment_detail_assessment_name);
         assessmentType = findViewById(R.id.assessment_detail_assessment_type);

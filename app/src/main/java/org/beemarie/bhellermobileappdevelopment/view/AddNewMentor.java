@@ -50,6 +50,8 @@ public class AddNewMentor extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_new_mentor);
 
+        context = getApplicationContext();
+
 
         db = AppDatabase.getDatabase(getApplicationContext());
 

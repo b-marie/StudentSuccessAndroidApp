@@ -42,6 +42,9 @@ public class MentorDetailActivity extends AppCompatActivity {
 
         context = this.getApplicationContext();
 
+        courseRepository = new CourseRepository();
+        courseViewModel = new CourseViewModel(this.getApplication());
+
         final ListItemMentor mentor = getIncomingIntent();
 
         mentorName = findViewById(R.id.mentor_detail_mentor_name);
@@ -106,7 +109,8 @@ public class MentorDetailActivity extends AppCompatActivity {
         mentorEmail.setText(mentor.getMentorEmail());
 
         TextView mentorCourse = findViewById(R.id.mentor_detail_course);
-        ListItemCourse course = courseViewModel.getCourseByID(mentor.getMentorCourseID());
+        int courseID = mentor.getMentorCourseID();
+        ListItemCourse course = courseRepository.getCourseByID(courseID);
         String courseName = course.getCourseName();
         mentorCourse.setText(courseName);
 

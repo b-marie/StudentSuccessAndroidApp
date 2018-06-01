@@ -17,6 +17,7 @@ public class CourseViewModel extends AndroidViewModel {
     private CourseRepository courseRepository;
     private LiveData<List<ListItemCourse>> allCourses;
 
+
     public CourseViewModel(Application application) {
         super(application);
         courseRepository = new CourseRepository(application);
