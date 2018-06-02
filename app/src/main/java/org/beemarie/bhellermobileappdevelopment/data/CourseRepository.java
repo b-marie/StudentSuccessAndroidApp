@@ -3,6 +3,7 @@ package org.beemarie.bhellermobileappdevelopment.data;
 import android.app.Application;
 import android.arch.lifecycle.LiveData;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +14,8 @@ public class CourseRepository {
     List<ListItemCourse> courses;
     private String courseName;
     ListItemCourse courseToReturn;
+    List<ListItemCourse> coursesToReturn;
+    ListItemCourse[] coursesList;
 
     public CourseRepository(){}
 
@@ -26,6 +29,7 @@ public class CourseRepository {
         return allCourses;
     }
 
+
     public ListItemCourse getCourseByID(final int ID) {
         AsyncTask.execute(new Runnable() {
             @Override
@@ -34,6 +38,16 @@ public class CourseRepository {
             }
         });
         return courseToReturn;
+    }
+
+    public List<ListItemCourse> getCoursesByTermID(final int ID) {
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                coursesToReturn = courseDao.loadAllCoursesByTermID(ID);
+            }
+        });
+        return coursesToReturn;
     }
 
     public List<ListItemCourse> getAllCoursesList()

@@ -1,9 +1,14 @@
 package org.beemarie.bhellermobileappdevelopment.view;
 
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -17,7 +22,9 @@ import org.beemarie.bhellermobileappdevelopment.data.ListItemCourse;
 import org.beemarie.bhellermobileappdevelopment.data.ListItemMentor;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class MentorDetailActivity extends AppCompatActivity {
 
@@ -32,6 +39,12 @@ public class MentorDetailActivity extends AppCompatActivity {
     AppDatabase db;
     CourseRepository courseRepository;
     CourseViewModel courseViewModel;
+    CourseAdapter courseAdapter;
+    List<ListItemCourse> courses;
+    List<ListItemCourse> courseWithMentor;
+    ListItemCourse course;
+    RecyclerView courseRecyclerView;
+    ListItemMentor mentor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,16 +55,33 @@ public class MentorDetailActivity extends AppCompatActivity {
 
         context = this.getApplicationContext();
 
-        courseRepository = new CourseRepository();
-        courseViewModel = new CourseViewModel(this.getApplication());
+        //Set current mentor based on incoming intent
+        mentor = getIncomingIntent();
 
-        final ListItemMentor mentor = getIncomingIntent();
+        //Set the course recycler view
+        courseRecyclerView = (RecyclerView) findViewById(R.id.mentor_detail_course_recycler_view);
+        courseRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        courseAdapter = new CourseAdapter(context, courseWithMentor);
+        courseRecyclerView.setAdapter(courseAdapter);
 
-        mentorName = findViewById(R.id.mentor_detail_mentor_name);
-        mentorPhoneNumber = findViewById(R.id.mentor_detail_phone_number);
-        mentorEmail = findViewById(R.id.mentor_detail_email);
-        mentorCourse=findViewById(R.id.mentor_detail_course);
+        courseAdapter = new CourseAdapter(context, courses);
+        //Get the viewmodel for courses
+        courseViewModel = ViewModelProviders.of(this).get(CourseViewModel.class);
 
+        courseViewModel.getAllCourses().observe(this, new Observer<List<ListItemCourse>>() {
+            @Override
+            public void onChanged(@Nullable final List<ListItemCourse> courses) {
+                //Update cached list of mentors in the adapter
+                courseWithMentor = getCoursesByID(courses);
+                courseAdapter.setCourses(courseWithMentor);
+            }
+        });
+
+
+//        mentorName = findViewById(R.id.mentor_detail_mentor_name);
+//        mentorPhoneNumber = findViewById(R.id.mentor_detail_phone_number);
+//        mentorEmail = findViewById(R.id.mentor_detail_email);
+//        mentorCourse=findViewById(R.id.mentor_detail_course);
 
         homeButton = (Button) findViewById(R.id.mentor_detail_home_button);
         homeButton.setOnClickListener(new View.OnClickListener() {
@@ -107,12 +137,16 @@ public class MentorDetailActivity extends AppCompatActivity {
 
         TextView mentorEmail = findViewById(R.id.mentor_detail_email);
         mentorEmail.setText(mentor.getMentorEmail());
+    }
 
-        TextView mentorCourse = findViewById(R.id.mentor_detail_course);
-        int courseID = mentor.getMentorCourseID();
-        ListItemCourse course = courseRepository.getCourseByID(courseID);
-        String courseName = course.getCourseName();
-        mentorCourse.setText(courseName);
-
+    public List<ListItemCourse> getCoursesByID (List<ListItemCourse> courses) {
+        ListItemMentor mentorToCompare = mentor;
+        List<ListItemCourse> courseToReturn = new ArrayList<ListItemCourse>();
+        for(int i = 0; i < courses.size(); i++  ){
+            if(mentor.getMentorCourseID() == courses.get(i).getCourseID()){
+                courseToReturn.add(courses.get(i));
+            }
+        }
+        return courseToReturn;
     }
 }

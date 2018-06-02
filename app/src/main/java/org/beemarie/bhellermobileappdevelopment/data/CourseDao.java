@@ -19,8 +19,14 @@ public interface CourseDao {
     @Query("SELECT * FROM course_table")
     List<ListItemCourse> getAllCoursesArrayList();
 
+    @Query("SELECT * FROM course_table")
+    ListItemCourse[] getCoursesList();
+
     @Query("SELECT * FROM course_table WHERE course_ID IN (:courseIds)")
     List<ListItemCourse> loadAllCoursesByIds(int[] courseIds);
+
+    @Query("SELECT * FROM course_table WHERE course_term_ID IN (:courseTermId)")
+    List<ListItemCourse> loadAllCoursesByTermID(int courseTermId);
 
     @Query("SELECT * FROM course_table WHERE course_ID = (:courseId)")
     ListItemCourse getCourseByID(int courseId);

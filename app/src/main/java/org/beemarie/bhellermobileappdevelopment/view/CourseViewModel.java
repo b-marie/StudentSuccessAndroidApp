@@ -16,17 +16,21 @@ import java.util.List;
 public class CourseViewModel extends AndroidViewModel {
     private CourseRepository courseRepository;
     private LiveData<List<ListItemCourse>> allCourses;
+    private ListItemCourse[] coursesList;
 
 
     public CourseViewModel(Application application) {
         super(application);
         courseRepository = new CourseRepository(application);
         allCourses = courseRepository.getAllCourses();
+//        coursesList = courseRepository.getCoursesList();
     }
 
     LiveData<List<ListItemCourse>> getAllCourses() {return allCourses;}
 
-    List<ListItemCourse> getAllCoursesArrayList() {return courseRepository.getAllCoursesList(); }
+    ListItemCourse[] getCoursesList() {return coursesList; }
+
+    List<ListItemCourse> getAllCoursesArrayList() {return courseRepository.getAllCoursesAsList(); }
 
     public void insert(ListItemCourse course) {courseRepository.insert(course); }
 
@@ -38,4 +42,9 @@ public class CourseViewModel extends AndroidViewModel {
         ListItemCourse courseToReturn = courseRepository.getCourseByID(ID);
         return courseToReturn;
         }
+
+    public List<ListItemCourse> getCoursesByTermID(int ID) {
+        List<ListItemCourse> coursesToReturn = courseRepository.getCoursesByTermID(ID);
+        return coursesToReturn;
+    }
 }

@@ -5,6 +5,7 @@ import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -50,6 +51,7 @@ public class TermDetailActivity extends AppCompatActivity {
     ListItemTerm term;
     CourseRepository courseRepository;
     List<ListItemCourse> courses;
+    List<ListItemCourse> coursesInTerm;
 
 
     @Override
@@ -61,9 +63,26 @@ public class TermDetailActivity extends AppCompatActivity {
 
         context = this.getApplicationContext();
 
+        //Set the current term based on the incoming intent
         term = getIncomingIntent();
 
-        ArrayList<ListItemCourse> coursesInTerm = coursesInTerm();
+        //Set recycler view
+        courseRecyclerView = (RecyclerView) findViewById(R.id.term_detail_course_recycler_view);
+        courseRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        courseAdapter = new CourseAdapter(context, coursesInTerm);
+        courseRecyclerView.setAdapter(courseAdapter);
+
+        //Get the viewmodel for courses
+        courseViewModel = ViewModelProviders.of(this).get(CourseViewModel.class);
+
+        courseViewModel.getAllCourses().observe(this, new Observer<List<ListItemCourse>>() {
+            @Override
+            public void onChanged(@Nullable final List<ListItemCourse> courses) {
+                //Update cached list of mentors in the adapter
+                coursesInTerm = coursesInTerm(courses);
+                courseAdapter.setCourses(coursesInTerm);
+            }
+        });
 
         termName = findViewById(R.id.term_detail_term_name);
         termStart = findViewById(R.id.term_detail_term_start);
@@ -131,38 +150,18 @@ public class TermDetailActivity extends AppCompatActivity {
 
     }
 
-    private ArrayList<ListItemCourse> coursesInTerm() {
+    private List<ListItemCourse> coursesInTerm(List<ListItemCourse> courses) {
         ListItemTerm termToCompare = term;
-//
-//        //Get the viewmodel
-//        courseViewModel = ViewModelProviders.of(this).get(CourseViewModel.class);
-//
-//        //Add an observer to return mentors
-//        courseViewModel.getAllCourses().observe(this, new Observer<List<ListItemCourse>>() {
-//            @Override
-//            public void onChanged(@Nullable final List<ListItemCourse> courses) {
-//                //Update cached list of mentors in the adapter
-//                courseAdapter.setCourses(courses);
-//            }
-//        });
 
-        courses = courseViewModel.getAllCoursesArrayList();
+        List<ListItemCourse> coursesInTerm = new ArrayList<ListItemCourse>();
 
-        ArrayList<ListItemCourse> coursesInTerm = new ArrayList<ListItemCourse>();
-
-        for(int i = 0; i < courses.size(); i++) {
-            if(courses.get(i).getCourseTermID() == term.getTermID()) {
-                coursesInTerm.add(courses.get(i));
+        if(courses != null) {
+            for(int i = 0; i < courses.size(); i++) {
+                if(courses.get(i).getCourseTermID() == term.getTermID()) {
+                    coursesInTerm.add(courses.get(i));
+                }
             }
         }
-
-
-
-        courseRecyclerView = (RecyclerView) findViewById(R.id.course_list_recycler);
-        courseRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        courseAdapter = new CourseAdapter(context, coursesInTerm);
-        courseRecyclerView.setAdapter(courseAdapter);
-
         return coursesInTerm;
     }
 }
