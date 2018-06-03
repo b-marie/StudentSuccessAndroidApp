@@ -1,5 +1,6 @@
 package org.beemarie.bhellermobileappdevelopment.view;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Handler;
@@ -7,13 +8,20 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import org.beemarie.bhellermobileappdevelopment.R;
 import org.beemarie.bhellermobileappdevelopment.data.AppDatabase;
+import org.beemarie.bhellermobileappdevelopment.data.ListItemCourse;
 import org.beemarie.bhellermobileappdevelopment.data.ListItemMentor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class UpdateMentorActivity extends AppCompatActivity {
 
@@ -23,12 +31,19 @@ public class UpdateMentorActivity extends AppCompatActivity {
     AppDatabase db;
     Button updateButton;
     Button deleteButton;
+    List<ListItemCourse> courses;
+    Context context;
+    Spinner courseDropdown;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_update_mentor);
+
+        context = getApplicationContext();
         db = AppDatabase.getDatabase(getApplicationContext());
+
+        populateCourseList();
 
         final ListItemMentor mentor = getIncomingIntent();
         final int mentorID = mentor.getMentorID();
@@ -38,12 +53,13 @@ public class UpdateMentorActivity extends AppCompatActivity {
         mentorName = findViewById(R.id.update_mentor_name_entry);
         mentorPhoneNumber = findViewById(R.id.update_mentor_phone_number_entry);
         mentorEmail = findViewById(R.id.update_mentor_email_entry);
+        courseDropdown = findViewById(R.id.update_mentor_course_list);
 
 
         updateButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 final int ID = mentorID;
-                if (mentorName.getText().toString().equals("") && mentorPhoneNumber.getText().toString().equals("") && mentorEmail.getText().toString().equals("")) {
+                if (mentorName.getText().toString().equals("") || mentorPhoneNumber.getText().toString().equals("") || mentorEmail.getText().toString().equals("")) {
                     //Add a toast to say they need to enter text
                     Toast.makeText(
                             getApplicationContext(),
@@ -57,7 +73,12 @@ public class UpdateMentorActivity extends AppCompatActivity {
                             String updatedMentorName = mentorName.getText().toString();
                             String updatedMentorPhoneNumber = mentorPhoneNumber.getText().toString();
                             String updatedMentorEmail = mentorEmail.getText().toString();
-                            int mentorCourseID = mentor.getMentorCourseID();
+
+                            List<ListItemCourse> courseList = db.courseDao().getAllCoursesArrayList();
+                            int i = courseDropdown.getSelectedItemPosition();
+                            ListItemCourse courseToAdd = courseList.get(i);
+                            int mentorCourseID = courseToAdd.getCourseID();
+
                             ListItemMentor mentor = new ListItemMentor(ID, updatedMentorName, updatedMentorPhoneNumber, updatedMentorEmail, mentorCourseID);
                             db.mentorDao().updateMentor(mentor);
                         }
@@ -132,5 +153,36 @@ public class UpdateMentorActivity extends AppCompatActivity {
 
         EditText mentorEmail = findViewById(R.id.update_mentor_email_entry);
         mentorEmail.setText(mentor.getMentorEmail());
+    }
+
+    private void populateCourseList() {
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                if (db.courseDao().getAllCoursesArrayList().isEmpty()) {
+                    return;
+                } else {
+                    //Populate the dropdown
+                    courses = db.courseDao().getAllCoursesArrayList();
+                    ArrayList<String> courseNames = new ArrayList<>();
+                    for (int i = 0; i < courses.size(); i++) {
+                        courseNames.add(courses.get(i).getCourseName());
+                    }
+                    Spinner courseDropdown = findViewById(R.id.update_mentor_course_list);
+                    ArrayAdapter<String> adapter = new ArrayAdapter<>(context, R.layout.support_simple_spinner_dropdown_item, courseNames);
+                    adapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+                    courseDropdown.setAdapter(adapter);
+                    courseDropdown.setSelection(0);
+                    courseDropdown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
+                        public void onItemSelected(AdapterView<?>  parent, View view, int pos, long id){
+                            Object item = parent.getItemAtPosition(pos);
+                        }
+                        public void onNothingSelected(AdapterView<?> parent) {
+
+                        }
+                    });
+                }
+            }
+        });
     }
 }

@@ -125,6 +125,7 @@ public class UpdateTermActivity extends AppCompatActivity {
 
         deleteButton = (Button) findViewById(R.id.update_term_delete_button);
         deleteButton.setOnClickListener(new View.OnClickListener() {
+
             int termId = termID;
             public void onClick(View view) {
                 final ListItemTerm deleteTerm = term;

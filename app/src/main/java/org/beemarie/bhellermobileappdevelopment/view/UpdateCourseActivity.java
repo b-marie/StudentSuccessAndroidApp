@@ -8,11 +8,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,11 +25,13 @@ import org.beemarie.bhellermobileappdevelopment.data.AppDatabase;
 import org.beemarie.bhellermobileappdevelopment.data.ListItemAssessment;
 import org.beemarie.bhellermobileappdevelopment.data.ListItemCourse;
 import org.beemarie.bhellermobileappdevelopment.data.ListItemMentor;
+import org.beemarie.bhellermobileappdevelopment.data.ListItemTerm;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 public class UpdateCourseActivity extends AppCompatActivity {
@@ -46,6 +51,7 @@ public class UpdateCourseActivity extends AppCompatActivity {
     Context context;
     AppDatabase db;
     Calendar mCalendar;
+    List<ListItemTerm> terms;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,8 +62,10 @@ public class UpdateCourseActivity extends AppCompatActivity {
 
         context = this.getApplicationContext();
 
+
         final ListItemCourse course = getIncomingIntent();
         final int courseID = course.getCourseID();
+        populateTermList(course);
 
         mCalendar = Calendar.getInstance();
 
@@ -70,6 +78,7 @@ public class UpdateCourseActivity extends AppCompatActivity {
         courseStatusCompleted = (RadioButton) findViewById(R.id.update_course_completed_status);
         updateButton = (Button) findViewById(R.id.update_course_save_button);
         deleteButton = (Button) findViewById(R.id.update_course_delete_button);
+        final Spinner termDropdown = findViewById(R.id.update_course_term_list);
         final DatePickerDialog.OnDateSetListener startDate = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
@@ -107,7 +116,10 @@ public class UpdateCourseActivity extends AppCompatActivity {
         updateButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 final int ID = courseID;
-                if (courseName.getText().toString().equals("") && courseStart.getText().toString().equals("") && courseEnd.getText().toString().equals("")) {
+                if (courseName.getText().toString().equals("") ||
+                        courseStart.getText().toString().equals("") ||
+                        courseEnd.getText().toString().equals("") ||
+                        courseStatusGroup.getCheckedRadioButtonId() == -1) {
                     //Add a toast to say they need to enter text
                     Toast.makeText(
                             getApplicationContext(),
@@ -128,7 +140,11 @@ public class UpdateCourseActivity extends AppCompatActivity {
                             statusButton = (RadioButton) findViewById(statusID);
                             String updateCourseStatus = statusButton.getText().toString();
                             String courseNotes = course.getCourseNotes();
-                            int courseTermID = course.getCourseTermID();
+
+                            List<ListItemTerm> termList = db.termDao().getAllTermsArrayList();
+                            int i = termDropdown.getSelectedItemPosition();
+                            ListItemTerm termToAdd = termList.get(i);
+                            int courseTermID = termToAdd.getTermID();
 
                             ListItemCourse updateCourse = new ListItemCourse(updateCourseID, updateCourseName, updateCourseStartDate, updateCourseEndDate, updateCourseStatus, courseNotes, courseTermID);
                             db.courseDao().updateCourse(updateCourse);
@@ -228,10 +244,48 @@ public class UpdateCourseActivity extends AppCompatActivity {
 
 
         RadioGroup courseStatusGroup = (RadioGroup) findViewById(R.id.update_course_course_status_radio_group);
-
         RadioButton courseStatusPlanned = (RadioButton) findViewById(R.id.update_course_planned_status);
         RadioButton courseStatusInProgress = (RadioButton) findViewById(R.id.update_course_in_progress_status);
         RadioButton courseStatusCompleted = (RadioButton) findViewById(R.id.update_course_completed_status);
+        if(course.getCourseStatus().equals("In Progress")) {
+            courseStatusInProgress.setSelected(true);
+        } else if (course.getCourseStatus().equals("Planned")) {
+            courseStatusPlanned.setSelected(true);
+        } else if(course.getCourseStatus().equals("Completed")) {
+            courseStatusCompleted.setSelected(true);
+        }
 
+    }
+
+    private void populateTermList(ListItemCourse course) {
+        final int termID = course.getCourseTermID();
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                if (db.termDao().getAllTermsArrayList().isEmpty()) {
+                    return;
+                } else {
+                    //Populate the dropdown
+                    terms = db.termDao().getAllTermsArrayList();
+                    ArrayList<String> termNames = new ArrayList<>();
+                    for (int i = 0; i < terms.size(); i++) {
+                        termNames.add(terms.get(i).getTermName());
+                    }
+                    Spinner termDropdown = findViewById(R.id.update_course_term_list);
+                    ArrayAdapter<String> adapter = new ArrayAdapter<>(context, R.layout.support_simple_spinner_dropdown_item, termNames);
+                    adapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+                    termDropdown.setAdapter(adapter);
+                    termDropdown.setSelection(0);
+                    termDropdown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
+                        public void onItemSelected(AdapterView<?>  parent, View view, int pos, long id){
+                            Object item = parent.getItemAtPosition(pos);
+                        }
+                        public void onNothingSelected(AdapterView<?> parent) {
+
+                        }
+                    });
+                }
+            }
+        });
     }
 }

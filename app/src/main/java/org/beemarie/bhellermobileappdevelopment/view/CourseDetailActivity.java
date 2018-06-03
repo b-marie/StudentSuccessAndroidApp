@@ -125,13 +125,6 @@ public class CourseDetailActivity extends AppCompatActivity {
         });
 
 
-
-//        LinearLayout mentorListViewLayout = (LinearLayout) findViewById(R.id.course_detail_mentor_view_layout);
-
-//        final Spinner mentorDropdown = findViewById(R.id.course_detail_mentor_list);
-//        Spinner assessmentsDropdown = findViewById(R.id.course_detail_assessment_list);
-
-
         Button editButton = (Button) findViewById(R.id.course_detail_edit_button);
         editButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -158,46 +151,6 @@ public class CourseDetailActivity extends AppCompatActivity {
 
         });
 
-
-
-//        Button addMentorButton = (Button) findViewById(R.id.course_detail_add_mentor_button);
-//        addMentorButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(final View view) {
-//                AsyncTask.execute(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        List<ListItemMentor> mentorsList = db.mentorDao().getAllMentorsList();
-//                        int i = mentorDropdown.getSelectedItemPosition();
-//                        ListItemMentor mentorToAdd = mentorsList.get(i);
-//                        Log.i("CourseDetailActivity", "Mentor to add is " + mentorToAdd.getMentorName());
-//                        ArrayList<ListItemMentor> newMentorList = currentCourse.getCourseMentors();
-//                        newMentorList.add(mentorToAdd);
-//                        Log.i("CourseDetailActivity", "Size of mentor list is " + newMentorList.size());
-//                        int currentCourseID = currentCourse.getCourseID();
-//                        String currentCourseName = currentCourse.getCourseName();
-//                        String currentCourseStatus = currentCourse.getCourseStatus();
-//                        Date currentCourseStartDate = currentCourse.getCourseStartDate();
-//                        Date currentCourseEndDate = currentCourse.getCourseEndDate();
-//                        ArrayList<ListItemAssessment> currentCourseAssessments = currentCourse.getCourseAssessments();
-//                        String currentCourseNotes = currentCourse.getCourseNotes();
-//                        ListItemCourse updatedCourse = new ListItemCourse(currentCourseID, currentCourseName,
-//                                currentCourseStartDate, currentCourseEndDate, currentCourseStatus, newMentorList,
-//                                currentCourseAssessments, currentCourseNotes);
-//                        db.courseDao().updateCourse(updatedCourse);
-//                        Log.i("CourseDetailActivity", "Updated course name is " + updatedCourse.getCourseName());
-//                        ListItemCourse checkCourse = db.courseDao().getCourseByID(currentCourseID);
-//                        Log.i("CourseDetailActivity", "Length of updated course mentor list is " + checkCourse.getCourseMentors().size());
-//
-//                    }
-//
-//                });
-//                Intent intent = new Intent(context, CourseListActivity.class);
-//                view.getContext().startActivity(intent);
-//            }
-//        });
-
-
         Button homeButton = (Button) findViewById(R.id.course_detail_home_button);
         homeButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -208,8 +161,22 @@ public class CourseDetailActivity extends AppCompatActivity {
         });
 
 
-//        Button addAssessmentButton = (Button) findViewById(R.id.course_detail_add_assessment_button);
         Button courseNotesButton = (Button) findViewById(R.id.course_detail_course_notes_button);
+        courseNotesButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(view.getContext(), CourseNotesActivity.class);
+                intent.putExtra("courseID", currentCourse.getCourseID());
+                intent.putExtra("courseName", currentCourse.getCourseName());
+                intent.putExtra("courseStartDate", currentCourse.getCourseStartDate());
+                intent.putExtra("courseEndDate", currentCourse.getCourseEndDate());
+                intent.putExtra("courseStatus", currentCourse.getCourseStatus());
+                intent.putExtra("courseNotes", currentCourse.getCourseNotes());
+                intent.putExtra("courseTermID", currentCourse.getCourseTermID());
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(intent);
+            }
+        });
 
 
     }
@@ -252,70 +219,7 @@ public class CourseDetailActivity extends AppCompatActivity {
         Date endDate = course.getCourseEndDate();
         String cEndDate = simpleDateFormat.format(endDate);
         courseEndDate.setText(cEndDate);
-//
-//        ArrayList<ListItemMentor> courseMentors = course.getCourseMentors();
-//        if(courseMentors == null) {
-//            courseMentors = new ArrayList<ListItemMentor>();
-//        }
-//        Log.i("CourseDetailActivity", "Course mentors number is " + courseMentors.size());
-//
-//        ArrayList<ListItemAssessment> courseAssessments = course.getCourseAssessments();
-//        ListItemAssessment courseAssessment1 = courseAssessments.get(0);
-
     }
-
-//    private void populateMentorsList(final ListItemCourse course) {
-//        AsyncTask.execute(new Runnable() {
-//            @Override
-//            public void run() {
-//                if (db.mentorDao().getAllMentorsList().isEmpty()) {
-//                    return;
-//                } else {
-//                    //Populate the dropdown
-//                    courseMentors = db.mentorDao().getAllMentorsList();
-//                    ArrayList<String> mentorNames = new ArrayList<>();
-//                    for (int i = 0; i < courseMentors.size(); i++) {
-//                        mentorNames.add(courseMentors.get(i).getMentorName());
-//                    }
-//                    Spinner mentorDropdown = findViewById(R.id.course_detail_mentor_list);
-//                    ArrayAdapter<String> adapter = new ArrayAdapter<>(context, R.layout.support_simple_spinner_dropdown_item, mentorNames);
-//                    adapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
-//                    mentorDropdown.setAdapter(adapter);
-//                    mentorDropdown.setSelection(0);
-//                    mentorDropdown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
-//                        public void onItemSelected(AdapterView<?>  parent, View view, int pos, long id){
-//                            Object item = parent.getItemAtPosition(pos);
-//                        }
-//                        public void onNothingSelected(AdapterView<?> parent) {
-//
-//                        }
-//                    });
-//                    //Populate the current course list
-//                    LinearLayout mentorListViewLayout = (LinearLayout) findViewById(R.id.course_detail_mentor_view_layout);
-//                    ArrayList<ListItemMentor> currentCourseMentors = new ArrayList<ListItemMentor>(course.getCourseMentors());
-//                    if (currentCourseMentors.isEmpty()) {
-//                        TextView noMentors = new TextView(context);
-//                        noMentors.setText("No Mentors");
-//                        mentorListViewLayout.addView(noMentors);
-//                    } else {
-//                        currentCourseMentors = course.getCourseMentors();
-//                        final TextView[] mentorTextViews = new TextView[currentCourseMentors.size()];
-//
-//                        for (int i = 0; i < currentCourseMentors.size(); i++) {
-//                            final TextView rowTextView = new TextView(context);
-//                            String text = currentCourseMentors.get(i).getMentorName() +
-//                                    "\n Phone Number: " + currentCourseMentors.get(i).getMentorPhoneNumber() +
-//                                    "\n Email: " + currentCourseMentors.get(i).getMentorEmail();
-//                            rowTextView.setText(text);
-//                            rowTextView.setTextColor(getResources().getColor(R.color.black));
-//                            mentorListViewLayout.addView(rowTextView);
-//                            mentorTextViews[i] = rowTextView;
-//                        }
-//                    }
-//                }
-//            }
-//        });
-//    }
 
 
     private List<ListItemMentor> mentorsInCourse(List<ListItemMentor> mentors) {
