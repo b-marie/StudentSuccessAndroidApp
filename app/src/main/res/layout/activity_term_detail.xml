@@ -33,8 +33,7 @@
         style="@style/Text.Item"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/term_detail_term_name"
-        android:layout_alignLeft="@+id/term_detail_term_name"
+        android:layout_alignStart="@+id/term_detail_term_dates_label"
         android:layout_below="@+id/term_detail_term_dates_label"
         android:text="@string/start_date" />
 
@@ -43,11 +42,8 @@
         style="@style/Text.Item"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
+        android:layout_alignEnd="@+id/term_detail_term_dates_label"
         android:layout_below="@+id/term_detail_term_dates_label"
-        android:layout_marginEnd="79dp"
-        android:layout_marginRight="79dp"
         android:text="@string/end_date" />
 
     <TextView

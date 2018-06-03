@@ -42,5 +42,8 @@ public interface TermDao {
     @Update
     void updateTerm(ListItemTerm... terms);
 
+    @Query("DELETE FROM term_table WHERE term_ID = (:termId)")
+    void deleteByID(int termId);
+
 
 }

@@ -1,11 +1,16 @@
 package org.beemarie.bhellermobileappdevelopment.view;
 
 import android.app.Application;
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -17,16 +22,18 @@ import org.beemarie.bhellermobileappdevelopment.data.AppDatabase;
 import org.beemarie.bhellermobileappdevelopment.data.CourseRepository;
 import org.beemarie.bhellermobileappdevelopment.data.ListItemAssessment;
 import org.beemarie.bhellermobileappdevelopment.data.ListItemCourse;
+import org.beemarie.bhellermobileappdevelopment.data.ListItemMentor;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class AssessmentDetailActivity extends AppCompatActivity {
 
     TextView assessmentName;
     TextView assessmentType;
     TextView assessmentDueDate;
-    TextView assessmentCourse;
     Button editButton;
     Button homeButton;
     Context context;
@@ -34,6 +41,11 @@ public class AssessmentDetailActivity extends AppCompatActivity {
     AppDatabase db;
     String courseName;
     CourseRepository courseRepository;
+    RecyclerView courseRecyclerView;
+    List<ListItemCourse> courseWithAssessment;
+    CourseAdapter courseAdapter;
+    CourseViewModel courseViewModel;
+    ListItemAssessment assessment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,15 +56,36 @@ public class AssessmentDetailActivity extends AppCompatActivity {
 
         context = this.getApplicationContext();
 
-        courseRepository = new CourseRepository(this.getApplication());
 
-        final ListItemAssessment assessment = getIncomingIntent();
+        //Get current assessment based on incoming intent
+        assessment = getIncomingIntent();
+
+
+        //Set the course recycler view
+        courseRecyclerView = (RecyclerView) findViewById(R.id.assessment_detail_course_recycler_view);
+        courseRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        courseAdapter = new CourseAdapter(context, courseWithAssessment);
+        courseRecyclerView.setAdapter(courseAdapter);
+
+        //Get the viewmodel for courses
+        courseViewModel = ViewModelProviders.of(this).get(CourseViewModel.class);
+
+        courseViewModel.getAllCourses().observe(this, new Observer<List<ListItemCourse>>() {
+            @Override
+            public void onChanged(@Nullable final List<ListItemCourse> courses) {
+                //Update cached list of mentors in the adapter
+                courseWithAssessment = getCoursesByID(courses);
+                courseAdapter.setCourses(courseWithAssessment);
+            }
+        });
+
+
+
 
 
         assessmentName = findViewById(R.id.assessment_detail_assessment_name);
         assessmentType = findViewById(R.id.assessment_detail_assessment_type);
         assessmentDueDate = findViewById(R.id.assessment_detail_assessment_due_date);
-        assessmentCourse = findViewById(R.id.assessment_detail_assessment_course);
 
 
         homeButton = (Button) findViewById(R.id.assessment_detail_home_button);
@@ -114,10 +147,17 @@ public class AssessmentDetailActivity extends AppCompatActivity {
         TextView assessmentType = findViewById(R.id.assessment_detail_assessment_type);
         assessmentType.setText(assessment.getAssessmentType());
 
-        TextView assessmentCourse = findViewById(R.id.assessment_detail_assessment_course);
-        ListItemCourse course = courseRepository.getCourseByID(assessment.getAssessmentCourseID());
-        String courseName = course.getCourseName();
-        assessmentCourse.setText(courseName);
+    }
+
+    public List<ListItemCourse> getCoursesByID (List<ListItemCourse> courses) {
+        ListItemAssessment assessmentToCompare = assessment;
+        List<ListItemCourse> courseToReturn = new ArrayList<ListItemCourse>();
+        for(int i = 0; i < courses.size(); i++  ){
+            if(assessment.getAssessmentCourseID() == courses.get(i).getCourseID()){
+                courseToReturn.add(courses.get(i));
+            }
+        }
+        return courseToReturn;
     }
 
 }

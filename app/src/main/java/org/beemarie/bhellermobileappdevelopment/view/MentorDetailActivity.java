@@ -64,7 +64,6 @@ public class MentorDetailActivity extends AppCompatActivity {
         courseAdapter = new CourseAdapter(context, courseWithMentor);
         courseRecyclerView.setAdapter(courseAdapter);
 
-        courseAdapter = new CourseAdapter(context, courses);
         //Get the viewmodel for courses
         courseViewModel = ViewModelProviders.of(this).get(CourseViewModel.class);
 

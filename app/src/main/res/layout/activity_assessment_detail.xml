@@ -61,15 +61,6 @@
         android:layout_centerHorizontal="true"
         android:text="@string/course_name" />
 
-    <TextView
-        android:id="@+id/assessment_detail_assessment_course"
-        style="@style/Text.Item"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/assessment_detail_assessment_course_label"
-        android:layout_centerHorizontal="true"
-        android:text="@string/course_name" />
-
     <Button
         android:id="@+id/assessment_detail_edit_button"
         android:layout_width="wrap_content"
@@ -86,4 +77,11 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="22dp"
         android:text="@string/home" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/assessment_detail_course_recycler_view"
+        android:layout_width="271dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/assessment_detail_assessment_course_label"
+        android:layout_centerHorizontal="true" />
 </RelativeLayout>

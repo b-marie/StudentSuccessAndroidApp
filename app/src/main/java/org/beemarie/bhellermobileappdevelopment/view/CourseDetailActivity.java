@@ -2,12 +2,17 @@ package org.beemarie.bhellermobileappdevelopment.view;
 
 import android.app.LauncherActivity;
 import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Parcelable;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -22,6 +27,7 @@ import org.beemarie.bhellermobileappdevelopment.data.AppDatabase;
 import org.beemarie.bhellermobileappdevelopment.data.ListItemAssessment;
 import org.beemarie.bhellermobileappdevelopment.data.ListItemCourse;
 import org.beemarie.bhellermobileappdevelopment.data.ListItemMentor;
+import org.beemarie.bhellermobileappdevelopment.data.ListItemTerm;
 import org.w3c.dom.Text;
 
 import java.text.SimpleDateFormat;
@@ -35,15 +41,9 @@ public class CourseDetailActivity extends AppCompatActivity {
     TextView courseStatus;
     TextView courseStartDate;
     TextView courseEndDate;
-    TextView courseMentorName;
-    TextView courseMentorPhoneNumber;
-    TextView courseMentorEmail;
-    TextView courseAssessmentName;
 
     Button editButton;
-    Button addMentorButton;
     Button homeButton;
-    Button addAssessmentButton;
     Button courseNotesButton;
 
     List<ListItemMentor> courseMentors;
@@ -55,6 +55,18 @@ public class CourseDetailActivity extends AppCompatActivity {
     Context context;
     AppDatabase db;
 
+    RecyclerView mentorRecyclerView;
+    MentorAdapter mentorAdapter;
+    MentorViewModel mentorViewModel;
+    List<ListItemMentor> mentorsInCourse;
+    List<ListItemMentor> mentors;
+
+    RecyclerView assessmentRecyclerView;
+    AssessmentAdapter assessmentAdapter;
+    AssessmentViewModel assessmentViewModel;
+    List<ListItemAssessment> assessmentsInCourse;
+    List<ListItemAssessment> assessments;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,7 +76,7 @@ public class CourseDetailActivity extends AppCompatActivity {
 
         context = this.getApplicationContext();
 
-        final ListItemCourse currentCourse = getIncomingIntent();
+        currentCourse = getIncomingIntent();
 
 //        populateMentorsList(currentCourse);
 
@@ -73,10 +85,51 @@ public class CourseDetailActivity extends AppCompatActivity {
         TextView courseStartDate = findViewById(R.id.course_detail_course_start_date);
         TextView courseEndDate = findViewById(R.id.course_detail_course_end_date);
 
-        LinearLayout mentorListViewLayout = (LinearLayout) findViewById(R.id.course_detail_mentor_view_layout);
+        //Populate mentor recycler view
+        mentorRecyclerView = (RecyclerView) findViewById(R.id.course_detail_mentor_recycler_view);
+        mentorRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mentorAdapter = new MentorAdapter(context, mentorsInCourse);
+        mentorRecyclerView.setAdapter(mentorAdapter);
 
-        final Spinner mentorDropdown = findViewById(R.id.course_detail_mentor_list);
-        Spinner assessmentsDropdown = findViewById(R.id.course_detail_assessment_list);
+        //Get the viewmodel
+        mentorViewModel = ViewModelProviders.of(this).get(MentorViewModel.class);
+
+        //Add an observer to return mentors
+        mentorViewModel.getAllMentors().observe(this, new Observer<List<ListItemMentor>>() {
+            @Override
+            public void onChanged(@Nullable final List<ListItemMentor> mentors) {
+                //Update cached list of mentors in the adapter
+                mentorsInCourse = mentorsInCourse(mentors);
+                mentorAdapter.setMentors(mentorsInCourse);
+            }
+        });
+
+        //Populate assessment recycler view
+        //Set assessment list recycler
+        assessmentRecyclerView = (RecyclerView) findViewById(R.id.course_detail_assessment_recycler_view);
+        assessmentRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        assessmentAdapter = new AssessmentAdapter(context, assessmentsInCourse);
+        assessmentRecyclerView.setAdapter(assessmentAdapter);
+
+        //Get the viewmodel
+        assessmentViewModel = ViewModelProviders.of(this).get(AssessmentViewModel.class);
+
+        //Add an observer to return mentors
+        assessmentViewModel.getAllAssessments().observe(this, new Observer<List<ListItemAssessment>>() {
+            @Override
+            public void onChanged(@Nullable final List<ListItemAssessment> assessments) {
+                //Update cached list of mentors in the adapter
+                assessmentsInCourse = assessmentsInCourse(assessments);
+                assessmentAdapter.setAssessments(assessmentsInCourse);
+            }
+        });
+
+
+
+//        LinearLayout mentorListViewLayout = (LinearLayout) findViewById(R.id.course_detail_mentor_view_layout);
+
+//        final Spinner mentorDropdown = findViewById(R.id.course_detail_mentor_list);
+//        Spinner assessmentsDropdown = findViewById(R.id.course_detail_assessment_list);
 
 
         Button editButton = (Button) findViewById(R.id.course_detail_edit_button);
@@ -107,7 +160,7 @@ public class CourseDetailActivity extends AppCompatActivity {
 
 
 
-        Button addMentorButton = (Button) findViewById(R.id.course_detail_add_mentor_button);
+//        Button addMentorButton = (Button) findViewById(R.id.course_detail_add_mentor_button);
 //        addMentorButton.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(final View view) {
@@ -155,7 +208,7 @@ public class CourseDetailActivity extends AppCompatActivity {
         });
 
 
-        Button addAssessmentButton = (Button) findViewById(R.id.course_detail_add_assessment_button);
+//        Button addAssessmentButton = (Button) findViewById(R.id.course_detail_add_assessment_button);
         Button courseNotesButton = (Button) findViewById(R.id.course_detail_course_notes_button);
 
 
@@ -263,4 +316,31 @@ public class CourseDetailActivity extends AppCompatActivity {
 //            }
 //        });
 //    }
+
+
+    private List<ListItemMentor> mentorsInCourse(List<ListItemMentor> mentors) {
+        ListItemCourse courseToCompare = currentCourse;
+
+        List<ListItemMentor> mentorsInCourse = new ArrayList<ListItemMentor>();
+
+            for(int i = 0; i < mentors.size(); i++) {
+                if(mentors.get(i).getMentorCourseID() == currentCourse.getCourseID()) {
+                    mentorsInCourse.add(mentors.get(i));
+                }
+        }
+        return mentorsInCourse;
+    }
+
+    private List<ListItemAssessment> assessmentsInCourse(List<ListItemAssessment> assessments) {
+        ListItemCourse courseToCompare = currentCourse;
+
+        List<ListItemAssessment> assessmentsInCourse = new ArrayList<ListItemAssessment>();
+
+            for(int i = 0; i < assessments.size(); i++) {
+                if(assessments.get(i).getAssessmentCourseID() == currentCourse.getCourseID()) {
+                    assessmentsInCourse.add(assessments.get(i));
+                }
+        }
+        return assessmentsInCourse;
+    }
 }

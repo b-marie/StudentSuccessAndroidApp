@@ -56,5 +56,7 @@
     <string name="delete_course">Delete Course</string>
     <string name="assign_to_course">Assign to Course</string>
     <string name="assign_to_term">Assign to Term</string>
+    <string name="update_term">Update Term</string>
+    <string name="delete_term">Delete Term</string>
 
 </resources>
