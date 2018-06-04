@@ -120,6 +120,8 @@
         android:layout_alignParentEnd="true"
         android:layout_centerVertical="true"
         android:layout_marginEnd="46dp"
-        android:text="@string/set_assessment_due_date_notification" />
+        android:text="@string/set_assessment_due_date_notification"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="46dp" />
 
 </RelativeLayout>
