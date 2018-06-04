@@ -122,12 +122,13 @@ public class AssessmentDetailActivity extends AppCompatActivity {
             String assessmentType = getIntent().getStringExtra("assessmentType");
             Date assessmentDueDate = (Date) getIntent().getSerializableExtra("assessmentDueDate");
             int assessmentCourseID = getIntent().getIntExtra("assessmentCourseID", 0);
+            boolean assessmentReminder = getIntent().getBooleanExtra("assessmentReminder", false);
 
-            ListItemAssessment assessment = new ListItemAssessment(assessmentID, assessmentName, assessmentType, assessmentDueDate, assessmentCourseID);
+            ListItemAssessment assessment = new ListItemAssessment(assessmentID, assessmentName, assessmentType, assessmentDueDate, assessmentCourseID, assessmentReminder);
             setAssessment(assessment);
             return assessment;
         } else {
-            ListItemAssessment assessment = new ListItemAssessment(0, "default", "default", new Date(2018, 1, 1), 1);
+            ListItemAssessment assessment = new ListItemAssessment(0, "default", "default", new Date(2018, 1, 1), 1, false);
             setAssessment(assessment);
             return assessment;
         }

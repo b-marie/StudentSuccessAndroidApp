@@ -58,5 +58,6 @@
     <string name="assign_to_term">Assign to Term</string>
     <string name="update_term">Update Term</string>
     <string name="delete_term">Delete Term</string>
+    <string name="set_assessment_due_date_notification">Set assessment due date notification</string>
 
 </resources>

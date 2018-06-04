@@ -1,9 +1,14 @@
 package org.beemarie.bhellermobileappdevelopment.view;
 
+import android.app.AlarmManager;
 import android.app.DatePickerDialog;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,8 +21,10 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.Toast;
 
+import org.beemarie.bhellermobileappdevelopment.AssessmentAlertReceiver;
 import org.beemarie.bhellermobileappdevelopment.R;
 import org.beemarie.bhellermobileappdevelopment.data.AppDatabase;
 import org.beemarie.bhellermobileappdevelopment.data.ListItemAssessment;
@@ -28,6 +35,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
 
@@ -47,6 +55,11 @@ public class UpdateAssessmentActivity extends AppCompatActivity {
     Spinner courseDropdown;
     List<ListItemCourse> courses;
     Context context;
+    Switch assessmentReminderSwitch;
+
+    NotificationManager notificationManager;
+    int assessmentDueNotificationID = 1;
+    boolean assessmentDueNotificationActive = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +86,7 @@ public class UpdateAssessmentActivity extends AppCompatActivity {
         objectiveAssessmentTypeSelection = (RadioButton) findViewById(R.id.update_assessment_objective_assessment_entry);
         performanceAssessmentTypeSelection = (RadioButton) findViewById(R.id.update_assessment_performance_assessment_entry);
         courseDropdown = findViewById(R.id.update_assessment_course_list);
+        assessmentReminderSwitch = findViewById(R.id.update_assessment_due_date_notification_switch);
 
         final DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
             @Override
@@ -92,7 +106,7 @@ public class UpdateAssessmentActivity extends AppCompatActivity {
         });
 
         saveButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
+            public void onClick(final View view) {
                 final int ID = assessmentID;
                 if (assessmentName.getText().toString().equals("") || dueDate.getText().toString().equals("") || assessmentTypeRadioGroup.getCheckedRadioButtonId() == -1) {
                     //Add a toast to say they need to enter text
@@ -117,8 +131,17 @@ public class UpdateAssessmentActivity extends AppCompatActivity {
                             ListItemCourse courseToAdd = courseList.get(i);
                             int assessmentCourseID = courseToAdd.getCourseID();
 
+                            boolean assessmentReminderOn = assessmentReminderSwitch.isChecked();
+
                             ListItemAssessment assessment = new ListItemAssessment(ID, newAssessmentName,
-                                    assessmentType, newAssessmentDueDate, assessmentCourseID);
+                                    assessmentType, newAssessmentDueDate, assessmentCourseID, assessmentReminderOn);
+
+                            if(assessment.getAssessmentDueDateNotification()) {
+                                setAssessmentDueAlarm(view, assessment);
+                            } else {
+                                assessmentDueNotificationOff(view, assessment);
+                            }
+
                             db.assessmentDao().updateAssessment(assessment);
                         }
 
@@ -177,15 +200,16 @@ public class UpdateAssessmentActivity extends AppCompatActivity {
             String assessmentType = getIntent().getStringExtra("assessmentType");
             Date assessmentDueDate = (Date) getIntent().getSerializableExtra("assessmentDueDate");
             int assessmentCourseID = getIntent().getIntExtra("assessmentCourseID", 0);
+            boolean assessmentReminder = getIntent().getBooleanExtra("assessmentReminder", false);
 
 
             ListItemAssessment assessment = new ListItemAssessment(assessmentID, assessmentName,
-                    assessmentType, assessmentDueDate, assessmentCourseID);
+                    assessmentType, assessmentDueDate, assessmentCourseID, assessmentReminder);
             setAssessment(assessment);
             return assessment;
         } else {
             ListItemAssessment assessment = new ListItemAssessment(0, "default",
-                    "default", new Date(2018, 1, 1), 0);
+                    "default", new Date(2018, 1, 1), 0, false);
             setAssessment(assessment);
             return assessment;
         }
@@ -201,6 +225,11 @@ public class UpdateAssessmentActivity extends AppCompatActivity {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
         String dueDate = simpleDateFormat.format(date);
         assessmentDueDate.setText(dueDate);
+
+        Switch assessmentReminderSwitch = findViewById(R.id.update_assessment_due_date_notification_switch);
+        if(assessment.getAssessmentDueDateNotification() == true) {
+            assessmentReminderSwitch.setChecked(true);
+        }
     }
 
     private void populateCourseList() {
@@ -232,5 +261,49 @@ public class UpdateAssessmentActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    public void assessmentDueNotificationOn(View view, ListItemAssessment assessment) {
+
+        NotificationCompat.Builder notificBuilder = new NotificationCompat.Builder(this)
+                .setContentTitle("Assessment is due!")
+                .setContentText("The " + assessment.getAssessmentName() + " assessment is due.")
+                .setTicker("Alert")
+                .setSmallIcon(R.drawable.icon_launcher_background);
+
+        Intent moreInfoIntent = new Intent(this, AssessmentListActivity.class);
+
+        TaskStackBuilder taskStackBuilder = TaskStackBuilder.create(this);
+        taskStackBuilder.addParentStack(AssessmentListActivity.class);
+        taskStackBuilder.addNextIntent(moreInfoIntent);
+
+        PendingIntent pendingIntent = taskStackBuilder.getPendingIntent(0,
+                PendingIntent.FLAG_UPDATE_CURRENT);
+
+        notificBuilder.setContentIntent(pendingIntent);
+
+        notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.notify(assessmentDueNotificationID, notificBuilder.build());
+        assessmentDueNotificationActive = true;
+    }
+
+    public void assessmentDueNotificationOff(View view, ListItemAssessment assessment) {
+        if(assessmentDueNotificationActive) {
+            notificationManager.cancel(assessmentDueNotificationID);
+        }
+    }
+
+    public void setAssessmentDueAlarm(View view, ListItemAssessment assessment) {
+        String assessmentName = assessment.getAssessmentName();
+        Date assessmentDueDate = assessment.getAssessmentDueDate();
+        int assessmentID = assessment.getAssessmentID();
+        Calendar cal = GregorianCalendar.getInstance();
+        cal.setTime(assessmentDueDate);
+        Long alertTime = cal.getTimeInMillis();
+
+        Intent alertIntent = new Intent(this, AssessmentAlertReceiver.class);
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        alarmManager.set(AlarmManager.RTC_WAKEUP, alertTime, PendingIntent.getBroadcast( this,
+                1, alertIntent, PendingIntent.FLAG_UPDATE_CURRENT));
     }
 }

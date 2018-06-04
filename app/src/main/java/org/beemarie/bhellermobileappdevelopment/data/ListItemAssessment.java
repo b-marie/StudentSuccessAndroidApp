@@ -40,20 +40,25 @@ public class ListItemAssessment{
     @ColumnInfo(name = "assessment_course_ID")
     private int assessmentCourseID;
 
+    @ColumnInfo(name = "assessment_due_date_notification")
+    private boolean assessmentDueDateNotification;
+
     @Ignore
-    public ListItemAssessment(int assessmentID, String assessmentName, String assessmentType, Date assessmentDueDate, int assessmentCourseID) {
+    public ListItemAssessment(int assessmentID, String assessmentName, String assessmentType, Date assessmentDueDate, int assessmentCourseID, boolean assessmentDueDateNotification) {
         this.assessmentID = assessmentID;
         this.assessmentName = assessmentName;
         this.assessmentType = assessmentType;
         this.assessmentDueDate = assessmentDueDate;
         this.assessmentCourseID = assessmentCourseID;
+        this.assessmentDueDateNotification = assessmentDueDateNotification;
     }
 
-    public ListItemAssessment(String assessmentName, String assessmentType, Date assessmentDueDate, int assessmentCourseID) {
+    public ListItemAssessment(String assessmentName, String assessmentType, Date assessmentDueDate, int assessmentCourseID, boolean assessmentDueDateNotification) {
         this.assessmentName = assessmentName;
         this.assessmentType = assessmentType;
         this.assessmentDueDate = assessmentDueDate;
         this.assessmentCourseID = assessmentCourseID;
+        this.assessmentDueDateNotification = assessmentDueDateNotification;
     }
 
     public int getAssessmentID() {
@@ -92,39 +97,22 @@ public class ListItemAssessment{
 
     public void setAssessmentCourseID(int assessmentCourseID) {this.assessmentCourseID = assessmentCourseID;}
 
-    protected ListItemAssessment(Parcel in) {
-        assessmentID = in.readInt();
-        assessmentName = in.readString();
-        assessmentType = in.readString();
-        long tmpAssessmentDueDate = in.readLong();
-        assessmentDueDate = tmpAssessmentDueDate != -1 ? new Date(tmpAssessmentDueDate) : null;
-        assessmentCourseID = in.readInt();
+    public boolean getAssessmentDueDateNotification() {
+        return assessmentDueDateNotification;
     }
 
-//    @Override
-//    public int describeContents() {
-//        return 0;
+    public void setAssessmentDueDateNotification(boolean assessmentDueDateNotification) {
+        this.assessmentDueDateNotification = assessmentDueDateNotification;
+    }
+
+    //
+//    protected ListItemAssessment(Parcel in) {
+//        assessmentID = in.readInt();
+//        assessmentName = in.readString();
+//        assessmentType = in.readString();
+//        long tmpAssessmentDueDate = in.readLong();
+//        assessmentDueDate = tmpAssessmentDueDate != -1 ? new Date(tmpAssessmentDueDate) : null;
+//        assessmentCourseID = in.readInt();
 //    }
-//
-//    @Override
-//    public void writeToParcel(Parcel dest, int flags) {
-//        dest.writeInt(assessmentID);
-//        dest.writeString(assessmentName);
-//        dest.writeString(assessmentType);
-//        dest.writeLong(assessmentDueDate != null ? assessmentDueDate.getTime() : -1L);
-//        dest.writeInt(assessmentCourseID);
-//    }
-//
-//    @SuppressWarnings("unused")
-//    public static final Parcelable.Creator<ListItemAssessment> CREATOR = new Parcelable.Creator<ListItemAssessment>() {
-//        @Override
-//        public ListItemAssessment createFromParcel(Parcel in) {
-//            return new ListItemAssessment(in);
-//        }
-//
-//        @Override
-//        public ListItemAssessment[] newArray(int size) {
-//            return new ListItemAssessment[size];
-//        }
-//    };
+
 }

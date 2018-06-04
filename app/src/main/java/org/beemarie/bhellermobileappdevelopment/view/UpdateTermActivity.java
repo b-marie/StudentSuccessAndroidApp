@@ -24,6 +24,7 @@ import org.beemarie.bhellermobileappdevelopment.data.ListItemTerm;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 public class UpdateTermActivity extends AppCompatActivity {
@@ -37,6 +38,7 @@ public class UpdateTermActivity extends AppCompatActivity {
     AppDatabase db;
     Calendar mCalendar;
     ListItemTerm term;
+    boolean termHasCourses;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +52,9 @@ public class UpdateTermActivity extends AppCompatActivity {
         mCalendar = Calendar.getInstance();
 
         term = getIncomingIntent();
+        termHasCourses = doesTermHaveCourses(term);
         final int termID = term.getTermID();
+
 
         //Add start date picker
         final DatePickerDialog.OnDateSetListener startDate = new DatePickerDialog.OnDateSetListener() {
@@ -125,22 +129,28 @@ public class UpdateTermActivity extends AppCompatActivity {
 
         deleteButton = (Button) findViewById(R.id.update_term_delete_button);
         deleteButton.setOnClickListener(new View.OnClickListener() {
-
             int termId = termID;
             public void onClick(View view) {
-                final ListItemTerm deleteTerm = term;
-                AsyncTask.execute(new Runnable() {
-                    @Override
-                    public void run() {
-                        int termID = termId;
-                        Log.i("UpdateTermActivity", "Got to delete course");
-                        db.termDao().deleteByID(termId);
-                    }
+                if(termHasCourses) {
+                    Toast.makeText(
+                            getApplicationContext(),
+                            "Cannot delete term with courses assigned",
+                            Toast.LENGTH_LONG).show();
+                } else {
+                    final ListItemTerm deleteTerm = term;
+                    AsyncTask.execute(new Runnable() {
+                        @Override
+                        public void run() {
+                            int termID = termId;
+                            Log.i("UpdateTermActivity", "Got to delete course");
+                            db.termDao().deleteByID(termId);
+                        }
 
-                });
-                Intent intent = new Intent(view.getContext(), TermListActivity.class);
-                view.getContext().startActivity(intent);
-                finish();
+                    });
+                    Intent intent = new Intent(view.getContext(), TermListActivity.class);
+                    view.getContext().startActivity(intent);
+                    finish();
+                }
             }
 
         });
@@ -199,5 +209,21 @@ public class UpdateTermActivity extends AppCompatActivity {
         Date endDate = term.getTermEndDate();
         String tEndDate = simpleDateFormat.format(endDate);
         termEndDate.setText(tEndDate);
+    }
+
+    private boolean doesTermHaveCourses(ListItemTerm term) {
+        final int termID = term.getTermID();
+        termHasCourses = false;
+
+        AsyncTask.execute(new Runnable() {
+           @Override
+           public void run() {
+               List<ListItemCourse> coursesInTerm = db.courseDao().loadAllCoursesByTermID(termID);
+               if (!coursesInTerm.isEmpty()) {
+                   termHasCourses = true;
+               }
+           }
+        });
+        return termHasCourses;
     }
 }

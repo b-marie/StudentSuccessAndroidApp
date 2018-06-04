@@ -1,9 +1,14 @@
 package org.beemarie.bhellermobileappdevelopment.view;
 
+import android.app.AlarmManager;
 import android.app.DatePickerDialog;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -20,6 +25,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.beemarie.bhellermobileappdevelopment.CourseAlertReceiver;
 import org.beemarie.bhellermobileappdevelopment.R;
 import org.beemarie.bhellermobileappdevelopment.data.AppDatabase;
 import org.beemarie.bhellermobileappdevelopment.data.ListItemAssessment;
@@ -31,6 +37,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
 
@@ -52,6 +59,13 @@ public class UpdateCourseActivity extends AppCompatActivity {
     AppDatabase db;
     Calendar mCalendar;
     List<ListItemTerm> terms;
+
+    NotificationManager notificationManager;
+    int courseStartNotificationID = 1;
+    boolean courseStartNotificationActive = false;
+
+    int courseEndNotificationID = 2;
+    boolean courseEndNotificationActive = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +92,10 @@ public class UpdateCourseActivity extends AppCompatActivity {
         courseStatusCompleted = (RadioButton) findViewById(R.id.update_course_completed_status);
         updateButton = (Button) findViewById(R.id.update_course_save_button);
         deleteButton = (Button) findViewById(R.id.update_course_delete_button);
+        courseStartDateReminder = (Switch) findViewById(R.id.update_course_start_date_toggle);
+        courseEndDateReminder = (Switch) findViewById(R.id.update_course_end_date_toggle);
+
+
         final Spinner termDropdown = findViewById(R.id.update_course_term_list);
         final DatePickerDialog.OnDateSetListener startDate = new DatePickerDialog.OnDateSetListener() {
             @Override
@@ -114,7 +132,7 @@ public class UpdateCourseActivity extends AppCompatActivity {
         });
 
         updateButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
+            public void onClick(final View view) {
                 final int ID = courseID;
                 if (courseName.getText().toString().equals("") ||
                         courseStart.getText().toString().equals("") ||
@@ -146,7 +164,24 @@ public class UpdateCourseActivity extends AppCompatActivity {
                             ListItemTerm termToAdd = termList.get(i);
                             int courseTermID = termToAdd.getTermID();
 
-                            ListItemCourse updateCourse = new ListItemCourse(updateCourseID, updateCourseName, updateCourseStartDate, updateCourseEndDate, updateCourseStatus, courseNotes, courseTermID);
+                            boolean courseStartReminderOn = courseStartDateReminder.isChecked();
+                            boolean courseEndReminderOn = courseEndDateReminder.isChecked();
+
+                            ListItemCourse updateCourse = new ListItemCourse(updateCourseID, updateCourseName,
+                                    updateCourseStartDate, updateCourseEndDate, updateCourseStatus, courseNotes,
+                                    courseTermID, courseStartReminderOn, courseEndReminderOn);
+                            if(updateCourse.getCourseStartNotification()) {
+                                setCourseStartAlarm(view, updateCourse);
+                            } else {
+                                courseStartNotificationOff(view, updateCourse);
+                            }
+
+                            if(updateCourse.getCourseEndNotification()) {
+                                setCourseEndAlarm(view, updateCourse);
+                            } else {
+                                courseEndNotificationOff(view, updateCourse);
+                            }
+
                             db.courseDao().updateCourse(updateCourse);
                         }
 
@@ -208,15 +243,17 @@ public class UpdateCourseActivity extends AppCompatActivity {
             String courseStatus = getIntent().getStringExtra("courseStatus");
             String courseNotes = getIntent().getStringExtra("courseNotes");
             int courseTermID = getIntent().getIntExtra("courseTermID", 0);
+            boolean courseStartReminderOn = getIntent().getBooleanExtra("courseStartReminder", false);
+            boolean courseEndReminderOn = getIntent().getBooleanExtra("courseEndReminder", false);
 
             ListItemCourse course = new ListItemCourse(courseID, courseName, courseStartDate, courseEndDate, courseStatus,
-                    courseNotes, courseTermID);
+                    courseNotes, courseTermID, courseStartReminderOn, courseEndReminderOn);
             setCourse(course);
             return course;
         } else {
             ListItemCourse course = new ListItemCourse(0, "default",
                     new Date(2018, 1, 1), new Date(2018, 1, 1),
-                    "default", "default", 0);
+                    "default", "default", 0, false, false);
             setCourse(course);
             return course;
         }
@@ -240,7 +277,16 @@ public class UpdateCourseActivity extends AppCompatActivity {
         courseEnd.setText(cEndDate);
 
         Switch courseStartDateReminder = findViewById(R.id.update_course_start_date_toggle);
+        if(course.getCourseStartNotification()) {
+            courseStartDateReminder.setChecked(true);
+            courseStartNotificationActive = true;
+        }
+
         Switch courseEndDateReminder = findViewById(R.id.update_course_end_date_toggle);
+        if(course.getCourseEndNotification()) {
+            courseEndDateReminder.setChecked(true);
+            courseEndNotificationActive = true;
+        }
 
 
         RadioGroup courseStatusGroup = (RadioGroup) findViewById(R.id.update_course_course_status_radio_group);
@@ -254,6 +300,8 @@ public class UpdateCourseActivity extends AppCompatActivity {
         } else if(course.getCourseStatus().equals("Completed")) {
             courseStatusCompleted.setSelected(true);
         }
+
+
 
     }
 
@@ -287,5 +335,96 @@ public class UpdateCourseActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+
+    public void courseStartNotificationOn(View view, ListItemCourse course) {
+        if(!courseStartNotificationActive){
+            NotificationCompat.Builder notificBuilder = new NotificationCompat.Builder(this)
+                    .setContentTitle("Course is starting!")
+                    .setContentText("The " + course.getCourseName() + " course is starting.")
+                    .setTicker("Alert")
+                    .setSmallIcon(R.drawable.icon_launcher_background);
+
+            Intent moreInfoIntent = new Intent(this, CourseListActivity.class);
+
+            TaskStackBuilder taskStackBuilder = TaskStackBuilder.create(this);
+            taskStackBuilder.addParentStack(CourseListActivity.class);
+            taskStackBuilder.addNextIntent(moreInfoIntent);
+
+            PendingIntent pendingIntent = taskStackBuilder.getPendingIntent(0,
+                    PendingIntent.FLAG_UPDATE_CURRENT);
+
+            notificBuilder.setContentIntent(pendingIntent);
+
+            notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            notificationManager.notify(courseStartNotificationID, notificBuilder.build());
+            courseStartNotificationActive = true;
+        }
+    }
+
+    public void courseStartNotificationOff(View view, ListItemCourse course) {
+        if(courseStartNotificationActive) {
+            notificationManager.cancel(courseStartNotificationID);
+        }
+    }
+
+    public void setCourseStartAlarm(View view, ListItemCourse course) {
+        String courseName = course.getCourseName();
+        Date courseStartDate = course.getCourseStartDate();
+        int courseID = course.getCourseID();
+        Calendar cal = GregorianCalendar.getInstance();
+        cal.setTime(courseStartDate);
+        Long alertTime = cal.getTimeInMillis();
+
+        Intent alertIntent = new Intent(this, CourseAlertReceiver.class);
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        alarmManager.set(AlarmManager.RTC_WAKEUP, alertTime, PendingIntent.getBroadcast( this,
+                1, alertIntent, PendingIntent.FLAG_UPDATE_CURRENT));
+    }
+
+    public void courseEndNotificationOn(View view, ListItemCourse course) {
+        if(!courseEndNotificationActive){
+            NotificationCompat.Builder notificBuilder = new NotificationCompat.Builder(this)
+                    .setContentTitle("Course is ending!")
+                    .setContentText("The " + course.getCourseName() + " course is ending.")
+                    .setTicker("Alert")
+                    .setSmallIcon(R.drawable.icon_launcher_background);
+
+            Intent moreInfoIntent = new Intent(this, CourseListActivity.class);
+
+            TaskStackBuilder taskStackBuilder = TaskStackBuilder.create(this);
+            taskStackBuilder.addParentStack(CourseListActivity.class);
+            taskStackBuilder.addNextIntent(moreInfoIntent);
+
+            PendingIntent pendingIntent = taskStackBuilder.getPendingIntent(0,
+                    PendingIntent.FLAG_UPDATE_CURRENT);
+
+            notificBuilder.setContentIntent(pendingIntent);
+
+            notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            notificationManager.notify(courseEndNotificationID, notificBuilder.build());
+            courseEndNotificationActive = true;
+        }
+    }
+
+    public void courseEndNotificationOff(View view, ListItemCourse course) {
+        if(courseEndNotificationActive) {
+            notificationManager.cancel(courseEndNotificationID);
+        }
+    }
+
+    public void setCourseEndAlarm(View view, ListItemCourse course) {
+        String courseName = course.getCourseName();
+        Date courseEndDate = course.getCourseEndDate();
+        int courseID = course.getCourseID();
+        Calendar cal = GregorianCalendar.getInstance();
+        cal.setTime(courseEndDate);
+        Long alertTime = cal.getTimeInMillis();
+
+        Intent alertIntent = new Intent(this, CourseAlertReceiver.class);
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        alarmManager.set(AlarmManager.RTC_WAKEUP, alertTime, PendingIntent.getBroadcast( this,
+                1, alertIntent, PendingIntent.FLAG_UPDATE_CURRENT));
     }
 }

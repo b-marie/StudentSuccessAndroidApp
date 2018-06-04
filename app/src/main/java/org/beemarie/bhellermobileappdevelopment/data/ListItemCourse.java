@@ -44,12 +44,6 @@ public class ListItemCourse{
 
     @ColumnInfo(name = "course_status")
     private String courseStatus;
-//
-//    @ColumnInfo(name = "course_mentors")
-//    private ArrayList<ListItemMentor> courseMentors;
-//
-//    @ColumnInfo(name = "course_assessments")
-//    private ArrayList<ListItemAssessment> courseAssessments;
 
     @ColumnInfo(name = "course_notes")
     private String courseNotes;
@@ -57,28 +51,34 @@ public class ListItemCourse{
     @ColumnInfo(name = "course_term_ID")
     private int courseTermID;
 
+    @ColumnInfo(name = "course_start_notification")
+    private boolean courseStartNotification;
+
+    @ColumnInfo(name = "course_end_notification")
+    private boolean courseEndNotification;
+
     @Ignore
-    public ListItemCourse(int courseID, String courseName, Date courseStartDate, Date courseEndDate, String courseStatus, String courseNotes, int courseTermID) {
+    public ListItemCourse(int courseID, String courseName, Date courseStartDate, Date courseEndDate, String courseStatus, String courseNotes, int courseTermID, boolean courseStartNotification, boolean courseEndNotification) {
         this.courseID = courseID;
         this.courseName = courseName;
         this.courseStartDate = courseStartDate;
         this.courseEndDate = courseEndDate;
         this.courseStatus = courseStatus;
-//        this.courseMentors = courseMentors;
-//        this.courseAssessments = courseAssessments;
         this.courseNotes = courseNotes;
         this.courseTermID = courseTermID;
+        this.courseStartNotification = courseStartNotification;
+        this.courseEndNotification = courseEndNotification;
     }
 
-    public ListItemCourse(String courseName, Date courseStartDate, Date courseEndDate, String courseStatus, String courseNotes, int courseTermID) {
+    public ListItemCourse(String courseName, Date courseStartDate, Date courseEndDate, String courseStatus, String courseNotes, int courseTermID, boolean courseStartNotification, boolean courseEndNotification) {
         this.courseName = courseName;
         this.courseStartDate = courseStartDate;
         this.courseEndDate = courseEndDate;
         this.courseStatus = courseStatus;
-//        this.courseMentors = courseMentors;
-//        this.courseAssessments = courseAssessments;
         this.courseNotes = courseNotes;
         this.courseTermID = courseTermID;
+        this.courseStartNotification = courseStartNotification;
+        this.courseEndNotification = courseEndNotification;
     }
 
     @Ignore
@@ -125,30 +125,13 @@ public class ListItemCourse{
         this.courseStatus = courseStatus;
     }
 
-//    public ArrayList<ListItemMentor> getCourseMentors() {
-//        if(courseMentors != null) {
-//            return courseMentors;
-//        } else {
-//            return new ArrayList<ListItemMentor>();
-//        }
-//
-//    }
+    public boolean getCourseStartNotification() {return courseStartNotification;}
 
-//    public void setCourseMentors(ArrayList<ListItemMentor> courseMentors) {
-//        this.courseMentors = courseMentors;
-//    }
-//
-//    public void addCourseMentor(ListItemMentor mentor) {
-//        this.courseMentors.add(mentor);
-//    }
-//
-//    public ArrayList<ListItemAssessment> getCourseAssessments() {
-//        return courseAssessments;
-//    }
-//
-//    public void setCourseAssessments(ArrayList<ListItemAssessment> courseAssessments) {
-//        this.courseAssessments = courseAssessments;
-//    }
+    public void setCourseStartNotification(boolean courseStartNotification) {this.courseStartNotification = courseStartNotification; }
+
+    public boolean getCourseEndNotification() {return courseEndNotification;}
+
+    public void setCourseEndNotification(boolean courseEndNotification) {this.courseEndNotification = courseEndNotification; }
 
     public String getCourseNotes() {
         return courseNotes;
@@ -166,115 +149,4 @@ public class ListItemCourse{
         this.courseTermID = courseTermID;
     }
 
-    protected ListItemCourse(Parcel in) {
-        courseID = in.readInt();
-        courseName = in.readString();
-        long tmpCourseStartDate = in.readLong();
-        courseStartDate = tmpCourseStartDate != -1 ? new Date(tmpCourseStartDate) : null;
-        long tmpCourseEndDate = in.readLong();
-        courseEndDate = tmpCourseEndDate != -1 ? new Date(tmpCourseEndDate) : null;
-        courseStatus = in.readString();
-//        if (in.readByte() == 0x01) {
-//            courseMentors = new ArrayList<ListItemMentor>();
-//            in.readList(courseMentors, ListItemMentor.class.getClassLoader());
-//        } else {
-//            courseMentors = null;
-//        }
-//        if (in.readByte() == 0x01) {
-//            courseAssessments = new ArrayList<ListItemAssessment>();
-//            in.readList(courseAssessments, ListItemAssessment.class.getClassLoader());
-//        } else {
-//            courseAssessments = null;
-//        }
-        courseNotes = in.readString();
-        courseTermID = in.readInt();
-    }
-
-//    @Override
-//    public int describeContents() {
-//        return 0;
-//    }
-//
-//    @Override
-//    public void writeToParcel(Parcel dest, int flags) {
-//        dest.writeInt(courseID);
-//        dest.writeString(courseName);
-//        dest.writeLong(courseStartDate != null ? courseStartDate.getTime() : -1L);
-//        dest.writeLong(courseEndDate != null ? courseEndDate.getTime() : -1L);
-//        dest.writeString(courseStatus);
-////        if (courseMentors == null) {
-////            dest.writeByte((byte) (0x00));
-////        } else {
-////            dest.writeByte((byte) (0x01));
-////            dest.writeList(courseMentors);
-////        }
-////        if (courseAssessments == null) {
-////            dest.writeByte((byte) (0x00));
-////        } else {
-////            dest.writeByte((byte) (0x01));
-////            dest.writeList(courseAssessments);
-////        }
-//        dest.writeString(courseNotes);
-//        dest.writeInt(courseTermID);
-//    }
-//
-//    @SuppressWarnings("unused")
-//    public static final Parcelable.Creator<ListItemCourse> CREATOR = new Parcelable.Creator<ListItemCourse>() {
-//        @Override
-//        public ListItemCourse createFromParcel(Parcel in) {
-//            return new ListItemCourse(in);
-//        }
-//
-//        @Override
-//        public ListItemCourse[] newArray(int size) {
-//            return new ListItemCourse[size];
-//        }
-//    };
-//
-//    public ListItemMentor findMentorByID(int mentorID) {
-//        ListItemMentor mentor;
-//        ArrayList<ListItemMentor> mentors = this.getCourseMentors();
-//        if(mentors.isEmpty()) {
-//            return null;
-//        } else {
-//            for(int i = 0; i < mentors.size(); i++) {
-//                if(mentors.get(i).getMentorID() == mentorID) {
-//                    mentor = mentors.get(i);
-//                    return mentor;
-//                }
-//            }
-//        }
-//        return mentor = new ListItemMentor();
-//    }
-//
-//    public boolean isMentorInList(int mentorID) {
-//        ArrayList<ListItemMentor> mentors = this.getCourseMentors();
-//        if(mentors.isEmpty()) {
-//            return false;
-//        } else {
-//            for(int i = 0; i < mentors.size(); i++) {
-//                if(mentors.get(i).getMentorID() == mentorID) {
-//                    return true;
-//                }
-//            }
-//        }
-//        return false;
-//    }
-//
-//    public void removeMentorByID(int mentorID){
-//        if(isMentorInList(mentorID)) {
-//            ArrayList<ListItemMentor> mentors = this.getCourseMentors();
-//            if(mentors.isEmpty()) {
-//                return;
-//            } else {
-//                for(int i = 0; i < mentors.size(); i++) {
-//                    if(mentors.get(i).getMentorID() == mentorID)  {
-//                        ListItemMentor mentor = mentors.get(i);
-//                        mentors.remove(mentor);
-//                        return;
-//                    }
-//                }
-//            }
-//        }
-//    }
 }

@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="org.beemarie.bhellermobileappdevelopment">
 
+    <uses-permission android:name="com.android.alarm.permission.SET_ALARM" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -33,7 +35,8 @@
         <activity android:name=".view.UpdateMentorActivity" />
         <activity android:name=".view.UpdateAssessmentActivity" />
         <activity android:name=".view.UpdateCourseActivity" />
-        <activity android:name=".view.UpdateTermActivity"></activity>
+        <activity android:name=".view.UpdateTermActivity" />
+        <activity android:name=".CourseStartNotification"></activity>
     </application>
 
 </manifest>

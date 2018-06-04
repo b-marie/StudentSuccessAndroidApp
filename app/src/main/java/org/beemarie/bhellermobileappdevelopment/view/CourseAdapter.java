@@ -72,6 +72,8 @@ class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseViewHolder>
                 intent.putExtra("courseStatus", courses.get(position).getCourseStatus());
                 intent.putExtra("courseNotes", courses.get(position).getCourseNotes());
                 intent.putExtra("courseTermID", courses.get(position).getCourseTermID());
+                intent.putExtra("courseStartReminder", courses.get(position).getCourseStartNotification());
+                intent.putExtra("courseEndReminder", courses.get(position).getCourseEndNotification());
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(intent);
             }

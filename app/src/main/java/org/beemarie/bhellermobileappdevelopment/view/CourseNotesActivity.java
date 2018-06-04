@@ -131,10 +131,12 @@ public class CourseNotesActivity extends AppCompatActivity {
         String courseStatus = getIntent().getStringExtra("courseStatus");
         String courseNotes = getIntent().getStringExtra("courseNotes");
         int courseTermID = getIntent().getIntExtra("courseTermID", 0);
+        boolean courseStartReminder = getIntent().getBooleanExtra("courseStartReminder", false);
+        boolean courseEndReminder = getIntent().getBooleanExtra("courseEndReminder", false);
 
 
         ListItemCourse course = new ListItemCourse(courseID, courseName, courseStartDate, courseEndDate, courseStatus,
-                courseNotes, courseTermID);
+                courseNotes, courseTermID, courseStartReminder, courseEndReminder);
         setCourse(course);
         return course;
     }

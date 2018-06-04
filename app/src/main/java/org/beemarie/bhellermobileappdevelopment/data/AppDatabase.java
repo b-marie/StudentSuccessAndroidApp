@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-@Database(entities = {ListItemTerm.class, ListItemCourse.class, ListItemAssessment.class, ListItemMentor.class}, version = 2, exportSchema = false)
+@Database(entities = {ListItemTerm.class, ListItemCourse.class, ListItemAssessment.class, ListItemMentor.class}, version = 3, exportSchema = false)
 @TypeConverters({DateTypeConverter.class, ListTypeConverter.class})
 public abstract class AppDatabase extends RoomDatabase {
     public abstract TermDao termDao();
@@ -32,6 +32,7 @@ public abstract class AppDatabase extends RoomDatabase {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                             AppDatabase.class, "app_database")
                             .addCallback(sRoomDatabaseCallback).build();
+//                            .fallbackToDestructiveMigration().build();
                 }
             }
         }
@@ -92,18 +93,6 @@ public abstract class AppDatabase extends RoomDatabase {
             return null;
         }
     }
-
-//    static final Migration MIGRATION_1_2 = new Migration(1, 2) {
-//        @Override
-//        public void migrate(SupportSQLiteDatabase database) {
-//            database.execSQL("ALTER TABLE term_table DROP COLUMN courses_in_term" );
-//            database.execSQL("ALTER TABLE course_table DROP COLUMN course_mentors, course_assessments");
-//            database.execSQL("ALTER TABLE course_table ADD COLUMN course_term_ID");
-//            database.execSQL("ALTER TABLE mentor_table ADD COLUMN mentor_course_ID");
-//            database.execSQL("ALTER TABLE assessment_table ADD COLUMN assessment_course_ID");
-//        }
-//    };
-
 
 
 }
