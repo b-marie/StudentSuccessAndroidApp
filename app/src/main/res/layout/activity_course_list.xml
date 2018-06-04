@@ -30,7 +30,7 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="103dp"
-        android:text="Add Course" />
+        android:text="@string/add_new_course" />
 
     <Button
         android:id="@+id/course_list_home_button"
@@ -39,5 +39,5 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="27dp"
-        android:text="Home" />
+        android:text="@string/home" />
 </RelativeLayout>

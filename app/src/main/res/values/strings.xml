@@ -59,5 +59,8 @@
     <string name="update_term">Update Term</string>
     <string name="delete_term">Delete Term</string>
     <string name="set_assessment_due_date_notification">Set assessment due date notification</string>
+    <string name="enter">Enter</string>
+    <string name="imageview_of_wgu_owl">Imageview of WGU owl</string>
+    <string name="term_start_term_end">Term Start - Term End</string>
 
 </resources>

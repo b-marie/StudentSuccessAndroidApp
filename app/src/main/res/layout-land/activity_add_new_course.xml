@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent" android:layout_height="fill_parent"
+    android:scrollbars="vertical">
+
+    <HorizontalScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+
+        <RelativeLayout
+            android:layout_width="600dp"
+            android:layout_height="600dp">
+
+            <TextView
+                android:id="@+id/add_course_title"
+                style="@style/Text.Title"
+                android:layout_width="380dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:text="@string/add_new_course" />
+
+            <EditText
+                android:id="@+id/add_course_name_entry"
+                android:layout_width="270dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/add_course_title"
+                android:layout_centerHorizontal="true"
+                android:ems="10"
+                android:hint="@string/course_name"
+                android:inputType="text" />
+
+            <EditText
+                android:id="@+id/add_course_start_date_entry"
+                android:layout_width="270dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/add_course_name_entry"
+                android:layout_centerHorizontal="true"
+                android:clickable="true"
+                android:ems="10"
+                android:focusable="true"
+                android:hint="@string/start_date"
+                android:inputType="date" />
+
+            <Switch
+                android:id="@+id/add_course_end_date_toggle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/add_course_start_date_toggle"
+                android:layout_centerHorizontal="true"
+                android:text="@string/set_end_date_reminder" />
+
+            <EditText
+                android:id="@+id/add_course_end_date_entry"
+                android:layout_width="270dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/add_course_start_date_entry"
+                android:layout_centerHorizontal="true"
+                android:clickable="true"
+                android:ems="10"
+                android:focusable="true"
+                android:hint="@string/end_date"
+                android:inputType="date" />
+
+            <Switch
+                android:id="@+id/add_course_start_date_toggle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="222dp"
+                android:text="@string/set_start_date_reminder" />
+
+            <TextView
+                android:id="@+id/add_course_course_status_label"
+                style="@style/Text.Item"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/add_course_end_date_toggle"
+                android:layout_centerHorizontal="true"
+                android:text="@string/course_status" />
+
+            <RadioGroup
+                android:id="@+id/add_course_course_status_radio_group"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/add_course_course_status_label"
+                android:layout_centerHorizontal="true">
+
+                <RadioButton
+                    android:id="@+id/add_course_planned_status"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/planned" />
+
+                <RadioButton
+                    android:id="@+id/add_course_in_progress_status"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/in_progress" />
+
+                <RadioButton
+                    android:id="@+id/add_course_completed_status"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/completed" />
+            </RadioGroup>
+
+            <Button
+                android:id="@+id/add_course_save_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="38dp"
+                android:text="@string/save" />
+
+            <TextView
+                android:id="@+id/add_course_term_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="141dp"
+                android:text="@string/assign_to_term" />
+
+            <Spinner
+                android:id="@+id/add_course_term_list"
+                style="@style/Dropdown"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/add_course_term_label"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="-141dp"
+                android:background="@android:drawable/btn_dropdown"
+                android:spinnerMode="dropdown" />
+
+
+        </RelativeLayout>
+
+
+    </HorizontalScrollView>
+
+</ScrollView>

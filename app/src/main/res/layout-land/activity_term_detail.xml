@@ -15,7 +15,6 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="22dp"
         android:text="@string/term_number" />
 
     <TextView
@@ -23,9 +22,12 @@
         style="@style/Text.Title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
         android:layout_below="@+id/term_detail_term_name"
-        android:layout_centerHorizontal="true"
-        android:text="@string/term_start_term_end" />
+        android:layout_marginStart="25dp"
+        android:text="@string/term_start_term_end"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="25dp" />
 
 
     <TextView
@@ -53,32 +55,40 @@
         style="@style/Text.Title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/term_detail_term_start"
-        android:layout_centerHorizontal="true"
-        android:text="@string/courses" />
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/term_detail_term_name"
+        android:layout_marginEnd="71dp"
+        android:text="@string/courses"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="71dp" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/term_detail_course_recycler_view"
         android:layout_width="271dp"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/term_detail_term_courses_label"
-        android:layout_centerHorizontal="true" />
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/term_detail_term_dates_label"
+        android:layout_alignParentRight="true" />
 
     <Button
         android:id="@+id/term_detail_home_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:text="@string/home" />
+        android:layout_below="@+id/term_detail_edit_button"
+        android:layout_marginTop="-85dp"
+        android:layout_toEndOf="@+id/term_detail_term_end"
+        android:text="@string/home"
+        android:layout_toRightOf="@+id/term_detail_term_end" />
 
     <Button
         android:id="@+id/term_detail_edit_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/term_detail_home_button"
-        android:layout_centerHorizontal="true"
-        android:text="@string/edit" />
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="85dp"
+        android:layout_toEndOf="@+id/term_detail_term_end"
+        android:text="@string/edit"
+        android:layout_toRightOf="@+id/term_detail_term_end" />
 
 
 </RelativeLayout>

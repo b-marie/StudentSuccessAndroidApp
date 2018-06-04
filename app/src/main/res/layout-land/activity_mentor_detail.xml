@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".view.MentorDetailActivity"
+    >
+
+    <TextView
+        android:id="@+id/mentor_detail_mentor_name"
+        style="@style/Text.Title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:text="@string/mentor_name" />
+
+    <TextView
+        android:id="@+id/mentor_detail_phone_number"
+        style="@style/Text.Item"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/mentor_detail_phone_number_label"
+        android:layout_marginStart="76dp"
+        android:text="@string/phone_number"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="76dp" />
+
+    <TextView
+        android:id="@+id/mentor_detail_email_label"
+        style="@style/Text.Title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/mentor_detail_phone_number"
+        android:layout_marginStart="92dp"
+        android:text="@string/e_mail"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="92dp" />
+
+    <TextView
+        android:id="@+id/mentor_detail_email"
+        style="@style/Text.Item"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/mentor_detail_email_label"
+        android:layout_marginStart="104dp"
+        android:text="@string/e_mail"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="104dp" />
+
+    <TextView
+        android:id="@+id/mentor_detail_course_label"
+        style="@style/Text.Title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/mentor_detail_mentor_name"
+        android:layout_marginEnd="56dp"
+        android:text="@string/course_name"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="56dp" />
+
+    <Button
+        android:id="@+id/mentor_detail_edit_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/mentor_detail_email"
+        android:layout_centerHorizontal="true"
+        android:text="@string/edit" />
+
+    <Button
+        android:id="@+id/mentor_detail_home_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:text="@string/home" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/mentor_detail_course_recycler_view"
+        android:layout_width="271dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/mentor_detail_phone_number_label"
+        android:layout_marginEnd="11dp"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="11dp" />
+
+    <TextView
+        android:id="@+id/mentor_detail_phone_number_label"
+        style="@style/Text.Title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/mentor_detail_mentor_name"
+        android:layout_marginStart="37dp"
+        android:text="@string/phone_number"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="37dp" />
+
+
+</RelativeLayout>
